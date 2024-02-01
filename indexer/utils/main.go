@@ -12,10 +12,10 @@ import (
 	"os"
 	"strings"
 
-	_ "net/http/pprof"
+	"github.com/joho/godotenv"
 )
 
-// ListFolderFiles devuelve una lista de archivos en una carpeta.
+// ListFolderFiles returns a list of files in a folder.
 func ListFiles(path string) ([]string, error) {
 	var folderList []string
 
@@ -40,7 +40,7 @@ func ListFiles(path string) ([]string, error) {
 	return folderList, nil
 }
 
-// IsDirectory verifica si una ruta corresponde a un directorio.
+// IsDirectory checks to see if a path corresponds to a directory.
 func IsDirectory(path string) bool {
 	fileInfo, err := os.Stat(path)
 	if err != nil {
@@ -53,7 +53,7 @@ func IsDirectory(path string) bool {
 	}
 }
 
-// MapEmailHeaders estructura los datos del correo según los encabezados.
+// MapEmailHeaders structures mail data based on headers.
 func MapEmailHeaders(key string, value string, emailStruct models.EnronMail) models.EnronMail {
 	switch key {
 	case "Message-ID":
@@ -91,7 +91,7 @@ func MapEmailHeaders(key string, value string, emailStruct models.EnronMail) mod
 	return emailStruct
 }
 
-// ConvertEmailFileToJSON convierte un archivo de correo a formato JSON.
+// ConvertEmailFileToJSON converts an email file to JSON format.
 func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 	var bodyLines strings.Builder
 	var emailStructure models.EnronMail
@@ -137,19 +137,24 @@ func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 	return emailStructure
 }
 
-// SendDataToIndex envía datos al índice utilizando HTTP.
+// SendDataToIndex sends data to the index using HTTP.
 func SendDataToIndex(data []models.EnronMail) error {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading env vars")
+	}
 	newData, err := json.Marshal(data)
 	if err != nil {
 		log.Fatal(err)
 	}
 	reader := bytes.NewReader(newData)
 
-	req, err := http.NewRequest("POST", "http://localhost:5080/api/default/test3/_json", reader)
+	req, err := http.NewRequest("POST", os.Getenv("OPEN_OBSERVE_BASE_URL")+"/api/default/"+os.Getenv("OPEN_OBSERVE_STREAM")+"/_json", reader)
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.SetBasicAuth("root@example.com", "Complexpass#123")
+	req.SetBasicAuth(os.Getenv("OPEN_OBSERVE_USER_EMAIL"), os.Getenv("OPEN_OBSERVE_USER_PASSWORD"))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
 
@@ -158,7 +163,7 @@ func SendDataToIndex(data []models.EnronMail) error {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	log.Println(resp.StatusCode)
+	// log.Println(resp.StatusCode)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
@@ -195,25 +200,23 @@ func IndexEmailFolder(path string) error {
 				if err != nil {
 					return fmt.Errorf("error while %s: %v", path, err)
 				}
-				dataBatch = nil // Limpiar el lote después de enviar
+				dataBatch = nil // Clean bacth after sending the data
 			}
 			id++
 		}
 		return nil
 	}
 
-	// Llamar a la función interna para iniciar el proceso de indexación
 	if err := indexEmail(path); err != nil {
 		return err
 	}
 
-	// Verificar si hay algún correo en el lote pendiente de enviar
+	// check if there is a mail pending
 	if len(dataBatch) > 0 {
 		err := SendDataToIndex(dataBatch)
 		if err != nil {
 			return err
 		}
 	}
-
 	return nil
 }

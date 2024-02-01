@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"indexer/utils"
 	"log"
 	"os"
@@ -19,6 +20,8 @@ func main() {
 		log.Printf("Error while indexing email: %v", err)
 		return
 	}
+
+	fmt.Println("indexing...")
 
 	for u := range user_list {
 		folders, err := utils.ListFiles(path + user_list[u])
