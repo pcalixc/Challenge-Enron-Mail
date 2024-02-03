@@ -6,8 +6,6 @@ services:
       ZO_ROOT_USER_EMAIL: "root@example.com"
       ZO_ROOT_USER_PASSWORD: "Complexpass#123"
     ports:
-      - "5090:5080"
+      - "5080:5080"
     volumes:
       - data:/data
-volumes:
-  data:

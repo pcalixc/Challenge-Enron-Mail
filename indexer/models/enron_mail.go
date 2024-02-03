@@ -1,24 +1,5 @@
 package models
 
-// type EnronMail struct {
-// 	MessageID               string `json:"Message_id"`
-// 	Date                    string `json:"Date"`
-// 	From                    string `json:"From"`
-// 	To                      string `json:"To"`
-// 	Subject                 string `json:"Subject"`
-// 	MimeVersion             string `json:"Mime_version"`
-// 	ContentType             string `json:"Content_type"`
-// 	ContentTransferEncoding string `json:"Content_transfer_encoding"`
-// 	X_from                  string `json:"X-from"`
-// 	X_to                    string `json:"X-to"`
-// 	X_CC                    string `json:"X-cc"`
-// 	X_BCC                   string `json:"X-bcc"`
-// 	X_folder                string `json:"X-folder"`
-// 	X_origin                string `json:"X-origin"`
-// 	X_fileName              string `json:"X-file_name"`
-// 	Body                    string `json:"body"`
-// }
-
 type EnronMail struct {
 	MessageID               string `json:"message_id"`
 	Date                    string `json:"date"`

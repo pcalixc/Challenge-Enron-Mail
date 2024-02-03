@@ -4,10 +4,19 @@ import (
 	"fmt"
 	"indexer/utils"
 	"log"
+	_ "net/http/pprof"
 	"os"
+	"runtime/pprof"
+	"time"
 )
 
 func main() {
+	cpuFile, _ := os.Create("cpu.pprof")
+	pprof.StartCPUProfile(cpuFile)
+	defer pprof.StopCPUProfile()
+
+	startTime := time.Now()
+
 	if len(os.Args) < 2 {
 		log.Println("DB Path is missing.")
 		return
@@ -34,4 +43,13 @@ func main() {
 			utils.IndexEmailFolder(path + user_list[u] + "/" + folders[f])
 		}
 	}
+
+	memoryFile, _ := os.Create("memory.pprof")
+	pprof.WriteHeapProfile(memoryFile)
+	defer pprof.StopCPUProfile()
+
+	endTime := time.Now()
+	elapsedTime := endTime.Sub(startTime)
+
+	log.Printf("ElapsedTime: %s", elapsedTime)
 }

@@ -211,7 +211,7 @@ func IndexEmailFolder(path string) error {
 		return err
 	}
 
-	// check if there is a mail pending
+	//check if there is a mail pending
 	if len(dataBatch) > 0 {
 		err := SendDataToIndex(dataBatch)
 		if err != nil {
