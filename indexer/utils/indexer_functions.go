@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"indexer/models"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -23,6 +22,7 @@ func ListFiles(path string) ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not open folder %s: %v", path, err)
 	}
+
 	defer outputDirRead.Close()
 
 	outputDirFiles, err := outputDirRead.Readdir(0)
@@ -36,7 +36,6 @@ func ListFiles(path string) ([]string, error) {
 		outputNameHere := outputFileHere.Name()
 		folderList = append(folderList, outputNameHere)
 	}
-
 	return folderList, nil
 }
 
@@ -93,9 +92,11 @@ func MapEmailHeaders(key string, value string, emailStruct models.EnronMail) mod
 
 // ConvertEmailFileToJSON converts an email file to JSON format.
 func ConvertEmailFileToJSON(filePath string) models.EnronMail {
-	var bodyLines strings.Builder
-	var emailStructure models.EnronMail
-	var bodyStarted bool
+	var (
+		bodyLines      strings.Builder
+		emailStructure models.EnronMail
+		bodyStarted    bool
+	)
 
 	// We read the email file
 	file, err := os.Open(filePath)
@@ -130,7 +131,6 @@ func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 			}
 		}
 	}
-
 	// Add the body to the email structure
 	emailStructure.Content = bodyLines.String()
 
@@ -144,31 +144,38 @@ func SendDataToIndex(data []models.EnronMail) error {
 	if err != nil {
 		log.Fatal("Error loading env vars")
 	}
-	newData, err := json.Marshal(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-	reader := bytes.NewReader(newData)
 
-	req, err := http.NewRequest("POST", os.Getenv("OPEN_OBSERVE_BASE_URL")+"/api/default/"+os.Getenv("OPEN_OBSERVE_STREAM")+"/_json", reader)
-	if err != nil {
-		log.Fatal(err)
+	bulkData := models.BulkDocument{
+		Index:   "hands",
+		Records: data,
 	}
-	req.SetBasicAuth(os.Getenv("OPEN_OBSERVE_USER_EMAIL"), os.Getenv("OPEN_OBSERVE_USER_PASSWORD"))
+
+	jsonBody, err := json.Marshal(bulkData)
+	if err != nil {
+		return fmt.Errorf("error marshaling JSON: %w", err)
+	}
+	req, err := http.NewRequest("POST", os.Getenv("ZS_BASE_URL")+"/api/_bulkv2", bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return err
+	}
+
+	req.SetBasicAuth(os.Getenv("ZS_USER"), os.Getenv("ZS_PASSWORD"))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error sending HTTP request: %w", err)
 	}
 	defer resp.Body.Close()
-	// log.Println(resp.StatusCode)
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Body: " + string(body))
+
+	//log.Println(resp.StatusCode)
+
+	// body, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println("Body: " + string(body))
 
 	return nil
 }

@@ -23,13 +23,13 @@ func main() {
 	})
 	r.Use(cors.Handler)
 
-	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Write([]byte("welcome"))
-	// })
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("welcome"))
+	})
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte(`{"message":"Welcome to the Enron-Email Index ZincSearch API v1"}`))
+			w.Write([]byte(`{"message":"Welcome to the Enron-Email Index OpenObserve API"}`))
 		})
 
 		r.Get("/search/{word}", func(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +48,6 @@ func main() {
 		})
 	})
 
-	log.Println("Server is up and running on port 3000")
-	http.ListenAndServe(":3000", r)
+	log.Println("Server is up and running on port 3001")
+	http.ListenAndServe(":3001", r)
 }

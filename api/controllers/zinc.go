@@ -131,22 +131,22 @@ func BulkCreateDocument(emails []Email, config Config) {
 
 func SearchDocument(word string) HitsResponse {
 	var query = fmt.Sprintf(`{
-        "search_type": "match",
-        "query":
-        {
-            "term": "%s",
-            "start_time": "2021-06-02T14:28:31.894Z",
-            "end_time": "2028-01-31T15:28:31.894Z"
-        },
-        "from": 0,
-        "max_results": 50,
-        "_source": []
-    }`, word)
-	req, err := http.NewRequest("POST", "http://localhost:5080/api/Enron/_search", strings.NewReader(query))
+		"aggs": {
+		  "histogram": "select histogram(_timestamp, '30 second') AS zo_sql_key, count(*) AS zo_sql_num from query GROUP BY zo_sql_key ORDER BY zo_sql_key"
+		},
+		"query": {
+		  "end_time": 1675185660872049,
+		  "from": 0,
+		  "size": 10,
+		  "sql": "select * from k8s ",
+		  "start_time": 1675182660872049
+		}
+	  }`, word)
+	req, err := http.NewRequest("POST", "http://localhost:5080/api/default/_search", strings.NewReader(query))
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
-	req.SetBasicAuth("admin", "Complexpass#123")
+	req.SetBasicAuth("root@example.com", "Complexpass#123")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
 

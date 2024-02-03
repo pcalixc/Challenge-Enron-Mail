@@ -23,14 +23,11 @@ func main() {
 	}
 
 	path := os.Args[1] + "/maildir/"
-
 	user_list, err := utils.ListFiles(path)
 	if err != nil {
 		log.Printf("Error while indexing email: %v", err)
 		return
 	}
-
-	fmt.Println("indexing...")
 
 	for u := range user_list {
 		folders, err := utils.ListFiles(path + user_list[u])
@@ -40,7 +37,12 @@ func main() {
 		}
 
 		for f := range folders {
-			utils.IndexEmailFolder(path + user_list[u] + "/" + folders[f])
+			err := utils.IndexEmailFolder(path + user_list[u] + "/" + folders[f])
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			fmt.Println("Indexing -> " + path + user_list[u] + "/" + folders[f])
 		}
 	}
 
@@ -51,5 +53,5 @@ func main() {
 	endTime := time.Now()
 	elapsedTime := endTime.Sub(startTime)
 
-	log.Printf("ElapsedTime: %s", elapsedTime)
+	log.Printf("ELAPSED TIME: %s", elapsedTime)
 }
