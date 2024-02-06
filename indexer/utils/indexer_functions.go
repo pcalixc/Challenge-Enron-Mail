@@ -12,6 +12,10 @@ import (
 	"strings"
 )
 
+var DataBatch []models.EnronMail
+
+const batchSize = 1000
+
 // ListFolderFiles returns a list of files in a folder.
 func ListFiles(path string) ([]string, error) {
 	var folderList []string
@@ -134,7 +138,7 @@ func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 // SendDataToIndex sends data to the index using HTTP.
 func SendDataToIndex(data *[]models.EnronMail) error {
 	bulkData := models.BulkDocument{
-		Index:   "mail2",
+		Index:   "mail5",
 		Records: *data,
 	}
 
@@ -163,21 +167,10 @@ func SendDataToIndex(data *[]models.EnronMail) error {
 	return nil
 }
 
-var DataBatch []models.EnronMail
-
 // FillIndexBatch fills the batch of emails to be sent to the index.
 func FillIndexBatch(path string) error {
-	const batchSize = 1000
 	jsonEmail := ConvertEmailFileToJSON(path)
 	DataBatch = append(DataBatch, jsonEmail)
-
-	if len(DataBatch) == batchSize {
-		err := SendDataToIndex(&DataBatch)
-		if err != nil {
-			return fmt.Errorf("error while %s: %v", path, err)
-		}
-		DataBatch = nil // Clean bacth after sending the data
-	}
 	return nil
 }
 
@@ -199,7 +192,22 @@ func IndexEmail(path string) error {
 		if err != nil {
 			return fmt.Errorf("error while  %s: %v", path, err)
 		}
+
+		if len(DataBatch) == batchSize {
+			err := SendDataToIndex(&DataBatch)
+			if err != nil {
+				return fmt.Errorf("error while %s: %v", path, err)
+			}
+			DataBatch = nil // Clean bacth after sending the data
+		}
 	}
+
+	// if len(DataBatch) > 0 {
+	// 	err := SendDataToIndex(&DataBatch)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	return nil
 }

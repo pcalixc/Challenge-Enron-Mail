@@ -14,7 +14,8 @@ import (
 func main() {
 	config.LoadEnvVars()
 
-	profiling.CPUProfiling()
+	cpuProf := profiling.StartCPUProfile()
+	memoryProf := profiling.StartMemoryProfile()
 
 	startTime := time.Now()
 
@@ -28,6 +29,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Error indexing: ", path, err)
 	}
+
 	if len(utils.DataBatch) > 0 {
 		err := utils.SendDataToIndex(&utils.DataBatch)
 		if err != nil {
@@ -35,7 +37,8 @@ func main() {
 		}
 	}
 
-	profiling.MeroryProfiling()
+	profiling.StopCPUProfile(cpuProf)
+	profiling.StopMemoryProfile(memoryProf)
 
 	endTime := time.Now()
 	log.Printf("ELAPSED INDEXING TIME: %s", endTime.Sub(startTime))

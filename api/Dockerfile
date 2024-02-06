@@ -16,7 +16,7 @@ RUN mkdir app
 WORKDIR /app
 
 COPY go.mod go.sum ./
-RUN go mod tidy
+#RUN go mod tidy
 
 
 # Download all dependencies

@@ -1,27 +1,33 @@
 package profiling
 
 import (
-	"log"
 	"os"
 	"runtime/pprof"
 )
 
-func CPUProfiling() {
-	cpuFile, err := os.Create("cpu.pprof")
+func StartCPUProfile() *os.File {
+	cpuProf, err := os.Create("cpu.prof")
 	if err != nil {
-		log.Fatal("Could not create CPU profile: ", err)
+		panic(err)
 	}
-	err = pprof.StartCPUProfile(cpuFile)
-	if err != nil {
-		log.Fatal("Could not start CPU profile: ", err)
-	}
-	defer pprof.StopCPUProfile()
+	pprof.StartCPUProfile(cpuProf)
+	return cpuProf
 }
 
-func MeroryProfiling() {
-	memoryFile, err := os.Create("memory.pprof")
+func StopCPUProfile(cpuProfile *os.File) {
+	pprof.StopCPUProfile()
+	cpuProfile.Close()
+}
+
+func StartMemoryProfile() *os.File {
+	memoryProfile, err := os.Create("mem.prof")
 	if err != nil {
-		log.Fatal("Could not create Memory profile: ", err)
+		panic(err)
 	}
-	pprof.WriteHeapProfile(memoryFile)
+	return memoryProfile
+}
+
+func StopMemoryProfile(memoryProfile *os.File) {
+	pprof.WriteHeapProfile(memoryProfile)
+	memoryProfile.Close()
 }
