@@ -10,8 +10,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/joho/godotenv"
 )
 
 // ListFolderFiles returns a list of files in a folder.
@@ -45,11 +43,7 @@ func IsDirectory(path string) bool {
 	if err != nil {
 		fmt.Println(err)
 	}
-	if fileInfo.IsDir() {
-		return true
-	} else {
-		return false
-	}
+	return fileInfo.IsDir()
 }
 
 // MapEmailHeaders structures mail data based on headers.
@@ -138,16 +132,10 @@ func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 }
 
 // SendDataToIndex sends data to the index using HTTP.
-func SendDataToIndex(data []models.EnronMail) error {
-
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading env vars")
-	}
-
+func SendDataToIndex(data *[]models.EnronMail) error {
 	bulkData := models.BulkDocument{
-		Index:   "hands",
-		Records: data,
+		Index:   "mail2",
+		Records: *data,
 	}
 
 	jsonBody, err := json.Marshal(bulkData)
@@ -169,61 +157,49 @@ func SendDataToIndex(data []models.EnronMail) error {
 	}
 	defer resp.Body.Close()
 
-	//log.Println(resp.StatusCode)
-
-	// body, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// fmt.Println("Body: " + string(body))
-
+	if resp.StatusCode == 200 {
+		log.Println("Bulk data succesfully inserted")
+	}
 	return nil
 }
 
-func IndexEmailFolder(path string) error {
-	id := 0
-	batchSize := 100
-	var dataBatch []models.EnronMail
+var DataBatch []models.EnronMail
 
-	var indexEmail func(string) error
-	indexEmail = func(path string) error {
-		if IsDirectory(path) {
-			folders, err := ListFiles(path)
-			if err != nil {
-				return fmt.Errorf("error while listing files in path %s: %v", path, err)
-			}
-			for _, folder := range folders {
-				err := indexEmail(path + "/" + folder)
-				if err != nil {
-					return fmt.Errorf("error while indexing email in path %s: %v", path, err)
-				}
-			}
-		} else {
-			jsonEmail := ConvertEmailFileToJSON(path)
-			dataBatch = append(dataBatch, jsonEmail)
+// FillIndexBatch fills the batch of emails to be sent to the index.
+func FillIndexBatch(path string) error {
+	const batchSize = 1000
+	jsonEmail := ConvertEmailFileToJSON(path)
+	DataBatch = append(DataBatch, jsonEmail)
 
-			if len(dataBatch) == batchSize {
-				err := SendDataToIndex(dataBatch)
-				if err != nil {
-					return fmt.Errorf("error while %s: %v", path, err)
-				}
-				dataBatch = nil // Clean bacth after sending the data
-			}
-			id++
-		}
-		return nil
-	}
-
-	if err := indexEmail(path); err != nil {
-		return err
-	}
-
-	//check if there is a mail pending
-	if len(dataBatch) > 0 {
-		err := SendDataToIndex(dataBatch)
+	if len(DataBatch) == batchSize {
+		err := SendDataToIndex(&DataBatch)
 		if err != nil {
-			return err
+			return fmt.Errorf("error while %s: %v", path, err)
+		}
+		DataBatch = nil // Clean bacth after sending the data
+	}
+	return nil
+}
+
+// IndexEmail recursively processes the directory structure and fills the index batch accordingly with FillIndexBatch(path string).
+func IndexEmail(path string) error {
+	if IsDirectory(path) {
+		folders, err := ListFiles(path)
+		if err != nil {
+			return fmt.Errorf("error while listing files in path %s: %v", path, err)
+		}
+		for _, folder := range folders {
+			err := IndexEmail(path + "/" + folder)
+			if err != nil {
+				return fmt.Errorf("error while indexing email in path %s: %v", path, err)
+			}
+		}
+	} else {
+		err := FillIndexBatch(path)
+		if err != nil {
+			return fmt.Errorf("error while  %s: %v", path, err)
 		}
 	}
+
 	return nil
 }

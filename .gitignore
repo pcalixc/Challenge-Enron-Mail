@@ -2,3 +2,6 @@ data
 .vscode
 indexer/enron
 indexer/.env
+api/.env
+zinc
+indexer/zinc

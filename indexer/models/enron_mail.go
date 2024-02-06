@@ -20,3 +20,11 @@ type EnronMail struct {
 	XFileName               string `json:"x_file_name"`
 	Content                 string `json:"content"`
 }
+
+type OriginalMail struct {
+	From    string `json:"from"`
+	Sent    string `json:"sent"`
+	To      string `json:"to"`
+	Subject string `json:"subject"`
+	Content string `json:"content"`
+}

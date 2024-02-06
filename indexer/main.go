@@ -2,18 +2,19 @@ package main
 
 import (
 	"fmt"
+	"indexer/config"
+	"indexer/profiling"
 	"indexer/utils"
 	"log"
 	_ "net/http/pprof"
 	"os"
-	"runtime/pprof"
 	"time"
 )
 
 func main() {
-	cpuFile, _ := os.Create("cpu.pprof")
-	pprof.StartCPUProfile(cpuFile)
-	defer pprof.StopCPUProfile()
+	config.LoadEnvVars()
+
+	profiling.CPUProfiling()
 
 	startTime := time.Now()
 
@@ -22,36 +23,20 @@ func main() {
 		return
 	}
 
-	path := os.Args[1] + "/maildir/"
-	user_list, err := utils.ListFiles(path)
+	path := os.Args[1] + "/maildir"
+	err := utils.IndexEmail(path)
 	if err != nil {
-		log.Printf("Error while indexing email: %v", err)
-		return
+		fmt.Println("Error indexing: ", path, err)
 	}
-
-	for u := range user_list {
-		folders, err := utils.ListFiles(path + user_list[u])
+	if len(utils.DataBatch) > 0 {
+		err := utils.SendDataToIndex(&utils.DataBatch)
 		if err != nil {
-			log.Printf("Error while listing email: %v", err)
 			return
 		}
-
-		for f := range folders {
-			err := utils.IndexEmailFolder(path + user_list[u] + "/" + folders[f])
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			fmt.Println("Indexing -> " + path + user_list[u] + "/" + folders[f])
-		}
 	}
 
-	memoryFile, _ := os.Create("memory.pprof")
-	pprof.WriteHeapProfile(memoryFile)
-	defer pprof.StopCPUProfile()
+	profiling.MeroryProfiling()
 
 	endTime := time.Now()
-	elapsedTime := endTime.Sub(startTime)
-
-	log.Printf("ELAPSED TIME: %s", elapsedTime)
+	log.Printf("ELAPSED INDEXING TIME: %s", endTime.Sub(startTime))
 }
