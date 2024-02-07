@@ -63,6 +63,8 @@ function handleChangeVisibility() {
 
 var totalResults = ref(0)
 var page = ref(1)
+var testData = ref('')
+
 var totalPages = ref(0)
 var baseURL = ref(`http://${import.meta.env.VITE_API_URL}/data/`)
 const dataByPage = ref<dataI[]>([])
@@ -70,33 +72,24 @@ var selectedFilterOption = ref('')
 var selectedFilter= ref('')
 
 
-function handleChange(type: string) {
-  var filter = document.getElementById(type)
+//localhost:3333/search?term=crazy&from=1&max=1
+const getData1 = async () => {
 
-  selectedFilterOption.value = filter.value
+  try {
+    const response = await fetch(`http://localhost:3333/search?term=crazy&from=1&max=1`)
+    const data = await response.json()
+    testData.value = data.hits.hits[0]._source.content
 
-  getData(1, type, selectedFilterOption.value)
-
-}
-
-const getData = async (pageNumber: number, filter?: string, value?: string) => {
-  
-    const StrpageNumer = pageNumber.toString()
-
-    try {
-      const response = await fetch(`${baseURL.value}${StrpageNumer}?${filter}=${value}`)
-      const data = await response.json()
-      dataByPage.value = data.data
-      totalResults.value = data.totalItems
-      totalPages.value = data.totalPages
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-    page.value = pageNumber
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
+ console.log("",testData.value)
 }
 
 onMounted(() => {
-  getData(1)
+  //getData(1)
+  getData1()
+
 })
 </script>
 
