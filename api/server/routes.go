@@ -9,5 +9,6 @@ func (s *Server) setupRoutesb() {
 		r.Get("/", s.Welcome)
 		r.Get("/search", s.handleEmailSearch)
 		r.Get("/emails", s.handleEmails)
+
 	})
 }

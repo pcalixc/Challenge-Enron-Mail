@@ -1,5 +1,5 @@
 # Golang image
-FROM golang:1.21.1-alpine
+FROM golang:1.21.1
 
 # Env vars
 ENV PROJECT_DIR=/app \
@@ -18,11 +18,8 @@ WORKDIR /app
 COPY go.mod go.sum ./
 #RUN go mod tidy
 
-
 # Download all dependencies
-
 RUN go mod download
-
 
 # Copies all files from local to container
 COPY . .

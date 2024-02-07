@@ -138,7 +138,7 @@ func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 // SendDataToIndex sends data to the index using HTTP.
 func SendDataToIndex(data *[]models.EnronMail) error {
 	bulkData := models.BulkDocument{
-		Index:   "mail5",
+		Index:   "mail",
 		Records: *data,
 	}
 

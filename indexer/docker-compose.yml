@@ -5,7 +5,7 @@ services:
       - ZINC_FIRST_ADMIN_USER=admin
       - ZINC_FIRST_ADMIN_PASSWORD=Complexpass#123
     ports:
-      - '4090:4080'
+      - '4080:4080'
     volumes:
       - ./zinc:/var/lib/zinc
 
