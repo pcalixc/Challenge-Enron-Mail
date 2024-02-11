@@ -7,7 +7,8 @@ import (
 func (s *Server) setupRoutesb() {
 	s.ChiRouter.Route("/", func(r chi.Router) {
 		r.Get("/", s.Welcome)
-		r.Get("/search", s.handleEmailSearch)
+		//r.Get("/search", s.handleEmailSearch)
+		//r.Get("/emails", s.handleEmails)
 		r.Get("/emails", s.handleEmails)
 
 	})

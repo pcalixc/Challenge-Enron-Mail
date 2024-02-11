@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func SearchMails(term, page, max string) models.HitsResponse {
+func SearchMails(term, page, max string) (models.HitsResponse, error) {
 	intMax, _ := strconv.Atoi(max)
 	intPage, _ := strconv.Atoi(page)
 
@@ -42,17 +42,21 @@ func SearchMails(term, page, max string) models.HitsResponse {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("45", err)
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)
 
 	var hitsResponse models.HitsResponse
+	if resp.ContentLength == 0 {
+		log.Println("esta vaciooo")
+		return hitsResponse, nil
+	}
 	err = json.NewDecoder(resp.Body).Decode(&hitsResponse)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("53 ", resp.ContentLength, err)
 	}
-	return hitsResponse
+	return hitsResponse, nil
 }
 
 func GetAllEmails(page, max string) models.HitsResponse {

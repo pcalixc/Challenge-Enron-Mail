@@ -54,30 +54,31 @@ func (s *Server) Welcome(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"message":"Enron-Email Index ZincSearch API"}`))
 }
 
-func (s *Server) handleEmailSearch(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
 	searchTerm := r.URL.Query().Get("term")
 	page := r.URL.Query().Get("page")
 	max := r.URL.Query().Get("max")
 
-	term := controllers.SearchMails(searchTerm, page, max)
-	jsonData, err := json.Marshal(term)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if searchTerm != "" {
+		term, err := controllers.SearchMails(searchTerm, page, max)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+		jsonData, err := json.Marshal(term)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write(jsonData)
+	} else {
+		result := controllers.GetAllEmails(page, max)
+		jsonData, err := json.Marshal(result)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(jsonData)
 	}
-	w.Write(jsonData)
-}
-
-func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
-	page := r.URL.Query().Get("page")
-	max := r.URL.Query().Get("max")
-
-	result := controllers.GetAllEmails(page, max)
-	jsonData, err := json.Marshal(result)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(jsonData)
 }
