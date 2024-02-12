@@ -2,6 +2,7 @@
 export default  {
   content: ["./app/**/*.html",
   "./src/**/*.vue", ],
+  darkMode: 'class',
   theme: {
     extend: {},
   },
