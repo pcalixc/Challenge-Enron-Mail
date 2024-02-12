@@ -13,11 +13,13 @@ const open = ref(false)
 const selectedEmail = ref([])
 const selectedEmailIndex = ref(0)
 const searchTerm = ref('')
+const isLoading=ref(false)
 
 const getData = async (pageNumber: number, searchTerm?: string) => {
   searchTerm = typeof searchTerm === 'undefined' ? '' : searchTerm
 
   let pn = pageNumber.toString()
+  isLoading.value = true;
   try {
     const response = await fetch(
       `http://localhost:3333/emails?page=${pn}&max=${amountEmailsByPage.value}&term=${searchTerm}`
@@ -28,6 +30,7 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
   } catch (error) {
     console.error('Error fetching data:', error, Response)
   }
+  isLoading.value = false;
   currentPage.value = pageNumber
 
   totalPages.value = Math.ceil(totalResults.value / amountEmailsByPage.value)
@@ -154,11 +157,11 @@ onBeforeMount(() => {
             <div class="overflow-hidden dark:border-gray-700 md:rounded-tl-lg">
               <table
                 v-if="totalResults > 0"
-                class="min-w-max w-[85%] rounded-t-xl m-auto mt-4 bg-white dark:bg-slate-600 table-auto shadow-md"
+                class="min-w-max w-[85%] rounded-t-xl m-auto mt-4 bg-white dark:bg-slate-600 dark:divide-gray-700 table-auto shadow-md"
               >
                 <thead>
                   <tr
-                    class="bg-slate-300  dark:bg-gray-900 dark:text-slate-100  text-gray-600 uppercase text-sm leading-normal rounded-t-xl"
+                    class="bg-slate-300   dark:bg-gray-900 dark:text-slate-100  text-gray-600 uppercase text-sm leading-normal rounded-t-xl"
                   >
                     <th class="py-3 px-6 text-left rounded-tl-xl">
                       <div class="gap-1 flex">
@@ -242,12 +245,12 @@ onBeforeMount(() => {
                     <th class="py-3 px-6 text-left rounded-tr-xl"></th>
                   </tr>
                 </thead>
-                <tbody class="text-gray-600 text-sm font-light">
+                <tbody class="text-gray-600 text-sm font-light shadow-inner">
                   <tr
                     v-for="(data, index) in emails"
                     :key="index"
-                    :class="{ ' bg-white dark:bg-slate-800 ': index % 2 === 0, 'bg-zinc-50 dark:bg-slate-900': index % 2 !== 0 }"
-                    class="border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-[#3636ff2b] dark:border-gray-500 dark:text-slate-200"
+                    :class="{ ' bg-white dark:bg-[#1717a880] dark:hover:bg-slate-900  ': index % 2 === 0, 'bg-zinc-50 dark:bg-[#13136bb8] dark:hover:bg-slate-900': index % 2 !== 0 }"
+                    class="border-b border-gray-200 dark:border-blue-900 hover:bg-gray-100  dark:text-slate-200"
                   >
                     <td class="py-3 pl-6 text-left whitespace-nowrap">
                       <span
@@ -268,15 +271,14 @@ onBeforeMount(() => {
                     </td>
                     <td class="py-3 px-6 text-left">
                       <span
-                        :class="{ ' dark:bg-gray-900 ': index % 2 === 0, 'dark:bg-gray-800': index % 2 !== 0 }"
-                        class="inline-flex items-center gap-1 rounded-xl bg-gray-50  px-2 py-1 text-xs font-semibold"
+                        class="inline-flex items-center gap-1 dark:bg-[#0101040e]  rounded-xl bg-gray-50  px-2 py-1 text-xs font-semibold"
                       >
                         {{ ConvertDateFormat(data._source.date) }}
                       </span>
                     </td>
                     <td class="py-3 px-6 text-left">
                       <button @click="asigneSelectedContent(index);open = true"
-                        class="px-2 py-1 font-normal dark:bg-[#2525ff52] dark:text-violet-50 border-purple-500 text-violet-600 bg-violet-50 rounded-xl transition duration-300 hover:scale-105 focus:outline-none"
+                        class="px-2 py-1 font-normal dark:bg-slate-300 dark:text-slate-800  dark:bg-[#28287552]  border-purple-500 text-violet-600 bg-violet-50 rounded-xl transition duration-300 hover:scale-105 focus:outline-none"
                       >
                         View Details
                       </button>
@@ -287,21 +289,32 @@ onBeforeMount(() => {
             </div>
           </div>
         </div>
-        <div v-if="totalResults == 0" class="h-full flex justify-center align-middle mt-24">
+        <div v-if="totalResults == 0 && isLoading==false" class="h-full flex justify-center align-middle mt-24">
           <lottie-animation :animation-data="animationData" :loop="true" class="w-72 h-72" />
+        </div>
+        <div v-if=" isLoading==true" class="h-full flex justify-center align-middle mt-24">
+          <svg role="status" class="inline h-12 w-12 animate-spin mt-24 text-gray-200 dark:text-gray-600 fill-[#9292FF]"
+		viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path
+			d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+			fill="currentColor" />
+		<path
+			d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+			fill="currentFill" />
+	</svg>
         </div>
       </div>
 
-      <!-- Pagination -->
-      <div v-if="totalResults > 0" class="flex items-center justify-center gap-2 mt-6 mx-24">
-        <button
+      <div id="pagination" v-if="totalResults > 0" class="flex items-center justify-center gap-2 mt-6 mx-24">
+  <!-- Botón de página "Previous" -->
+  <button
           @click="getData(currentPage - 1, searchTerm)"
           :disabled="currentPage <= 1"
           :class="[
-            'flex items-center px-3 py-2 text-sm capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
+            'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200  border rounded-xl gap-x-2',
             currentPage == 1
-              ? ' bg-gray-50 text-gray-300 dark:bg-slate-800 dark:text-slate-500 '
-              : 'hover:bg-gray-100 bg-white text-gray-700 dark:bg-slate-800 border-[#2525ff29] shadow-inner dark:text-slate-200 border-slate-500  dark:hover:bg-gray-900'
+            ? ' bg-gray-50 text-gray-300 dark:bg-slate-800 dark:text-slate-500'
+              : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-slate-800   dark:text-slate-200 border-slate-300  dark:hover:bg-gray-900'
           ]"
         >
           <svg
@@ -320,18 +333,80 @@ onBeforeMount(() => {
           </svg>
           <span> Previous </span>
         </button>
-        <button class="px-2 py-1 text-sm rounded-xl font-semibold dark:text-slate-200 text-slate-600">
-          
-          {{ currentPage }} / {{ totalPages }}
-        </button>
+
+        <div v-if="currentPage>0 && currentPage<3" class="items-center hidden md:flex gap-x-3">
+        
         <button
+          v-for="pageNumber in Math.min(3, totalPages)"
+          :key="pageNumber"
+          @click="getData(pageNumber)"
+          :class="[
+            'px-2 py-1 text-sm rounded-xl ',
+            currentPage === pageNumber
+              ? 'text-blue-500 bg-blue-100/60'
+              : ' hover:bg-gray-100 text-slate-900'
+          ]"
+        >
+          {{ pageNumber }}
+        </button>
+       
+        <button
+          v-if="totalPages > 5"
+          class="px-2 py-1 text-sm text-gray-500 rounded-xl hover:bg-gray-100"
+          disabled
+        >
+          ...
+        </button>
+       
+        <button
+          @click="getData(totalPages)"
+          :class="[
+            'px-2 py-1 text-sm rounded-xl ',
+            currentPage === totalPages-1
+              ? 'text-blue-500 bg-blue-100/60'
+              : ' hover:bg-gray-100 text-slate-900'
+          ]"
+        >
+          {{ totalPages }}
+        </button>
+      </div>
+  
+  <!-- Botones de página -->
+  <div v-if="currentPage>2">
+    <section v-if="totalPages <= 5" class="items-center hidden md:flex gap-x-3">
+    <!-- Mostrar todos los botones de página si hay 5 páginas o menos -->
+    <button v-for="pageNumber in totalPages" :key="pageNumber" @click="getData(pageNumber)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === pageNumber }">
+      {{ pageNumber }}
+    </button>
+  </section>
+  <section v-else class="items-center hidden md:flex gap-x-3 ">
+    <!-- Mostrar botones de página con paginación "compacta" -->
+    <button @click="getData(1)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === 1 }">1</button>
+    <span v-if="currentPage > 3">...</span>
+    <template v-if="currentPage === 1">
+        <button @click="getData(2)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === 2 }">2</button>
+    </template>
+    <template v-else>
+        <button @click="getData(currentPage - 1)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === currentPage - 1 }">{{ currentPage - 1 }}</button>
+    </template>
+    <button @click="getData(currentPage)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === currentPage }">{{ currentPage }}</button>
+    <button @click="getData(currentPage + 1)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === currentPage + 1 }">{{ currentPage + 1 }}</button>
+    <span v-if="currentPage + 2 < totalPages">...</span>
+    <button @click="getData(totalPages)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === totalPages }">{{ totalPages }}</button>
+  </section>
+
+  </div>
+
+
+  <!-- Botón de página "Next" -->
+  <button
           @click="getData(currentPage + 1, searchTerm)"
           :disabled="currentPage == totalPages"
           :class="[
             'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200  border rounded-xl gap-x-2 ',
             currentPage == totalPages
-            ? ' bg-gray-50 text-gray-300 dark:bg-slate-800 dark:text-slate-500 border-slate-500'
-              : 'hover:bg-gray-100 bg-white text-gray-700 dark:bg-slate-800 border-[#2525ff29]  shadow-inner dark:text-slate-200 border-slate-500  dark:hover:bg-gray-900'
+            ? ' bg-gray-50 text-gray-300 dark:bg-slate-800 dark:text-slate-500'
+              : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-slate-800   dark:text-slate-200 border-slate-300  dark:hover:bg-gray-900'
           ]"
         >
           <span> Next </span>
@@ -350,17 +425,20 @@ onBeforeMount(() => {
             />
           </svg>
         </button>
-      </div>
+</div>
+
+
+
     </div>
   </div>
   <div id="results" class="flex flex-row align-middle justify-center mt-5">
-    <p class="text-slate-700 text-xs dark:text-slate-200 font-medium">{{ totalResults }} emails founded</p>
+    <p class="text-slate-700 text-xs dark:text-slate-200 underline">{{ totalResults }} emails founded</p>
   </div>
 
   <!-- modal -->
   <div v-if="open" tra class="fixed inset-0 z-50 overflow-hidden">
     <div
-      class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
       @click="open = false"
     ></div>
     <!-- Sidebar Content -->
