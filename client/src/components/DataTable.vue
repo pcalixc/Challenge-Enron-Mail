@@ -53,7 +53,7 @@ onBeforeMount(() => {
 
 <template>
   <div
-    class="container mx-auto dark:bg-slate-900 bg-white rounded-lg p-4 dark:shadow-slate-700 shadow-violet-100 shadow-md"
+    class="container mx-auto dark:bg-[#010101] bg-white rounded-lg p-4 dark:shadow-none shadow-violet-100 shadow-md"
   >
     <div
       class="flex items-center relative justify-between max-w-screen-xl px-4 mx-auto md:px-6 lg:px-8"
@@ -77,7 +77,7 @@ onBeforeMount(() => {
               class="text-lg dark:text-slate-100 font-semibold tracking-wider uppercase text-black focus:outline-none focus:shadow-outline"
               >Mail Searcher</a
             >
-            <span class="text-slate-600 dark:text-slate-500 text-[0.70rem] font-xs"
+            <span class="text-slate-600 dark:text-slate-300 text-[0.70rem] font-xs"
               >Find Emails Effortlessly!</span
             >
           </div>
@@ -151,7 +151,7 @@ onBeforeMount(() => {
   <!-- component -->
   <div class="overflow-x-auto flex items-center justify-center font-sans overflow-hidden">
     <div class="w-full lg:w-5/6 ">
-      <div class="flex flex-col mt-8 h-[65vh] ">
+      <div class="flex flex-col mt-8 h-[67vh] ">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
           <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8 ">
             <div class="overflow-hidden dark:border-gray-700 md:rounded-tl-lg">
@@ -161,7 +161,7 @@ onBeforeMount(() => {
               >
                 <thead>
                   <tr
-                    class="bg-slate-300   dark:bg-gray-900 dark:text-slate-100  text-gray-600 uppercase text-sm leading-normal rounded-t-xl"
+                    class="bg-slate-300   dark:bg-black dark:text-slate-100  text-gray-600 uppercase text-sm leading-normal rounded-t-xl"
                   >
                     <th class="py-3 px-6 text-left rounded-tl-xl">
                       <div class="gap-1 flex">
@@ -249,8 +249,8 @@ onBeforeMount(() => {
                   <tr
                     v-for="(data, index) in emails"
                     :key="index"
-                    :class="{ ' bg-white dark:bg-[#1717a880] dark:hover:bg-slate-900  ': index % 2 === 0, 'bg-zinc-50 dark:bg-[#13136bb8] dark:hover:bg-slate-900': index % 2 !== 0 }"
-                    class="border-b border-gray-200 dark:border-blue-900 hover:bg-gray-100  dark:text-slate-200"
+                    :class="{ ' bg-white dark:bg-[#1a1a40] dark:hover:bg-slate-900  ': index % 2 === 0, 'bg-zinc-50 dark:bg-[#082032] dark:hover:bg-slate-900': index % 2 !== 0 }"
+                    class="border-b border-gray-200 dark:border-slate-900 hover:bg-gray-100  dark:text-slate-200"
                   >
                     <td class="py-3 pl-6 text-left whitespace-nowrap">
                       <span
@@ -278,7 +278,7 @@ onBeforeMount(() => {
                     </td>
                     <td class="py-3 px-6 text-left">
                       <button @click="asigneSelectedContent(index);open = true"
-                        class="px-2 py-1 font-normal dark:bg-slate-300 dark:text-slate-800  dark:bg-[#28287552]  border-purple-500 text-violet-600 bg-violet-50 rounded-xl transition duration-300 hover:scale-105 focus:outline-none"
+                        class="px-2 py-1 font-normal dark:bg-slate-900 dark:text-slate-300 border dark:border-slate-700  dark:bg-[#28287552]  border-purple-500 text-violet-600 bg-violet-50 rounded-xl transition duration-300 hover:scale-105 focus:outline-none"
                       >
                         View Details
                       </button>
@@ -311,10 +311,10 @@ onBeforeMount(() => {
           @click="getData(currentPage - 1, searchTerm)"
           :disabled="currentPage <= 1"
           :class="[
-            'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200  border rounded-xl gap-x-2',
+            'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200   rounded-xl gap-x-2',
             currentPage == 1
-            ? ' bg-gray-50 text-gray-300 dark:bg-slate-800 dark:text-slate-500'
-              : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-slate-800   dark:text-slate-200 border-slate-300  dark:hover:bg-gray-900'
+            ? ' bg-gray-50 text-gray-300 dark:bg-[#082032] dark:text-slate-500'
+              : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900'
           ]"
         >
           <svg
@@ -333,8 +333,8 @@ onBeforeMount(() => {
           </svg>
           <span> Previous </span>
         </button>
-
-        <div v-if="currentPage>0 && currentPage<3" class="items-center hidden md:flex gap-x-3">
+        
+        <div v-if="currentPage>0 && currentPage<3 " class="items-center hidden md:flex gap-x-3">
         
         <button
           v-for="pageNumber in Math.min(3, totalPages)"
@@ -343,8 +343,8 @@ onBeforeMount(() => {
           :class="[
             'px-2 py-1 text-sm rounded-xl ',
             currentPage === pageNumber
-              ? 'text-blue-500 bg-blue-100/60'
-              : ' hover:bg-gray-100 text-slate-900'
+              ? 'text-blue-500  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
+              : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900'
           ]"
         >
           {{ pageNumber }}
@@ -352,7 +352,7 @@ onBeforeMount(() => {
        
         <button
           v-if="totalPages > 5"
-          class="px-2 py-1 text-sm text-gray-500 rounded-xl hover:bg-gray-100"
+          class="px-2 py-1 text-sm text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
           disabled
         >
           ...
@@ -363,50 +363,47 @@ onBeforeMount(() => {
           :class="[
             'px-2 py-1 text-sm rounded-xl ',
             currentPage === totalPages-1
-              ? 'text-blue-500 bg-blue-100/60'
-              : ' hover:bg-gray-100 text-slate-900'
+              ? 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900  '
+              : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900'
           ]"
         >
           {{ totalPages }}
         </button>
-      </div>
-  
-  <!-- Botones de página -->
-  <div v-if="currentPage>2">
-    <section v-if="totalPages <= 5" class="items-center hidden md:flex gap-x-3">
-    <!-- Mostrar todos los botones de página si hay 5 páginas o menos -->
-    <button v-for="pageNumber in totalPages" :key="pageNumber" @click="getData(pageNumber)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === pageNumber }">
-      {{ pageNumber }}
-    </button>
-  </section>
-  <section v-else class="items-center hidden md:flex gap-x-3 ">
-    <!-- Mostrar botones de página con paginación "compacta" -->
-    <button @click="getData(1)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === 1 }">1</button>
-    <span v-if="currentPage > 3">...</span>
-    <template v-if="currentPage === 1">
-        <button @click="getData(2)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === 2 }">2</button>
-    </template>
-    <template v-else>
-        <button @click="getData(currentPage - 1)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === currentPage - 1 }">{{ currentPage - 1 }}</button>
-    </template>
-    <button @click="getData(currentPage)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === currentPage }">{{ currentPage }}</button>
-    <button @click="getData(currentPage + 1)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === currentPage + 1 }">{{ currentPage + 1 }}</button>
-    <span v-if="currentPage + 2 < totalPages">...</span>
-    <button @click="getData(totalPages)" class="px-2 py-1 text-sm rounded-xl" :class="{ 'text-blue-500 bg-blue-100/60': currentPage === totalPages }">{{ totalPages }}</button>
-  </section>
+        </div>
+          <!-- Botones de página -->
+        <div v-if="currentPage>2">
+          <section v-if="totalPages <= 5" class="items-center hidden md:flex gap-x-3">
+          <!-- Mostrar todos los botones de página si hay 5 páginas o menos -->
+          <button v-for="pageNumber in totalPages" :key="pageNumber" @click="getData(pageNumber)" class="px-2 py-1 text-sm rounded-xl text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 " :class="{ 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === pageNumber }">
+            {{ pageNumber }}
+          </button>
+        </section>
+        <section v-else class="items-center hidden md:flex gap-x-3 ">
+          <!-- Mostrar botones de página con paginación "compacta" -->
+          <button @click="getData(1)" class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300  bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900" :class="{ 'text-blue-500  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === 1 }">1</button>
+          <span v-if="currentPage > 3" class="dark:text-slate-100">...</span>
+          <template v-if="currentPage === 1">
+              <button @click="getData(2)" class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900" :class="{ 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === 2 }">2</button>
+          </template>
+          <template v-else>
+              <button @click="getData(currentPage - 1)" class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900" :class="{ 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === currentPage - 1 }">{{ currentPage - 1 }}</button>
+          </template>
+          <button @click="getData(currentPage)" class="px-2 py-1 text-sm rounded-xl text-blue-500 bg-blue-100/60 hover:bg-gray-300 bg-slate-200 shadow-xs  dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900" :class="{ 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === currentPage }">{{ currentPage }}</button>
+          <button @click="getData(currentPage + 1)" class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900" :class="{ 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === currentPage + 1 }">{{ currentPage + 1 }}</button>
+          <span v-if="currentPage + 2 < totalPages" class="dark:text-slate-100">...</span>
+          <button @click="getData(totalPages)" class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200  dark:hover:bg-gray-900" :class="{ 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ': currentPage === totalPages }">{{ totalPages }}</button>
+        </section>
 
-  </div>
-
-
-  <!-- Botón de página "Next" -->
-  <button
+        </div>
+          <!-- Botón de página "Next" -->
+      <button
           @click="getData(currentPage + 1, searchTerm)"
           :disabled="currentPage == totalPages"
           :class="[
-            'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200  border rounded-xl gap-x-2 ',
+            'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
             currentPage == totalPages
-            ? ' bg-gray-50 text-gray-300 dark:bg-slate-800 dark:text-slate-500'
-              : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-slate-800   dark:text-slate-200 border-slate-300  dark:hover:bg-gray-900'
+            ? ' text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900'
+              : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-[#1a1a40]   dark:text-slate-200   dark:hover:bg-gray-900'
           ]"
         >
           <span> Next </span>
@@ -444,7 +441,7 @@ onBeforeMount(() => {
     <!-- Sidebar Content -->
     <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex">
       <div class="max-w-lg rounded-l-2xl">
-        <div class="h-full flex flex-col py-6 bg-white dark:bg-slate-800 shadow-xl rounded-2xl">
+        <div class="h-full flex flex-col py-6 bg-white dark:bg-slate-900 shadow-xl rounded-2xl">
           <!-- Sidebar Header -->
           <div class="flex items-center justify-between px-4">
             <div class="px-2 flex items-end mr-auto space-x-4">
@@ -455,8 +452,8 @@ onBeforeMount(() => {
                   :class="[
                     ' p-1.5 rounded-lg',
                     selectedEmailIndex != 0
-                      ? 'text-gray-700 dark:text-slate-100 dark:bg-[#2525ff52] hover:scale-105'
-                      : 'text-gray-400 dark:bg-gray-700  disabled pointer-events-none'
+                      ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
+                      : 'text-gray-400 dark:bg-gray-600  disabled pointer-events-none'
                   ]"
                   title="Previous Email"
                 >
@@ -478,7 +475,7 @@ onBeforeMount(() => {
                   :class="[
                     'bg-gray-200  p-1.5 rounded-lg',
                     selectedEmailIndex != 6
-                    ? 'text-gray-700 dark:text-slate-100 dark:bg-[#2525ff52] hover:scale-105'
+                    ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
                       : 'text-gray-400 dark:bg-gray-700  disabled pointer-events-none'
                   ]"
                   title="Nex Email"
