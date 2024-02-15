@@ -6,8 +6,6 @@ import (
 	"fmt"
 )
 
-//var routes = flag.Bool("routes", false, "Generate router documentation")
-
 func main() {
 	config.LoadEnvVars()
 

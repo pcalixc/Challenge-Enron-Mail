@@ -38,7 +38,7 @@ func New() Server {
 		ChiRouter: router,
 	}
 
-	server.setupRoutesb() // Configurar las rutas
+	server.setupRoutes()
 
 	return server
 }
