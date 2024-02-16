@@ -33,9 +33,9 @@ func ListFiles(path string) ([]string, error) {
 	}
 
 	for outputIndex := range outputDirFiles {
-		outputFileHere := outputDirFiles[outputIndex]
+		outputFile := outputDirFiles[outputIndex]
 
-		outputNameHere := outputFileHere.Name()
+		outputNameHere := outputFile.Name()
 		folderList = append(folderList, outputNameHere)
 	}
 	return folderList, nil
@@ -174,15 +174,15 @@ func FillIndexBatch(path string) error {
 	return nil
 }
 
-// IndexEmail recursively processes the directory structure and fills the index batch accordingly with FillIndexBatch(path string).
-func IndexEmail(path string) error {
+// IndexEmailDirectory recursively processes the directory structure and fills the index batch accordingly with FillIndexBatch(path string).
+func IndexEmailDirectory(path string) error {
 	if IsDirectory(path) {
 		folders, err := ListFiles(path)
 		if err != nil {
 			return fmt.Errorf("error while listing files in path %s: %v", path, err)
 		}
 		for _, folder := range folders {
-			err := IndexEmail(path + "/" + folder)
+			err := IndexEmailDirectory(path + "/" + folder)
 			if err != nil {
 				return fmt.Errorf("error while indexing email in path %s: %v", path, err)
 			}

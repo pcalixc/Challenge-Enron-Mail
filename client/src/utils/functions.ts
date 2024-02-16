@@ -38,7 +38,7 @@ export function SeparateEmailsByCommas(string: string) {
   }
   
 
-export  const highlighWord = (text: string, word: string) => {
+export  const HighlighWord = (text: string, word: string) => {
     const regex = new RegExp(word, 'gi')
     return text.replace(
       regex,

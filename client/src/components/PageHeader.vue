@@ -13,7 +13,7 @@ const searchTerm = ref('')
 
 <template>
 <div
-    class="container mx-auto dark:bg-[#010101] bg-white rounded-lg p-4 dark:shadow-none shadow-violet-100 shadow-md"
+    class="container mx-auto dark:bg-primary_dark bg-white rounded-lg p-4 dark:shadow-none shadow-violet-100 shadow-md"
   >
     <div
       class="flex items-center relative justify-between max-w-screen-xl px-4 mx-auto md:px-6 lg:px-8"
@@ -52,8 +52,8 @@ const searchTerm = ref('')
             type="search"
             placeholder="Enter a keyword..."
             v-model="searchTerm"
-            @keyup.enter="props.getData(1, searchTerm)"
-            class="peer cursor-pointer relative shadow-inner z-10 h-12 rounded-xl border-2 border-[#4a4aff2e] dark:bg-[#4a4aff18] bg-transparent pl-16 pr-4 outline-none focus:w-full focus:cursor-text focus:border-[#4a4aff5c] focus:border-3"
+      
+            class="peer cursor-pointer relative shadow-inner z-10 h-12 rounded-xl border-2 border-[#2525ff52] dark:bg-[#28287549] bg-transparent pl-16 pr-4 outline-none focus:w-full focus:cursor-text focus:border-[#4a4aff5c] focus:border-3"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"

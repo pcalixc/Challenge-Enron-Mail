@@ -1,4 +1,4 @@
-interface EnronMail {
+export interface Email {
   message_id: string;
   date: string;
   from: string;
@@ -16,9 +16,14 @@ interface EnronMail {
   x_folder: string;
   x_origin: string;
   x_file_name: string;
-  content: string;
+  _content: string;
 }
-  
 
 
-  
+export interface Hit{
+	_index:  string 
+  _type: string,
+    _id:    string 
+    _source: Email    
+}
+

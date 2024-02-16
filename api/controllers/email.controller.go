@@ -42,14 +42,13 @@ func SearchMails(term, page, max string) (models.HitsResponse, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal("45", err)
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)
 
 	var hitsResponse models.HitsResponse
 	if resp.ContentLength == 0 {
-		log.Println("esta vaciooo")
 		return hitsResponse, nil
 	}
 	err = json.NewDecoder(resp.Body).Decode(&hitsResponse)

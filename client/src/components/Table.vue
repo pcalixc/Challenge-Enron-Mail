@@ -1,3 +1,4 @@
+eslint-disable vue/multi-word-component-names
 <script setup lang="ts">
 import { ref,defineProps } from 'vue'
 import { LottieAnimation } from 'lottie-web-vue'

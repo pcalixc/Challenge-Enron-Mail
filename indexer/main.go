@@ -25,7 +25,7 @@ func main() {
 	}
 
 	path := os.Args[1] + "/maildir"
-	err := utils.IndexEmail(path)
+	err := utils.IndexEmailDirectory(path)
 	if err != nil {
 		fmt.Println("Error indexing: ", path, err)
 	}
