@@ -22,14 +22,15 @@ const isLoading = ref(false)
 
 
 const getData = async (pageNumber: number, searchTerm?: string) => {
-  console.log(searchTerm)
+
+
   searchTerm = typeof searchTerm === 'undefined' ? '' : searchTerm
   let pn = pageNumber.toString()
   currentSearchTerm.value = searchTerm
   isLoading.value = true
   try {
     const response = await fetch(
-      `http://localhost:3333/emails?page=${pn}&max=${amountEmailsByPage.value}&term=${searchTerm}`
+      `http://${import.meta.env.VITE_API_URL}/${import.meta.env.INDEX_NAME}?page=${pn}&max=${amountEmailsByPage.value}&term=${searchTerm}`
     )
     const data = await response.json()
     emails.value = data.hits.hits
@@ -61,8 +62,8 @@ onBeforeMount(() => {
   <!-- table component -->
   <div class="overflow-x-auto flex items-center justify-center font-sans overflow-hidden">
     <div class="w-full lg:w-5/6">
-      <div class="flex flex-col mt-8 h-[67vh]">
-        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="flex flex-col mt-8 h-[68vh]">
+        <div class="-mx-4 -my-2  sm:-mx-6 lg:-mx-8">
           <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div class="overflow-hidden dark:border-gray-700 md:rounded-tl-lg">
               <table
@@ -75,57 +76,71 @@ onBeforeMount(() => {
                   >
                     <th class="py-3 px-6 text-left rounded-tl-xl">
                       <div class="gap-1 flex">
-                        <img class=" dark:fill-white fill-[#414141]" src="../assets/subject.svg" alt="mail-icon" >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="mt-1 dark:fill-white fill-[#414141]"
+                          id="Filled"
+                          viewBox="0 0 24 24"
+                          width="13"
+                          height="13"
+                        >
+                          <path
+                            d="M23.954,5.542,15.536,13.96a5.007,5.007,0,0,1-7.072,0L.046,5.542C.032,5.7,0,5.843,0,6V18a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V6C24,5.843,23.968,5.7,23.954,5.542Z"
+                          />
+                          <path
+                            d="M14.122,12.546l9.134-9.135A4.986,4.986,0,0,0,19,1H5A4.986,4.986,0,0,0,.744,3.411l9.134,9.135A3.007,3.007,0,0,0,14.122,12.546Z"
+                          />
+                        </svg>
                         Subject
                       </div>
                     </th>
                     <th class="py-3 px-6 text-left">
                       <div class="gap-1 flex">
-                        <!-- <svg
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           id="Layer_1"
                           class="mt-1 dark:fill-white fill-[#414141]"
                           data-name="Layer 1"
                           viewBox="0 0 24 24"
-                          width="14"
-                          height="14"
+                          width="13"
+                          height="13"
                         >
                           <path
                             d="m20,0H4C1.794,0,0,1.794,0,4v12c0,2.206,1.794,4,4,4h2.923l3.748,3.156c.382.34.862.509,1.338.509.467,0,.931-.163,1.292-.485l3.847-3.18h2.852c2.206,0,4-1.794,4-4V4c0-2.206-1.794-4-4-4Zm-3.293,9.826c-.391.391-1.023.391-1.414,0l-2.293-2.293v7.467c0,.553-.448,1-1,1s-1-.447-1-1v-7.367l-2.293,2.293c-.195.195-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023,0-1.414l2.636-2.637c1.17-1.17,3.072-1.17,4.242,0l2.536,2.536c.391.391.391,1.023,0,1.414Z"
                           />
-                        </svg> -->
+                        </svg>
 
                         From
                       </div>
                     </th>
                     <th class="py-3 px-6 text-left flex gap-1">
                       <div class="gap-1 flex">
-                        <!-- <svg
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           id="Layer_1"
                           class="mt-1 dark:fill-white fill-[#414141]"
                           data-name="Layer 1"
                           viewBox="0 0 24 24"
-                          width="14"
-                          height="14"
+                          width="13"
+                          height="13"
                         >
                           <path
                             d="m21,0H3C1.346,0,0,1.346,0,3v17h6.923l3.749,3.157c.382.339.861.507,1.337.507.468,0,.931-.163,1.292-.484l3.848-3.18h6.852V3c0-1.654-1.346-3-3-3Zm-7.594,14.419c-.388.387-.897.581-1.406.581s-1.018-.193-1.405-.58l-3.3-3.3,1.414-1.414,2.291,2.291v-6.997h2v7.008l2.291-2.302,1.414,1.414-3.299,3.299Z"
                           />
-                        </svg> -->
+                        </svg>
                         To
                       </div>
                     </th>
 
                     <th class="py-3 px-6 text-left">
                       <div class="gap-1 flex">
-                        <!-- <svg
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           id="Filled"
-                          class="mt-1 dark:fill-white fill-[#414141]"
+                          class="mt-1 ml-2 dark:fill-white fill-[#414141]"
                           viewBox="0 0 24 24"
-                          width="14"
-                          height="14"
+                          width="13"
+                          height="13"
                         >
                           <path
                             d="M0,19a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V10H0Zm17-4.5A1.5,1.5,0,1,1,15.5,16,1.5,1.5,0,0,1,17,14.5Zm-5,0A1.5,1.5,0,1,1,10.5,16,1.5,1.5,0,0,1,12,14.5Zm-5,0A1.5,1.5,0,1,1,5.5,16,1.5,1.5,0,0,1,7,14.5Z"
@@ -133,7 +148,7 @@ onBeforeMount(() => {
                           <path
                             d="M19,2H18V1a1,1,0,0,0-2,0V2H8V1A1,1,0,0,0,6,1V2H5A5.006,5.006,0,0,0,0,7V8H24V7A5.006,5.006,0,0,0,19,2Z"
                           />
-                        </svg> -->
+                        </svg>
                         Date
                       </div>
                     </th>
