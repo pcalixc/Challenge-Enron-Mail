@@ -1,10 +1,11 @@
-eslint-disable vue/multi-word-component-names
+<!-- eslint-disable vue/multi-word-component-names -->
+
 <script setup lang="ts">
 import { ref,defineProps } from 'vue'
 import { LottieAnimation } from 'lottie-web-vue'
 import animationData from '../assets/Animation.json'
 import { ConvertDateFormat } from '../utils/functions'
-import { highlighWord } from '../utils/functions'
+import { HighlighWord } from '../utils/functions'
 
 interface Props {
   getData: Function
@@ -170,6 +171,8 @@ const searchTerm = ref('')
             </div>
           </div>
         </div>
+
+
         <div
           v-if="props.totalResults == 0 && props.isLoading == false"
           class="h-full flex justify-center align-middle mt-24"
@@ -194,6 +197,8 @@ const searchTerm = ref('')
             />
           </svg>
         </div>
+
+        
       </div>
 
       <div

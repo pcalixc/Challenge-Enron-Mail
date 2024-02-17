@@ -10,7 +10,7 @@ export default  {
         "primary_dark": "#010101",
         "ligth_blue": "#1a1a40",
         "deep_blue": "#082032",
-        "vivid_blue": "#2128a6",
+        "vivid_blue": "#1a1a40",
         "transparent_blue": "#28287552",
         "royal_purple": "#9292FF",
       },

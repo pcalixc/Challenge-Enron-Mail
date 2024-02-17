@@ -1,11 +1,15 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
-import { LottieAnimation } from 'lottie-web-vue'
-import animationData from '../assets/Animation.json'
-import PageHeader from '@/components/PageHeader.vue'
+// import animation from '@/assets/planets.json'
+import Header from '@/components/Header.vue'
 import  type {Email, Hit} from '@/types/index'
-import { ConvertDateFormat, SeparateEmailsByCommas, HighlighWord } from '../utils/functions'
+import ConnectionError from '@/components/indicators/ConnectionError.vue'
+import NoData from '@/components/indicators/NoData.vue'
+import Loading from '@/components/indicators/Loading.vue'
+import EmailModal from '@/components/EmailModal.vue'
+import TotalResults from '@/components/TotalResults.vue'
+import { ConvertDateFormat, HighlighWord } from '../utils/functions'
 
 const open = ref(false)
 const selectedEmail = ref<Email | null>();
@@ -17,32 +21,31 @@ const currentPage = ref(1)
 var totalPages = ref(0)
 const amountEmailsByPage = ref(7)
 const isLoading = ref(false)
-
-
+const conectionError= ref(false)
 
 
 const getData = async (pageNumber: number, searchTerm?: string) => {
-
-
   searchTerm = typeof searchTerm === 'undefined' ? '' : searchTerm
   let pn = pageNumber.toString()
   currentSearchTerm.value = searchTerm
   isLoading.value = true
   try {
     const response = await fetch(
-      `http://${import.meta.env.VITE_API_URL}/${import.meta.env.INDEX_NAME}?page=${pn}&max=${amountEmailsByPage.value}&term=${searchTerm}`
+      `http://${import.meta.env.VITE_API_URL}/emails?page=${pn}&max=${amountEmailsByPage.value}&term=${searchTerm}`
     )
+
     const data = await response.json()
+
     emails.value = data.hits.hits
     totalResults.value = data.hits.Total.value
   } catch (error) {
     console.error('Error fetching data:', error, Response)
+    conectionError.value=true
   }
   isLoading.value = false
   currentPage.value = pageNumber
   totalPages.value = Math.ceil(totalResults.value / amountEmailsByPage.value)
 }
-
 
 const asigneSelectedContent = (index: number) => {
   selectedEmail.value = emails.value[index]._source
@@ -57,8 +60,9 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <!-- header component -->
-  <PageHeader :getData="getData" />
+
+  <Header :getData="getData" />
+
   <!-- table component -->
   <div class="overflow-x-auto flex items-center justify-center font-sans overflow-hidden">
     <div class="w-full lg:w-5/6">
@@ -206,38 +210,21 @@ onBeforeMount(() => {
             </div>
           </div>
         </div>
-        <div
-          v-if="totalResults == 0 && isLoading == false"
-          class="h-full flex justify-center align-middle mt-24"
-        >
-          <lottie-animation :animation-data="animationData" :loop="true" class="w-72 h-72" />
-        </div>
-        <div v-if="isLoading == true" class="h-full flex justify-center align-middle mt-24">
-          <svg
-            role="status"
-            class="inline h-12 w-12 animate-spin mt-24 text-gray-200 dark:text-gray-600 fill-royal_purple"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor"
-            />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentFill"
-            />
-          </svg>
-        </div>
+
+        <NoData  v-if="totalResults == 0 && isLoading == false && conectionError==false"  />
+        
+        <ConnectionError v-if="conectionError"/>
+
+        <Loading v-if="isLoading" />
+
       </div>
+  <!-- <lottie-animation :animation-data="animation" :loop="true" class="w-72 h-72 opacity-10  fixed" /> -->
 
       <div
         id="pagination"
         v-if="totalResults > 0"
         class="flex items-center justify-center gap-2 mt-6 mx-24"
       >
-      
         <button
           @click="getData(currentPage - 1, currentSearchTerm)"
           :disabled="currentPage <= 1"
@@ -264,7 +251,6 @@ onBeforeMount(() => {
           </svg>
           <span> Previous </span>
         </button>
-
         <div v-if="currentPage > 0 && currentPage < 3" class="items-center hidden md:flex gap-x-3">
           <button
             v-for="pageNumber in Math.min(3, totalPages)"
@@ -415,178 +401,22 @@ onBeforeMount(() => {
           </svg>
         </button>
       </div>
+
     </div>
   </div>
-  <div id="results" class="flex flex-row align-middle justify-center mt-5">
-    <p class="text-slate-700 text-xs dark:text-slate-200 underline">
-      {{ totalResults }} emails founded
-    </p>
-  </div>
 
-  <!-- email infomodal -->
-  <div v-if="open" tra class="fixed inset-0 z-50 overflow-hidden">
-    <div
-      class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
-      @click="open = false"
-    ></div>
-    <!-- Sidebar Content -->
-    <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex">
-      <div class="max-w-lg rounded-l-2xl">
-        <div class="h-full flex flex-col py-6 bg-white dark:bg-slate-900 shadow-xl rounded-2xl">
-          <!-- Sidebar Header -->
-          <div class="flex items-center justify-between px-4">
-            <div class="px-2 flex items-end mr-auto space-x-4">
-              <div class="flex items-center space-x-2">
-                <button
-                  @click="asigneSelectedContent(selectedEmailIndex - 1)"
-                  :class="[
-                    ' p-1.5 rounded-lg',
-                    selectedEmailIndex != 0
-                      ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
-                      : 'text-gray-400 dark:bg-gray-600  disabled pointer-events-none'
-                  ]"
-                  title="Previous Email"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-7 w-7"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  @click="asigneSelectedContent(selectedEmailIndex + 1)"
-                  :class="[
-                    'bg-gray-200  p-1.5 rounded-lg',
-                    selectedEmailIndex != 6
-                      ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
-                      : 'text-gray-400 dark:bg-gray-700  disabled pointer-events-none'
-                  ]"
-                  title="Nex Email"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-7 w-7"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <button @click="open = false" class="text-gray-600 scale-105 hover:text-gray-700">
-              <span class="sr-only">Close</span>
-              <svg
-                class="h-6 w-6"
-                x-description="Heroicon name: x"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
-              </svg>
-            </button>
-          </div>
+  <TotalResults v-if="!conectionError"
+  :totalResults="totalResults"/>
 
-          <!-- Sidebar Content -->
-          <header>
-            <nav class="flex items-start flex-col mt-6 gap-y-3">
-              <div class="ml-4 mb-3s font-semibold dark:text-slate-200">
-                From:
-                <div
-                  class="inline-flex items-center gap-1 rounded-full bg-violet-50 dark:bg-vivid_blue px-2 py-1 text-xs font-semibold text-slate-600 dark:text-slate-200"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Layer_1"
-                    class="m-1 fill-[#414141] dark:fill-slate-400"
-                    data-name="Layer 1"
-                    viewBox="0 0 24 24"
-                    width="12"
-                    height="12"
-                  >
-                    <path
-                      d="M16.043,14H7.957A4.963,4.963,0,0,0,3,18.957V24H21V18.957A4.963,4.963,0,0,0,16.043,14Z"
-                    />
-                    <circle cx="12" cy="6" r="6" />
-                  </svg>
-                  <span v-html="HighlighWord(selectedEmail.from, currentSearchTerm)"></span>
-                </div>
-              </div>
-              <div class="inline-flex ml-4 font-semibold dark:text-slate-200">
-                To:
-                <div class="ml-6 grid grid-cols-2 gap-y-1 gap-x-2">
-                  <span
-                    v-for="(email, index) in SeparateEmailsByCommas(selectedEmail.to)"
-                    :key="index"
-                    class="inline-flex rounded-full bg-violet-50 dark:bg-vivid_blue px-2 py-1 text-xs font-semibold text-gray-600 dark:text-slate-200"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      version="1.1"
-                      id="Capa_1"
-                      x="0px"
-                      y="0px"
-                      viewBox="0 0 512 512"
-                      xml:space="preserve"
-                      class="m-1 fill-[#414141] dark:fill-slate-400"
-                      width="12"
-                      height="12"
-                    >
-                      <g>
-                        <circle cx="256" cy="128" r="128" />
-                        <path
-                          d="M256,298.667c-105.99,0.118-191.882,86.01-192,192C64,502.449,73.551,512,85.333,512h341.333   c11.782,0,21.333-9.551,21.333-21.333C447.882,384.677,361.99,298.784,256,298.667z"
-                        />
-                      </g>
-                    </svg>
-                    {{ email }}
-                  </span>
-                </div>
-              </div>
-            </nav>
-            <hr class="border-t border-slate-500 mt-4 shadow-xl" />
-          </header>
 
-          <main class="mt-4 px-10 overflow-x-hidden overflow-y-auto custom-scrollbar">
-            <h2
-              class="mt-1 mb-4 mr-8 text-right rounded-full text-md font-bold uppercase text-slate-800 dark:text-slate-200"
-            >
-              {{ ConvertDateFormat(selectedEmail.date) }}
-            </h2>
-            <h2
-              class="font-bold text-2xl dark:text-slate-300"
-              v-html="HighlighWord(selectedEmail.subject, currentSearchTerm)"
-            ></h2>
-            <p
-              class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14"
-              v-html="HighlighWord(selectedEmail.content, currentSearchTerm)"
-            ></p>
-          </main>
-          <hr class="border-t border-slate-500 mt-4 shadow-md" />
-        </div>
-      </div>
-    </section>
-  </div>
+  <EmailModal v-if="open"
+  :selectedEmail="selectedEmail"
+  :asigneSelectedContent="asigneSelectedContent"
+  :currentSearchTerm="currentSearchTerm"
+  :selectedEmailIndex="selectedEmailIndex"
+  @close="open=false"
+  />
+
 </template>
 
 <style>

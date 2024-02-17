@@ -16,7 +16,7 @@ export interface Email {
   x_folder: string;
   x_origin: string;
   x_file_name: string;
-  _content: string;
+  content: string;
 }
 
 

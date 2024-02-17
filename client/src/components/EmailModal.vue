@@ -1,14 +1,36 @@
 <script setup lang="ts">
+import type { Email } from '@/types';
+import { defineProps } from 'vue'
+import { HighlighWord,SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/functions';
 
+function close() {
+  emit('close', false);
+}
+
+interface Emits{
+    (event: 'close', value: boolean): void
+}
+
+ const emit = defineEmits<Emits>()
+
+
+interface Props {
+  asigneSelectedContent : Function
+  selectedEmail: Email  | null | undefined
+  currentSearchTerm: string
+  selectedEmailIndex: number
+}
+
+const props = defineProps<Props>()
 
 
 </script>
 
-<!-- <template>
-      <div v-if="open" tra class="fixed inset-0 z-50 overflow-hidden">
+<template>
+    <div  tra class="fixed inset-0 z-50 overflow-hidden">
     <div
       class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
-      @click="open = false"
+      @click="close()" 
     ></div>
     <!-- Sidebar Content -->
     <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex">
@@ -19,10 +41,10 @@
             <div class="px-2 flex items-end mr-auto space-x-4">
               <div class="flex items-center space-x-2">
                 <button
-                  @click="asigneSelectedContent(selectedEmailIndex - 1)"
+                  @click="props.asigneSelectedContent(props.selectedEmailIndex - 1)"
                   :class="[
-                    ' p-1.5 rounded-lg',
-                    selectedEmailIndex != 0
+                    'bg-gray-200  p-1.5 rounded-lg',
+                    props.selectedEmailIndex != 0
                       ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
                       : 'text-gray-400 dark:bg-gray-600  disabled pointer-events-none'
                   ]"
@@ -42,11 +64,11 @@
                   </svg>
                 </button>
                 <button
-                  @click="asigneSelectedContent(selectedEmailIndex + 1)"
+                  @click="props.asigneSelectedContent(props.selectedEmailIndex + 1)"
                   :class="[
                     'bg-gray-200  p-1.5 rounded-lg',
-                    selectedEmailIndex != 6
-                    ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
+                    props.selectedEmailIndex != 6
+                      ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
                       : 'text-gray-400 dark:bg-gray-700  disabled pointer-events-none'
                   ]"
                   title="Nex Email"
@@ -66,7 +88,7 @@
                 </button>
               </div>
             </div>
-            <button @click="open = false" class="text-gray-600 scale-105 hover:text-gray-700">
+            <button @click="close()" class="text-gray-600 scale-105 hover:text-gray-700">
               <span class="sr-only">Close</span>
               <svg
                 class="h-6 w-6"
@@ -93,9 +115,9 @@
               <div class="ml-4 mb-3s font-semibold dark:text-slate-200">
                 From:
                 <div
-                  class="inline-flex items-center gap-1 rounded-full bg-violet-50 dark:bg-[#2525ff52] px-2 py-1 text-xs font-semibold text-slate-600 dark:text-slate-200"
+                  class="inline-flex items-center gap-1 rounded-full bg-violet-50 dark:bg-vivid_blue px-2 py-1 text-xs font-semibold text-slate-600 dark:text-slate-200"
                 >
-                 <svg
+                  <svg
                     xmlns="http://www.w3.org/2000/svg"
                     id="Layer_1"
                     class="m-1 fill-[#414141] dark:fill-slate-400"
@@ -108,17 +130,17 @@
                       d="M16.043,14H7.957A4.963,4.963,0,0,0,3,18.957V24H21V18.957A4.963,4.963,0,0,0,16.043,14Z"
                     />
                     <circle cx="12" cy="6" r="6" />
-                  </svg> 
-                <span v-html="highlighWord(selectedEmail.from, searchTerm)"></span>
+                  </svg>
+                  <span v-html="HighlighWord(props.selectedEmail.from, props.currentSearchTerm)"></span>
                 </div>
               </div>
               <div class="inline-flex ml-4 font-semibold dark:text-slate-200">
                 To:
                 <div class="ml-6 grid grid-cols-2 gap-y-1 gap-x-2">
                   <span
-                    v-for="(email, index) in SeparateEmailsByCommas(selectedEmail.to)"
+                    v-for="(email, index) in SeparateEmailsByCommas(props.selectedEmail.to)"
                     :key="index"
-                    class="inline-flex rounded-full bg-violet-50 dark:bg-[#2525ff52] px-2 py-1 text-xs font-semibold text-gray-600 dark:text-slate-200"
+                    class="inline-flex rounded-full bg-violet-50 dark:bg-vivid_blue px-2 py-1 text-xs font-semibold text-gray-600 dark:text-slate-200"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -152,19 +174,20 @@
             <h2
               class="mt-1 mb-4 mr-8 text-right rounded-full text-md font-bold uppercase text-slate-800 dark:text-slate-200"
             >
-              {{ ConvertDateFormat(selectedEmail.date) }}
+              {{ ConvertDateFormat(props.selectedEmail.date) }}
             </h2>
-            <h2 class="font-bold text-2xl dark:text-slate-300" v-html="highlighWord(selectedEmail.subject, searchTerm)"></h2>
-
-            <p class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14">
-              {{ selectedEmail.content }}
-            </p>
-            <span v-html="highlighWord(selectedEmail.content, searchTerm)"></span>
+            <h2
+              class="font-bold text-2xl dark:text-slate-300"
+              v-html="HighlighWord(props.selectedEmail.subject, props.currentSearchTerm)"
+            ></h2>
+            <p
+              class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14"
+              v-html="HighlighWord(props.selectedEmail.content, props.currentSearchTerm)"
+            ></p>
           </main>
           <hr class="border-t border-slate-500 mt-4 shadow-md" />
-
         </div>
       </div>
     </section>
   </div>
-</template> -->
+</template>

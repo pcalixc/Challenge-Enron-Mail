@@ -8,6 +8,17 @@ const togleDark= useToggle(isDark)
 const props = defineProps(['getData'])
 
 const searchTerm = ref('')
+const errorMessage= ref('')
+
+const handleSubmit=()=> {
+      const regex = /[?/><>,!@#$%^&*()_=+{}|[\]\\:;"'`~]/;
+      if (regex.test(searchTerm.value)) {
+        errorMessage.value = 'Input must not contain special characters.';
+        return;
+      }
+      props.getData(1, searchTerm.value);
+      errorMessage.value = ''; 
+    }
 
 </script>
 
@@ -43,16 +54,15 @@ const searchTerm = ref('')
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-center max-w-md mr-8">
+      <div class="flex items-center flex-col justify-center max-w-md mr-8">
         <form
-          @submit.prevent="props.getData(1, searchTerm)"
+          @submit.prevent="handleSubmit()"
           class="relative w-full text-slate-800 dark:text-slate-50"
         >
           <input
             type="search"
             placeholder="Enter a keyword..."
             v-model="searchTerm"
-      
             class="peer cursor-pointer relative shadow-inner z-10 h-12 rounded-xl border-2 border-[#2525ff52] dark:bg-[#28287549] bg-transparent pl-16 pr-4 outline-none focus:w-full focus:cursor-text focus:border-[#4a4aff5c] focus:border-3"
           />
           <svg
@@ -70,8 +80,12 @@ const searchTerm = ref('')
             />
           </svg>
         </form>
-      </div>
+        <span  class="flex absolute mt-16 items-center tracking-wide text-red-500 text-xs">
+			{{errorMessage}}
+		</span>
 
+      </div>
+     
       <div class="flex justify-center items-center">
         <span class="">
           <svg class="h-6 w-6 dark:text-gray-500 text-[#9292FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
