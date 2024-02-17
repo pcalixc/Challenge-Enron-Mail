@@ -5,7 +5,6 @@ import { ref,defineProps } from 'vue'
 import { LottieAnimation } from 'lottie-web-vue'
 import animationData from '../assets/Animation.json'
 import { ConvertDateFormat } from '../utils/functions'
-import { HighlighWord } from '../utils/functions'
 
 interface Props {
   getData: Function

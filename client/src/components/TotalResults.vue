@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
-
-
-
 interface Props {
     totalResults : number
-
 }
 
 const props = defineProps<Props>()
-
 
 </script>
 
