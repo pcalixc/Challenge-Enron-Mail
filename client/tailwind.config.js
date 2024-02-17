@@ -4,8 +4,18 @@ export default  {
   "./src/**/*.vue", ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "secundary_dark": "#13161C", 
+        "primary_dark": "#010101",
+        "ligth_blue": "#1a1a40",
+        "deep_blue": "#082032",
+        "vivid_blue": "#1a1a40",
+        "transparent_blue": "#28287552",
+        "royal_purple": "#9292FF",
+      },
   },
   plugins: [],
+}
 }
 

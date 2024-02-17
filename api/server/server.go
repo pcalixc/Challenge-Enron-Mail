@@ -38,7 +38,7 @@ func New() Server {
 		ChiRouter: router,
 	}
 
-	server.setupRoutesb() // Configurar las rutas
+	server.setupRoutes()
 
 	return server
 }
@@ -78,7 +78,6 @@ func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
 		w.Write(jsonData)
 	}
 }

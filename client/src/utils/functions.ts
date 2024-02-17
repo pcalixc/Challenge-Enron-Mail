@@ -37,3 +37,11 @@ export function SeparateEmailsByCommas(string: string) {
     });
   }
   
+
+export  const HighlighWord = (text: string, word: string) => {
+    const regex = new RegExp(word, 'gi')
+    return text.replace(
+      regex,
+      '<span class="bg-yellow-200 opacity-80 font-bold text-black rounded-full">' + word + '</span>'
+    )
+  }

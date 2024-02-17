@@ -42,19 +42,18 @@ func SearchMails(term, page, max string) (models.HitsResponse, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal("45", err)
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)
 
 	var hitsResponse models.HitsResponse
 	if resp.ContentLength == 0 {
-		log.Println("esta vaciooo")
 		return hitsResponse, nil
 	}
 	err = json.NewDecoder(resp.Body).Decode(&hitsResponse)
 	if err != nil {
-		log.Fatal("53 ", resp.ContentLength, err)
+		log.Fatal(resp, err)
 	}
 	return hitsResponse, nil
 }
@@ -74,7 +73,7 @@ func GetAllEmails(page, max string) models.HitsResponse {
 	}`, from, intMax)
 	req, err := http.NewRequest("POST", os.Getenv("ZS_BASE_URL")+"/api/mail/_search", strings.NewReader(query))
 	if err != nil {
-		log.Fatal("line 75 controller", err)
+		log.Fatal(err)
 	}
 	req.SetBasicAuth(os.Getenv("ZS_USER"), os.Getenv("ZS_PASSWORD"))
 	req.Header.Set("Content-Type", "application/json")
@@ -82,7 +81,7 @@ func GetAllEmails(page, max string) models.HitsResponse {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal("line 83 controller", err)
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 	log.Println(resp.StatusCode)
@@ -90,7 +89,7 @@ func GetAllEmails(page, max string) models.HitsResponse {
 	var hitsResponse models.HitsResponse
 	err = json.NewDecoder(resp.Body).Decode(&hitsResponse)
 	if err != nil {
-		log.Fatal("line 91 controller", err)
+		log.Fatal(err)
 
 	}
 	return hitsResponse
