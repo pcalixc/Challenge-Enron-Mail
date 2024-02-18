@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   zinc:
     image: public.ecr.aws/zinclabs/zinc:latest
@@ -9,9 +11,25 @@ services:
     volumes:
       - ./zinc:/var/lib/zinc
   api:
-    build: ./api
+    build: 
+      context: ./api
+      args:
+        ZS_USER: admin
+        ZS_PASSWORD: Complexpass#123
+        ZS_BASE_URL: http://localhost:4090
+        API_PORT: 3334
     ports:
-      - 3334:3000
+      - "3334:8080"
     depends_on:
       - zinc
-    #restart: on-failure
+  
+  client:
+    build: 
+      context: ./client
+      args:
+        VITE_API_URL: localhost:3334
+        VITE_API_PORT: 3333
+    ports:
+      - "5555:8080"
+    depends_on:
+      - api
