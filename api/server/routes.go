@@ -6,8 +6,10 @@ import (
 
 func (s *Server) setupRoutes() {
 	s.ChiRouter.Route("/", func(r chi.Router) {
+		//Welcome route
 		r.Get("/", s.Welcome)
-		r.Get("/emails", s.handleEmails)
 
+		//Route in charge of handling emails
+		r.Get("/emails", s.handleEmails)
 	})
 }

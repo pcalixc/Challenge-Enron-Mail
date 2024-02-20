@@ -5,7 +5,7 @@ import ConnectionError from '@/components/indicators/ConnectionError.vue'
 import NoData from '@/components/indicators/NoData.vue'
 import Loading from '@/components/indicators/Loading.vue'
 import Pagination from './Pagination.vue'
-import { ConvertDateFormat, HighlighWord } from '../utils/functions'
+import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
 import type { Hit } from '@/types';
 
 interface Props {
@@ -193,3 +193,4 @@ const props = defineProps<Props>()
     </div>
   </div>
 </template>
+../utils/utilities../utils/emails.utilities

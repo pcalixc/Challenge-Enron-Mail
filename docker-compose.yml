@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   zinc:
     image: public.ecr.aws/zinclabs/zinc:latest
@@ -7,29 +6,29 @@ services:
       - ZINC_FIRST_ADMIN_USER=admin
       - ZINC_FIRST_ADMIN_PASSWORD=Complexpass#123
     ports:
-      - '4090:4080'
+      - '4080:4080'
     volumes:
       - ./zinc:/var/lib/zinc
   api:
     build: 
       context: ./api
       args:
-        ZS_USER: admin
-        ZS_PASSWORD: Complexpass#123
-        ZS_BASE_URL: http://localhost:4090
-        API_PORT: 3334
+        ZS_USER: $ZS_USER
+        ZS_PASSWORD: $ZS_PASSWORD
+        ZS_BASE_URL: $ZS_BASE_URL
+        API_PORT: $API_PORT
     ports:
-      - "3334:8080"
-    depends_on:
-      - zinc
-  
+      - '3333:3000'
   client:
     build: 
       context: ./client
       args:
-        VITE_API_URL: localhost:3334
-        VITE_API_PORT: 3333
+        VITE_API_URL: $VITE_API_URL
     ports:
       - "5555:8080"
     depends_on:
       - api
+
+      
+
+      

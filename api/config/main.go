@@ -2,16 +2,21 @@ package config
 
 import (
 	"fmt"
-	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 )
 
-func LoadEnvVars() {
+func LoadEnvVars() error {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading env vars")
+		return fmt.Errorf("error loading env vars: %w", err)
 	}
 
-	fmt.Println("Environment vars succesfully loaded")
+	fmt.Println("Environment vars successfully loaded")
+	return nil
+}
+
+func GetEnvVar(key string) string {
+	return os.Getenv(key)
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Email } from '@/types';
 import { defineProps } from 'vue'
-import { HighlighWord,SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/functions';
+import { HighlighWord,SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/emails.utilities';
 
 function close() {
   emit('close', false);
@@ -11,8 +11,7 @@ interface Emits{
     (event: 'close', value: boolean): void
 }
 
- const emit = defineEmits<Emits>()
-
+const emit = defineEmits<Emits>()
 
 interface Props {
   asigneSelectedContent : Function
@@ -193,4 +192,4 @@ const props = defineProps<Props>()
       </div>
     </section>
   </div>
-</template>
+</template>@/utils/utilities

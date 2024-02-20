@@ -1,68 +1,19 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"indexer/models"
 	"indexer/utils"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-// func TestConvertEmailFileToJSON(t *testing.T) {
-// 	// Crear un archivo de prueba con contenido de correo electrónico
-// 	testEmailFile := "test_email.txt"
-// 	defer func() {
-// 		_ = os.Remove(testEmailFile)
-// 	}()
-
-// 	emailContent := `Message-ID: <13234904.1075861308849.JavaMail.evans@thyme>\n
-// 	Date: Tue, 20 Nov 2001 12:07:00 -0800 (PST)
-// 	From: alan.aronowitz@enron.com
-// 	To: matthias.lee@enron.com
-// 	Subject: Re: counterparty request to migrate trades
-// 	Cc: elizabeth.sager@enron.com
-// 	Mime-Version: 1.0
-// 	Content-Type: text/plain; charset=us-ascii
-// 	Content-Transfer-Encoding: 7bit
-// 	Bcc: elizabeth.sager@enron.com
-// 	X-From: Aronowitz, Alan </O=ENRON/OU=NA/CN=RECIPIENTS/CN=AARONOW>
-// 	X-To: Lee, Matthias </O=ENRON/OU=NA/CN=RECIPIENTS/CN=EU/cn=Recipients/cn=mlee3>
-// 	X-cc: Sager, Elizabeth </O=ENRON/OU=NA/CN=RECIPIENTS/CN=Esager>
-// 	X-bcc:
-// 	X-Folder: \ESAGER (Non-Privileged)\Sager, Elizabeth\Deleted Items
-// 	X-Origin: Sager-E
-// 	X-FileName: ESAGER (Non-Privileged).pst
-
-// 	I have no objections, but I am copying Elizabeth Sager on this note to see if she has any issues. She is handling the Credit legal issues.
-// 	 Alan Aronowitz`
-
-// 	// Escribir contenido del correo electrónico en el archivo de prueba
-// 	err := os.WriteFile(testEmailFile, []byte(emailContent), 0644)
-// 	assert.NoError(t, err)
-
-// 	// Llamar a la función bajo prueba
-// 	result := utils.ConvertEmailFileToJSON(testEmailFile)
-
-// 	// Verificar el resultado esperado
-// 	expectedResult := models.EnronMail{
-// 		MessageID:               "<13234904.1075861308849.JavaMail.evans@thyme>",
-// 		Date:                    "Tue, 20 Nov 2001 12:07:00 -0800 (PST)",
-// 		From:                    "alan.aronowitz@enron.com",
-// 		To:                      "matthias.lee@enron.com",
-// 		Subject:                 "Re: counterparty request to migrate trades",
-// 		MimeVersion:             "1.0",
-// 		ContentType:             "text/plain; charset=us-ascii",
-// 		ContentTransferEncoding: "7bit",
-// 		Content:                 "I have no objections, but I am copying Elizabeth Sager on this note to see if she has any issues. She is handling the Credit legal issues.\nAlan Aronowitz",
-// 	}
-
-// 	//assert.Equal(t, expectedResult.MessageID, result.MessageID)
-// 	assert.Equal(t, expectedResult.Date, result.Date)
-// }
-
 func TestConvertEmailFileToJSONEmptyFile(t *testing.T) {
-	// Crear un archivo de prueba vacío
 	emptyFile := "empty_file.txt"
 	_ = os.WriteFile(emptyFile, []byte(""), 0644)
 
@@ -70,10 +21,10 @@ func TestConvertEmailFileToJSONEmptyFile(t *testing.T) {
 		_ = os.Remove(emptyFile)
 	}()
 
-	// Llamar a la función bajo prueba con el archivo vacío
+	// call function
 	result := utils.ConvertEmailFileToJSON(emptyFile)
 
-	// Verificar que el resultado tenga campos vacíos
+	// verify if the result is empty
 	expectedResult := models.EnronMail{}
 	assert.Equal(t, expectedResult, result)
 }
@@ -99,7 +50,6 @@ func TestListFiles(t *testing.T) {
 	// Verify
 	assert.NoError(t, err)
 	assert.ElementsMatch(t, testFiles, result)
-
 }
 
 func TestListFilesNonexistentDirectory(t *testing.T) {
@@ -110,21 +60,89 @@ func TestListFilesNonexistentDirectory(t *testing.T) {
 }
 
 func TestMapEmailHeaders(t *testing.T) {
-	// Crear una estructura EnronMail de prueba
+	//Create an Email structure
 	emailStruct := models.EnronMail{}
 
-	// Llamar a la función bajo prueba para asignar valores a diferentes campos
 	emailStruct = utils.MapEmailHeaders("Subject", "Test Subject", emailStruct)
 	emailStruct = utils.MapEmailHeaders("From", "sender@example.com", emailStruct)
 	emailStruct = utils.MapEmailHeaders("Date", "2022-01-01", emailStruct)
 
-	// Verificar que los campos se asignen correctamente
+	// Verify
 	assert.Equal(t, "Test Subject", emailStruct.Subject)
 	assert.Equal(t, "sender@example.com", emailStruct.From)
 	assert.Equal(t, "2022-01-01", emailStruct.Date)
 
-	// Verificar que otros campos no hayan sido modificados
+	// Verify if other fields were updated
 	assert.Empty(t, emailStruct.MessageID)
 	assert.Empty(t, emailStruct.To)
-	// Añadir más verificaciones según sea necesario
 }
+
+func TestConvertEmailFileToJSON(t *testing.T) {
+	tempFile, err := os.CreateTemp("", "email_test_*.txt")
+	assert.NoError(t, err)
+	defer os.Remove(tempFile.Name())
+
+	emailContent := []byte(
+		`From: alan.aronowitz@enron.com
+	To: matthias.lee@enron.com
+	Subject: Re: counterparty request to migrate trades
+
+	I have no objections, but I am copying Elizabeth Sager on this note to see if she has any issues. She is handling the Credit legal issues.`)
+	err = os.WriteFile(tempFile.Name(), emailContent, 0644)
+	assert.NoError(t, err)
+
+	email := utils.ConvertEmailFileToJSON(tempFile.Name())
+
+	expectedEmail := models.EnronMail{
+		From:    "alan.aronowitz@enron.com",
+		To:      "matthias.lee@enron.com",
+		Subject: "Re: counterparty request to migrate trades",
+		Content: "I have no objections, but I am copying Elizabeth Sager on this note to see if she has any issues. She is handling the Credit legal issues.",
+	}
+	assert.Equal(t, expectedEmail, email)
+}
+
+func TestSendDataToIndex(t *testing.T) {
+	// Mock data
+	mockData := []models.EnronMail{
+		{From: "sender1@example.com", To: "receiver1@example.com", Subject: "Test Email 1", Content: "Content 1"},
+		{From: "sender2@example.com", To: "receiver2@example.com", Subject: "Test Email 2", Content: "Content 2"},
+	}
+
+	// Mock HTTP server
+	mockServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "POST", r.Method)
+		assert.Equal(t, os.Getenv("ZS_BASE_URL")+"/api/_bulkv2", r.URL.String())
+
+		// Read request body
+		var bulkData models.BulkDocument
+		err := json.NewDecoder(r.Body).Decode(&bulkData)
+		assert.NoError(t, err)
+
+		// Verify request body
+		assert.Equal(t, "mail", bulkData.Index)
+		assert.Equal(t, mockData, bulkData.Records)
+
+		// Respond with success
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, "Bulk data successfully inserted")
+	}))
+	defer mockServer.Close()
+
+	// Override ZS_BASE_URL for the test
+	oldBaseUrl := os.Getenv("ZS_BASE_URL")
+	os.Setenv("ZS_BASE_URL", mockServer.URL)
+	defer os.Setenv("ZS_BASE_URL", oldBaseUrl)
+
+	// Call the function to test
+	err := utils.SendDataToIndex(&mockData)
+
+	// Assertions
+	assert.NoError(t, err)
+}
+
+// func SendDataToIndex(data *[]models.EnronMail)
+
+// func FillIndexBatch(path string)
+
+// func IndexEmailDirectory(path string)

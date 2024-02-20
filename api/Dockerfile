@@ -6,8 +6,6 @@ ENV PROJECT_DIR=/app \
     CGO_ENABLED=0 \
     GO_ENV=production
 
-## Project setup
-
 # Create app directory inside container
 RUN mkdir app
 
@@ -25,11 +23,10 @@ ARG ZS_USER \
     ZS_BASE_URL \
     API_PORT 
     
-
 ENV ZS_USER=${ZS_USER} \
     ZS_PASSWORD=${ZS_PASSWORD} \
     ZS_BASE_URL=${ZS_BASE_URL} \
-    API_PORT=/${API_PORT}
+    API_PORT=${API_PORT}
 
 # Copies all files from local to container
 COPY . .

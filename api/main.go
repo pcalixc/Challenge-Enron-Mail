@@ -4,12 +4,17 @@ import (
 	"challenge/api/config"
 	"challenge/api/server"
 	"fmt"
+	"os"
 )
 
 func main() {
-	config.LoadEnvVars()
+
+	if os.Getenv("GO_ENV") != "production" {
+		config.LoadEnvVars()
+	}
 
 	router := server.New()
+
 	err := router.Run()
 	if err != nil {
 		fmt.Println(err)

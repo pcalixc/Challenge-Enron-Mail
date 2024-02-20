@@ -26,12 +26,3 @@ type Hit struct {
 		Content                 string `json:"content"`
 	} `json:"_source"`
 }
-
-type HitsResponse struct {
-	Hits struct {
-		Total struct {
-			Value int `json:"value"`
-		}
-		Hits []Hit `json:"hits"`
-	} `json:"hits"`
-}

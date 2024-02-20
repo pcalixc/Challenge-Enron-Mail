@@ -1,53 +1,52 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref,computed, onBeforeMount } from 'vue'
 import Header from '@/components/Header.vue'
 import  type {Email, Hit} from '@/types/index'
 import EmailDetails from '@/components/EmailDetails.vue'
 import TotalResults from '@/components/TotalResults.vue'
-import Table from '@/components/Table.vue'
+import EmailsTable from '@/components/EmailsTable.vue'
 
-const open = ref(false)
-const selectedEmail = ref<Email>();
-const emails = ref<Hit[]>([]);
-const selectedEmailIndex = ref(0)
-const currentSearchTerm = ref('')
-const totalResults = ref(0)
-const currentPage = ref(1)
-var totalPages = ref(0)
-const amountEmailsByPage = ref(7)
-const isLoading = ref(false)
-const conectionError= ref(false)
+const open = ref<boolean>(false)
+const selectedEmail = ref<Email | null>(null)
+const emails = ref<Hit[]>([])
+const selectedEmailIndex = ref<number>(0)
+const currentSearchTerm = ref<string>('')
+const totalResults = ref<number>(0)
+const currentPage = ref<number>(1)
+const amountEmailsByPage = ref<number>(7)
+const isLoading = ref<boolean>(false)
+const conectionError = ref<boolean>(false)
+const totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage.value))
 
 
 const getData = async (pageNumber: number, searchTerm?: string) => {
   searchTerm = typeof searchTerm === 'undefined' ? '' : searchTerm
-  let pn = pageNumber.toString()
+
+  let strPageNumber = pageNumber.toString()
   currentSearchTerm.value = searchTerm
   isLoading.value = true
+
   try {
     const response = await fetch(
-      `http://${import.meta.env.VITE_API_URL}/emails?page=${pn}&max=${amountEmailsByPage.value}&term=${searchTerm}`
+      `http://${import.meta.env.VITE_API_URL}/emails?page=${strPageNumber}&max=${amountEmailsByPage.value}&term=${searchTerm}`
     )
 
     const data = await response.json()
-
     emails.value = data.hits.hits
     totalResults.value = data.hits.Total.value
   } catch (error) {
-    console.error('Error fetching data:', error, Response)
+    console.error('Error fetching data:', error)
     conectionError.value=true
   }
   isLoading.value = false
   currentPage.value = pageNumber
-  totalPages.value = Math.ceil(totalResults.value / amountEmailsByPage.value)
 }
 
 const asigneSelectedContent = (index: number) => {
   selectedEmail.value = emails.value[index]._source
   selectedEmailIndex.value = index
   open.value=true
-  console.log(index, selectedEmail.value)
 }
 
 onBeforeMount(() => {
@@ -57,9 +56,9 @@ onBeforeMount(() => {
 
 <template>
 
-<Header :getData="getData" />
+  <Header :getData="getData" />
 
-  <Table
+  <EmailsTable
     :getData="getData" 
     :emails ="emails"
     :asigneSelectedContent = "asigneSelectedContent"

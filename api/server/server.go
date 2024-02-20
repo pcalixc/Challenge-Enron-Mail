@@ -1,11 +1,13 @@
 package server
 
 import (
+	"challenge/api/config"
 	"challenge/api/controllers"
+	"challenge/api/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -31,7 +33,7 @@ func New() Server {
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
+		MaxAge:           300,
 	}))
 
 	server := Server{
@@ -44,14 +46,14 @@ func New() Server {
 }
 
 func (s *Server) Run() error {
-	port := os.Getenv("API_PORT")
+	port := config.GetEnvVar("API_PORT")
 
 	fmt.Println("running on:" + port)
 	return http.ListenAndServe(":"+port, s.ChiRouter)
 }
 
 func (s *Server) Welcome(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(`{"message":"Enron-Email Index ZincSearch API"}`))
+	w.Write([]byte(`{"message":"Welcome to Enron-Email Index ZincSearch API 💫"}`))
 }
 
 func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
@@ -59,25 +61,38 @@ func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Query().Get("page")
 	max := r.URL.Query().Get("max")
 
-	if searchTerm != "" {
-		term, err := controllers.SearchMails(searchTerm, page, max)
-		if err != nil {
-			w.Write([]byte(err.Error()))
-			return
-		}
-		jsonData, err := json.Marshal(term)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Write(jsonData)
-	} else {
-		result := controllers.GetAllEmails(page, max)
-		jsonData, err := json.Marshal(result)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Write(jsonData)
+	intMax, err := strconv.Atoi(max)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to convert max_results to integer: %v", err), http.StatusBadRequest)
+		return
 	}
+
+	intPage, err := strconv.Atoi(page)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to convert page to integer: %v", err), http.StatusBadRequest)
+		return
+
+	}
+
+	var result models.HitsResponse
+	var jsonData []byte
+
+	if searchTerm != "" {
+		result, err = controllers.SearchMails(searchTerm, intPage, intMax)
+	} else {
+		result, err = controllers.GetAllEmails(intPage, intMax)
+	}
+	if err != nil {
+		http.Error(w, fmt.Sprintf("error processing request: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err = json.Marshal(result)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("error marshaling response: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonData)
+
 }
