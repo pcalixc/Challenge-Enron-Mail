@@ -146,9 +146,10 @@ func SendDataToIndex(data *[]models.EnronMail) error {
 	if err != nil {
 		return fmt.Errorf("error marshaling JSON: %w", err)
 	}
+
 	req, err := http.NewRequest("POST", os.Getenv("ZS_BASE_URL")+"/api/_bulkv2", bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return err
+		return fmt.Errorf("error creating request: %w", err)
 	}
 
 	req.SetBasicAuth(os.Getenv("ZS_USER"), os.Getenv("ZS_PASSWORD"))

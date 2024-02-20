@@ -4,11 +4,9 @@ import { defineProps, ref } from 'vue'
 import {useDark, useToggle} from '@vueuse/core'
 const isDark= useDark();
 const togleDark= useToggle(isDark)
-
-const props = defineProps(['getData'])
-
 const searchTerm = ref('')
 const errorMessage= ref('')
+const props = defineProps(['getData'])
 
 const handleSubmit=()=> {
       const regex = /[?/><>,!@#$%^&*()_=+{}|[\]\\:;"'`~]/;
@@ -38,10 +36,7 @@ const handleSubmit=()=> {
             alt=""
           />
         </div>
-
-      
         <div class="flex flex-col ml-3">
-         
           <div class="mb-0 flex flex-col">
             <a
               href="#"
@@ -85,7 +80,6 @@ const handleSubmit=()=> {
 		</span>
 
       </div>
-     
       <div class="flex justify-center items-center">
         <span class="">
           <svg class="h-6 w-6 dark:text-gray-500 text-[#9292FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,7 +113,6 @@ const handleSubmit=()=> {
           </svg>
         </span>
       </div>
-      
     </div>
   </div>
 </template>

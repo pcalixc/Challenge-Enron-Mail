@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Email } from '@/types';
 import { defineProps } from 'vue'
-import { HighlighWord,SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/functions';
+import { HighlighWord,SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/emails.utilities';
 
 function close() {
   emit('close', false);
@@ -11,12 +11,11 @@ interface Emits{
     (event: 'close', value: boolean): void
 }
 
- const emit = defineEmits<Emits>()
-
+const emit = defineEmits<Emits>()
 
 interface Props {
   asigneSelectedContent : Function
-  selectedEmail: Email  | null | undefined
+  selectedEmail: Email|undefined
   currentSearchTerm: string
   selectedEmailIndex: number
 }
@@ -131,12 +130,12 @@ const props = defineProps<Props>()
                     />
                     <circle cx="12" cy="6" r="6" />
                   </svg>
-                  <span v-html="HighlighWord(props.selectedEmail.from, props.currentSearchTerm)"></span>
+                  <span v-if="props.selectedEmail" v-html="HighlighWord(props.selectedEmail.from, props.currentSearchTerm)"></span>
                 </div>
               </div>
               <div class="inline-flex ml-4 font-semibold dark:text-slate-200">
                 To:
-                <div class="ml-6 grid grid-cols-2 gap-y-1 gap-x-2">
+                <div v-if="props.selectedEmail" class="ml-6 grid grid-cols-2 gap-y-1 gap-x-2">
                   <span
                     v-for="(email, index) in SeparateEmailsByCommas(props.selectedEmail.to)"
                     :key="index"
@@ -172,15 +171,18 @@ const props = defineProps<Props>()
 
           <main class="mt-4 px-10 overflow-x-hidden overflow-y-auto custom-scrollbar">
             <h2
+            v-if="props.selectedEmail"
               class="mt-1 mb-4 mr-8 text-right rounded-full text-md font-bold uppercase text-slate-800 dark:text-slate-200"
             >
               {{ ConvertDateFormat(props.selectedEmail.date) }}
             </h2>
             <h2
+            v-if="props.selectedEmail"
               class="font-bold text-2xl dark:text-slate-300"
               v-html="HighlighWord(props.selectedEmail.subject, props.currentSearchTerm)"
             ></h2>
             <p
+            v-if="props.selectedEmail"
               class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14"
               v-html="HighlighWord(props.selectedEmail.content, props.currentSearchTerm)"
             ></p>
@@ -190,4 +192,4 @@ const props = defineProps<Props>()
       </div>
     </section>
   </div>
-</template>
+</template>@/utils/utilities
