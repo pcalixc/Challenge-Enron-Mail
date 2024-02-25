@@ -1,4 +1,4 @@
-package utilsv2
+package utils
 
 import (
 	"bufio"
@@ -23,7 +23,7 @@ func ConvertEmailFileToStruct(filePath string) (*models.EnronMail, error) {
 	// We read the email file
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Fatal(err)
+		return &models.EnronMail{}, fmt.Errorf("error opening path: %v", err)
 	}
 	defer file.Close()
 
@@ -50,9 +50,6 @@ func ConvertEmailFileToStruct(filePath string) (*models.EnronMail, error) {
 				value := parts[1]
 				// Create an Email object
 				MapEmailHeaders(key, value, emailStructure)
-				if err != nil {
-					return emailStructure, fmt.Errorf("error al analizar encabezado: %v", err)
-				}
 			}
 		}
 	}
@@ -62,7 +59,7 @@ func ConvertEmailFileToStruct(filePath string) (*models.EnronMail, error) {
 	return emailStructure, nil
 }
 
-// MapEmailHeaders structures mail data based on headers.
+// MapEmailHeaders maps the email headers to the email data structure.
 func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) {
 	switch key {
 	case "Message-ID":
@@ -98,10 +95,10 @@ func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) {
 	}
 }
 
-// SendDataToIndex sends data to the index using HTTP.
+// SendDataToIndex sends data to the index via HTTP.
 func SendDataToIndex(data *[]models.EnronMail) error {
 	bulkData := models.BulkDocument{
-		Index:   "mail333",
+		Index:   "emails",
 		Records: *data,
 	}
 

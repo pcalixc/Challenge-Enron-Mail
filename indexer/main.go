@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"indexer/config"
 	"indexer/profiling"
-	"indexer/utils"
+	"indexer/utilities"
 	"log"
 	_ "net/http/pprof"
 	"os"
@@ -25,13 +25,13 @@ func main() {
 	}
 
 	path := os.Args[1] + "/maildir"
-	err := utils.IndexEmailDirectory(path)
+	err := utilities.IndexEmailDirectory(path)
 	if err != nil {
 		fmt.Println("Error indexing: ", path, err)
 	}
 
-	if len(utils.DataBatch) > 0 {
-		err := utils.SendDataToIndex(&utils.DataBatch)
+	if len(utilities.DataBatch) > 0 {
+		err := utilities.SendDataToIndex(&utilities.DataBatch)
 		if err != nil {
 			return
 		}

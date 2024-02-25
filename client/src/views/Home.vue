@@ -7,7 +7,7 @@ import  type {Email, Hit} from '@/types/index'
 import EmailDetails from '@/components/EmailDetails.vue'
 import TotalResults from '@/components/TotalResults.vue'
 import EmailsTable from '@/components/EmailsTable.vue'
-import palabrasJson from '@/assets/words_dictionary.json'; 
+import dictionary from '@/assets/words_dictionary.json'; 
 const open = ref<boolean>(false)
 const selectedEmail = ref<Email | undefined>()
 const emails = ref<Hit[]>([])
@@ -18,8 +18,8 @@ const currentPage = ref<number>(1)
 const amountEmailsByPage = ref<number>(8)
 const isLoading = ref<boolean>(false)
 const conectionError = ref<boolean>(false)
-const palabrasEnBaseDeDatos: string[] = Object.keys(palabrasJson);
-const sugerencias= ref()
+const wordsInDictionary: string[] = Object.keys(dictionary);
+const suggestion= ref()
 const totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage.value))
 
 
@@ -40,17 +40,8 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
     totalResults.value = data.hits.Total.value
 
     if (totalResults.value===0){
-      const fuse = new Fuse(palabrasEnBaseDeDatos, { threshold: 0.2 });
-      const resultados = fuse.search(searchTerm);
-
-      if (resultados.length > 0) {
-        sugerencias.value = resultados
-    .filter((resultado) => resultado.item.startsWith(searchTerm.slice(0, 2)))
-    .map((resultado) => resultado.item);
-        console.log("sugg",sugerencias.value)
-      }else{
-        sugerencias.value = [];
-      }
+      const sugerencias = searchWithFuse(wordsInDictionary, searchTerm);
+      suggestion.value = sugerencias;
     }
 
   } catch (error) {
@@ -60,6 +51,20 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
   isLoading.value = false
   currentPage.value = pageNumber
 }
+
+function searchWithFuse(words :string[], searchTerm: string) {
+    const fuse = new Fuse(words, { threshold: 0.2 });
+    const results = fuse.search(searchTerm);
+
+    if (results.length > 0) {
+        return results
+            .filter((result) => result.item.startsWith(searchTerm.slice(0, 2)))
+            .map((result) => result.item);
+    } else {
+        return [];
+    }
+}
+
 
 const asigneSelectedContent = (index: number) => {
   selectedEmail.value = emails.value[index]._source
@@ -90,7 +95,7 @@ onBeforeMount(() => {
     :conectionError="conectionError"
     :totalPages="totalPages"
     :currentPage="currentPage"
-    :suggestions="sugerencias"
+    :suggestions="suggestion"
     />
 
     <TotalResults v-if="!conectionError && totalResults !=0"
@@ -98,7 +103,7 @@ onBeforeMount(() => {
     :isLoading="isLoading"
     :currentSearchTerm="currentSearchTerm"
     :currentPage="currentPage"
-    :sugerencias="sugerencias"
+    :sugerencias="suggestion"
     :getData="getData"
     />
 

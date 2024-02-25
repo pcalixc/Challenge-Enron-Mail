@@ -1,18 +1,16 @@
-package utilsv2
+package utils
 
 import (
 	"fmt"
 )
 
-// A goroutine that processes files and send the results through a channel.
 type Worker struct {
-	id                 int
 	filePathsToProcess <-chan string
 	resultChannel      chan<- Result
 }
 
-// Worker pool manages the workers, distributes file processing and collects the emails.
-
+// Start (Worker method) initiates a worker to process files. Each worker receives files from the file queue channel, processes them,
+// and sends the results to the results channel.
 func (w *Worker) Start() {
 	go func() {
 		for filePath := range w.filePathsToProcess {

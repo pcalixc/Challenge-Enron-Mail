@@ -35,7 +35,7 @@ const props = defineProps<Props>()
               class="dark:border-gray-700 md:rounded-tl-lg rounded flex align-middle justify-center"
             >
               <table
-                v-if="props.totalResults > 0"
+                v-if="props.totalResults > 0 && !props.isLoading"
                 class="w-[90%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-8 dark:divide-gray-700 min-w-max border-collapse block md:table"
               >
                 <thead class="block md:table-header-group">
