@@ -108,13 +108,13 @@ After running these commands, you should be able to access the graphical user in
 
 ## Screenshots
 
-![main]("./client/screenshots/main.jpg")
+![main]("https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/main.jpg")
 
-![searchresults]("./client/screenshots/searchresults.jpg")
+![searchresults]("[./client/screenshots/searchresults.jpg](https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/searchresults.jpg)")
 
-![emaildetails]("./client/screenshots/emaildetails.jpg")
+![emaildetails]("[./client/screenshots/emaildetails.jpg](https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/emaildetails.jpg)")
 
-![darkmode]("./client/screenshots/darkmode.jpg")
+!("[./client/screenshots/darkmode.jpg](https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/darkmode.jpg)")
 
 
 
