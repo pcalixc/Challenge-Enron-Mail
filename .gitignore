@@ -9,3 +9,4 @@ indexer/zinc
 zinc
 terraform
 .docker
+.env
