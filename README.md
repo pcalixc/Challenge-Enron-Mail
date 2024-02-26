@@ -96,7 +96,7 @@ _Remember to add your environment variables_
 This endpoint allows users to search for emails containing the specified keyword. The optional parameters `page` and `max` can be used for pagination control. If `term` is not provided, all emails will be returned.
 
 
-### CLIENT (Vue.js App)
+## CLIENT (Vue.js App)
 The API also serves a Vue.js dist folder to allow users to interact with the indexed data visually.
 1. Navigate to the api directory and run the follow comands:  
 ```bash
