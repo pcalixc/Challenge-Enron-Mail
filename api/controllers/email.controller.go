@@ -14,7 +14,7 @@ import (
 var ErrHTTPRequestFailed = errors.New("HTTP request failed")
 
 func doRequest(query string) (*http.Response, error) {
-	req, err := http.NewRequest("POST", os.Getenv("ZS_BASE_URL")+"/api/mail/_search", strings.NewReader(query))
+	req, err := http.NewRequest("POST", os.Getenv("ZS_BASE_URL")+"/api/emails/_search", strings.NewReader(query))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
 	}

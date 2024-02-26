@@ -10,11 +10,9 @@ import animationConnError from '@/assets/oops3.json'
   >
     <div class="xl:pt-0 w-44 xl:w-1/3 relative pb-12 lg:pb-0">
       <h1 class="font-mono text-gray-800 font-bold text-2xl dark:text-slate-100">
-        Sorry, we couldn't complete the request at this time :(
+        Sorry, we couldn't complete the request at this time.
       </h1>
-      <p class="my-2 font-mono text-gray-500 dark:text-slate-100 texts-xs">
-        Please ensure that the server is available or check your connection.
-      </p>
+    
     </div>
     <lottie-animation
       :animation-data="animationConnError"

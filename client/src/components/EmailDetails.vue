@@ -28,13 +28,13 @@ const props = defineProps<Props>()
 <template>
     <div  tra class="fixed inset-0 z-50 overflow-hidden">
     <div
-      class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
+      class="absolute inset-0 bg-gray-900  bg-opacity-50 transition-opacity"
       @click="close()" 
     ></div>
     <!-- Sidebar Content -->
-    <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex">
-      <div class="max-w-lg rounded-l-2xl">
-        <div class="h-full flex flex-col py-6 bg-white dark:bg-slate-900 shadow-xl rounded-2xl">
+    <section class="absolute inset-y-0 right-0 pl-10 flex">
+      <div class=" rounded-l-2xl ">
+        <div class="h-full flex flex-col w-[33rem] py-6 bg-white border dark:border-slate-800 dark:shadow-xl dark:bg-slate-900 shadow-xl rounded-2xl">
           <!-- Sidebar Header -->
           <div class="flex items-center justify-between px-4">
             <div class="px-2 flex items-end mr-auto space-x-4">
@@ -166,7 +166,7 @@ const props = defineProps<Props>()
                 </div>
               </div>
             </nav>
-            <hr class="border-t border-slate-500 mt-4 shadow-xl" />
+            <hr class="border-t border-slate-300 dark:border-slate-700 mt-4 shadow-xl" />
           </header>
 
           <main class="mt-4 px-10 overflow-x-hidden overflow-y-auto custom-scrollbar">
@@ -187,9 +187,9 @@ const props = defineProps<Props>()
               v-html="HighlighWord(props.selectedEmail.content, props.currentSearchTerm)"
             ></p>
           </main>
-          <hr class="border-t border-slate-500 mt-4 shadow-md" />
+          <hr class="border-t border-slate-300 mt-4 dark:border-slate-700 shadow-md" />
         </div>
       </div>
     </section>
   </div>
-</template>@/utils/utilities
+</template>

@@ -27,3 +27,8 @@ export interface Hit{
     _source: Email    
 }
 
+export interface SearchReq {
+  type:string,
+  from: string,
+  to: string,
+}

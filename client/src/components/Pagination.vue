@@ -49,13 +49,13 @@ const props = defineProps<Props>()
         </button>
         <div v-if="props.currentPage > 0 && props.currentPage < 3" class="items-center hidden md:flex gap-x-3">
           <button
-            v-for="pageNumber in Math.min(3, props.totalPages)"
+            v-for="pageNumber in Math.min(4, props.totalPages)"
             :key="pageNumber"
             @click="props.getData(pageNumber)"
             :class="[
               'px-2 py-1 text-sm rounded-xl ',
               props.currentPage === pageNumber
-                ? 'text-blue-500  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
+                ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
                 : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
             ]"
           >
@@ -75,7 +75,7 @@ const props = defineProps<Props>()
             :class="[
               'px-2 py-1 text-sm rounded-xl ',
               props.currentPage === props.totalPages - 1
-                ? 'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900  '
+                ? 'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900  '
                 : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
             ]"
           >
@@ -90,9 +90,9 @@ const props = defineProps<Props>()
               v-for="pageNumber in props.totalPages"
               :key="pageNumber"
               @click="getData(pageNumber)"
-              class="px-2 py-1 text-sm rounded-xl text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900"
+              class="px-2 py-1 text-sm rounded-xl text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900"
               :class="{
-                'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+                'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
                 props.currentPage === pageNumber
               }"
             >
@@ -105,7 +105,7 @@ const props = defineProps<Props>()
               @click="props.getData(1)"
               class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
               :class="{
-                'text-blue-500  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+                'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
                 props.currentPage === 1
               }"
             >
@@ -126,7 +126,7 @@ const props = defineProps<Props>()
                 @click="props.getData(props.currentPage - 1)"
                 class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
                 :class="{
-                  'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+                  'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
                   props.currentPage === props.currentPage - 1
                 }"
               >
@@ -135,9 +135,9 @@ const props = defineProps<Props>()
             </template>
             <button
               @click="props.getData(props.currentPage)"
-              class="px-2 py-1 text-sm rounded-xl text-blue-500 bg-blue-100/60 hover:bg-gray-300 bg-slate-200 shadow-xs dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
+              class="px-2 py-1 text-sm rounded-xl text-royal_purple font-bold bg-blue-100/60 hover:bg-gray-300 bg-slate-200 shadow-xs dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
               :class="{
-                'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+                'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
                 props.currentPage === props.currentPage
               }"
             >
@@ -147,7 +147,7 @@ const props = defineProps<Props>()
               @click="props.getData(props.currentPage + 1)"
               class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
               :class="{
-                'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+                'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
                 props.currentPage === props.currentPage + 1
               }"
             >
@@ -158,7 +158,7 @@ const props = defineProps<Props>()
               @click="props.getData(props.totalPages)"
               class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
               :class="{
-                'text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+                'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
                 props.currentPage === props.totalPages
               }"
             >
@@ -171,9 +171,9 @@ const props = defineProps<Props>()
           @click="props.getData(props.currentPage + 1, props.currentSearchTerm)"
           :disabled="props.currentPage == props.totalPages"
           :class="[
-            'flex items-center px-5 py-2 text-sm capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
+            'flex items-center px-8 py-2 text-sm capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
             props.currentPage == props.totalPages
-              ? ' text-blue-500 bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900'
+              ? ' text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900'
               : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200   dark:hover:bg-gray-900'
           ]"
         >
