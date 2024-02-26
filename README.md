@@ -102,7 +102,7 @@ The API also serves a Vue.js dist folder to allow users to interact with the ind
 ```bash
 cd ./client
 npm install
-npm run dev`
+npm run dev
 ```
 After running these commands, you should be able to access the graphical user interface (GUI) at `http://localhost:3333`.
 
