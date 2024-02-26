@@ -106,15 +106,6 @@ npm run dev`
 ```
 After running these commands, you should be able to access the graphical user interface (GUI) at `http://localhost:3333`.
 
-## Screenshots
-
-![main]("https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/main.jpg")
-
-![searchresults]("[./client/screenshots/searchresults.jpg](https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/searchresults.jpg)")
-
-![emaildetails]("[./client/screenshots/emaildetails.jpg](https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/emaildetails.jpg)")
-
-!("[./client/screenshots/darkmode.jpg](https://github.com/pcalixc/Challenge-Enron-Mail/blob/v2.1/client/screenshots/darkmode.jpg)")
 
 
 

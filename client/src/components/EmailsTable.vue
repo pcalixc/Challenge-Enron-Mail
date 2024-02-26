@@ -268,7 +268,7 @@ const props = defineProps<Props>()
         <Loading v-if="props.isLoading" />
       </div>
 
-      <Pagination
+      <Pagination v-if="!conectionError"
         :currentPage="props.currentPage"
         :totalResults="props.totalResults"
         :currentSearchTerm="currentSearchTerm"
