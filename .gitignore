@@ -5,3 +5,7 @@ indexer/.env
 api/.env
 zinc
 indexer/zinc
+.env
+zinc
+terraform
+.docker

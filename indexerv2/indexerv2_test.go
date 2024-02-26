@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	// Import necessary packages for testing
 )
 
 const TestFilePath = "./1."
@@ -82,20 +81,4 @@ func TestSendDataToIndex_ServerError(t *testing.T) {
 	if err == nil {
 		t.Error("Expected error, got nil")
 	}
-}
-
-func TestWorkerPool_SubmitFile(t *testing.T) {
-	// Test cases for WorkerPool SubmitFile method
-}
-
-func TestWorkerPool_Close(t *testing.T) {
-	// Test cases for WorkerPool Close method
-}
-
-func TestWorkerPool_sendBulk(t *testing.T) {
-	// Test cases for WorkerPool sendBulk method
-}
-
-func TestReadFilesInDir(t *testing.T) {
-	// Test cases for readFilesInDir function
 }
