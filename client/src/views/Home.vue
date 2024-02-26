@@ -1,6 +1,8 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref,computed, onBeforeMount } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 import { SearchWithFuse } from '@/utils/emails.utilities';
 import Header from '@/components/Header.vue'
 import  type {Email, Hit} from '@/types/index'
@@ -16,11 +18,11 @@ let selectedEmailIndex = ref<number>(0)
 let currentSearchTerm = ref<string>('')
 let totalResults = ref<number>(0)
 let currentPage = ref<number>(1)
-let amountEmailsByPage = ref<number>(8)
 let isLoading = ref<boolean>(false)
 let conectionError = ref<boolean>(false)
 let wordsInDictionary: string[] = Object.keys(dictionary);
 let suggestion= ref()
+let amountEmailsByPage = ref<number>(8)
 let totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage.value))
 
 /**
@@ -31,6 +33,8 @@ let totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPag
 const getData = async (pageNumber: number, searchTerm?: string) => {
     // Set the search term to an empty string if it's undefined.
   searchTerm = typeof searchTerm === 'undefined' ? '' : searchTerm
+  let amountEmailsByPage = 8
+
 
   let strPageNumber = pageNumber.toString()
   currentSearchTerm.value = searchTerm
@@ -38,7 +42,7 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
 
   try {
     const response = await fetch(
-      `http://${import.meta.env.VITE_API_URL}/emails?page=${strPageNumber}&max=${amountEmailsByPage.value}&term=${searchTerm}`
+      `http://${import.meta.env.VITE_API_URL}/emails?page=${strPageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`
     )
 
     const data = await response.json()
@@ -49,7 +53,9 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
     if (totalResults.value===0){
       const suggestions = SearchWithFuse(wordsInDictionary, searchTerm);
       suggestion.value = suggestions;
-    }
+    }else if (response.status === 404) {
+    router.push('/404')
+  }
 
   } catch (error) {
     console.error('Error fetching data:', error)

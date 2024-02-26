@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import type { Email } from '@/types';
+import type { Email } from '@/types'
 import { defineProps } from 'vue'
-import { HighlighWord,SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/emails.utilities';
+import { HighlighWord, SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/emails.utilities'
 
 function close() {
-  emit('close', false);
+  emit('close', false)
 }
 
-interface Emits{
-    (event: 'close', value: boolean): void
+interface Emits {
+  (event: 'close', value: boolean): void
 }
 
 const emit = defineEmits<Emits>()
 
 interface Props {
-  asigneSelectedContent : Function
-  selectedEmail: Email|undefined
+  asigneSelectedContent: Function
+  selectedEmail: Email | undefined
   currentSearchTerm: string
   selectedEmailIndex: number
 }
 
 const props = defineProps<Props>()
-
-
 </script>
 
 <template>
-    <div  tra class="fixed inset-0 z-50 overflow-hidden">
+  <div tra class="fixed inset-0 z-50 overflow-hidden">
     <div
-      class="absolute inset-0 bg-gray-900  bg-opacity-50 transition-opacity"
-      @click="close()" 
+      class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
+      @click="close()"
     ></div>
     <!-- Sidebar Content -->
     <section class="absolute inset-y-0 right-0 pl-10 flex">
-      <div class=" rounded-l-2xl ">
-        <div class="h-full flex flex-col w-[33rem] py-6 bg-white border dark:border-slate-800 dark:shadow-xl dark:bg-slate-900 shadow-xl rounded-2xl">
+      <div class="rounded-l-2xl">
+        <div
+          class="h-full flex flex-col w-[33rem] py-6 bg-white border dark:border-slate-800 dark:shadow-xl dark:bg-slate-900 shadow-xl rounded-2xl"
+        >
           <!-- Sidebar Header -->
           <div class="flex items-center justify-between px-4">
             <div class="px-2 flex items-end mr-auto space-x-4">
@@ -130,7 +130,10 @@ const props = defineProps<Props>()
                     />
                     <circle cx="12" cy="6" r="6" />
                   </svg>
-                  <span v-if="props.selectedEmail" v-html="HighlighWord(props.selectedEmail.from, props.currentSearchTerm)"></span>
+                  <span
+                    v-if="props.selectedEmail"
+                    v-html="HighlighWord(props.selectedEmail.from, props.currentSearchTerm)"
+                  ></span>
                 </div>
               </div>
               <div class="inline-flex ml-4 font-semibold dark:text-slate-200">
@@ -171,18 +174,18 @@ const props = defineProps<Props>()
 
           <main class="mt-4 px-10 overflow-x-hidden overflow-y-auto custom-scrollbar">
             <h2
-            v-if="props.selectedEmail"
+              v-if="props.selectedEmail"
               class="mt-1 mb-4 mr-8 text-right rounded-full text-md font-bold uppercase text-slate-800 dark:text-slate-200"
             >
               {{ ConvertDateFormat(props.selectedEmail.date) }}
             </h2>
             <h2
-            v-if="props.selectedEmail"
+              v-if="props.selectedEmail"
               class="font-bold text-2xl dark:text-slate-300"
               v-html="HighlighWord(props.selectedEmail.subject, props.currentSearchTerm)"
             ></h2>
             <p
-            v-if="props.selectedEmail"
+              v-if="props.selectedEmail"
               class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14"
               v-html="HighlighWord(props.selectedEmail.content, props.currentSearchTerm)"
             ></p>

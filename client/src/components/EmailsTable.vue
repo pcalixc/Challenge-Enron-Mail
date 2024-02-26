@@ -21,7 +21,6 @@ interface Props {
   suggestions: string[]
 }
 
-
 const props = defineProps<Props>()
 </script>
 
@@ -258,9 +257,9 @@ const props = defineProps<Props>()
           v-if="
             props.totalResults == 0 && props.isLoading == false && props.conectionError == false
           "
-              :currentSearchTerm="currentSearchTerm"
-              :suggestions="suggestions"
-              :getData="getData"
+          :currentSearchTerm="currentSearchTerm"
+          :suggestions="suggestions"
+          :getData="getData"
         />
 
         <ConnectionError v-if="props.conectionError" />
@@ -268,7 +267,8 @@ const props = defineProps<Props>()
         <Loading v-if="props.isLoading" />
       </div>
 
-      <Pagination v-if="!conectionError"
+      <Pagination
+        v-if="!conectionError"
         :currentPage="props.currentPage"
         :totalResults="props.totalResults"
         :currentSearchTerm="currentSearchTerm"

@@ -24,7 +24,10 @@ const props = defineProps<Props>()
 <template>
   <div class="flex flex-row align-middle justify-center">
     <p class="text-slate-800 text-xs dark:text-slate-200  mt-4">
-      Showing <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ ini +1 }}</span>  to <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ fin }}</span>  of <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ props.totalResults }}</span> emails
+      Showing 
+      <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ ini +1 }}</span>  to 
+      <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ fin }}</span>  of 
+      <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ props.totalResults-1 }}</span> emails
   </p>
   </div>
 </template>
