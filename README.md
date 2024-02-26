@@ -98,7 +98,7 @@ This endpoint allows users to search for emails containing the specified keyword
 
 ## CLIENT (Vue.js App)
 The API also serves a Vue.js dist folder to allow users to interact with the indexed data visually.
-1. Navigate to the api directory and run the follow comands:  
+1. Navigate to the client directory and run the follow comands:  
 ```bash
 cd ./client
 npm install

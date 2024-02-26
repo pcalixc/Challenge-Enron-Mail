@@ -4,10 +4,10 @@ import (
 	"challenge/api/config"
 	"challenge/api/controllers"
 	"challenge/api/models"
+	"challenge/api/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -57,30 +57,18 @@ func (s *Server) Welcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
-	searchTerm := r.URL.Query().Get("term")
-	page := r.URL.Query().Get("page")
-	max := r.URL.Query().Get("max")
+	var (
+		result   models.HitsResponse
+		jsonData []byte
+		err      error
+		params   models.QueryParameters
+	)
+	params = utils.EvaluateQueryParams(r.URL.Query().Get("max"), r.URL.Query().Get("page"), r.URL.Query().Get("term"))
 
-	intMax, err := strconv.Atoi(max)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to convert max_results to integer: %v", err), http.StatusBadRequest)
-		return
-	}
-
-	intPage, err := strconv.Atoi(page)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to convert page to integer: %v", err), http.StatusBadRequest)
-		return
-
-	}
-
-	var result models.HitsResponse
-	var jsonData []byte
-
-	if searchTerm != "" {
-		result, err = controllers.SearchMails(searchTerm, intPage, intMax)
+	if params.Term != "" {
+		result, err = controllers.SearchMails(params.Term, params.PageNumber, params.MaxResults)
 	} else {
-		result, err = controllers.GetAllEmails(intPage, intMax)
+		result, err = controllers.GetAllEmails(params.PageNumber, params.MaxResults)
 	}
 	if err != nil {
 		http.Error(w, fmt.Sprintf("error processing request: %v", err), http.StatusInternalServerError)
@@ -94,5 +82,4 @@ func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write(jsonData)
-
 }

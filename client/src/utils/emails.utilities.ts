@@ -1,4 +1,4 @@
-
+import Fuse from 'fuse.js';
 
 export function  ConvertDateFormat(originalDate: string) {
     // Create a Date object with the original date string
@@ -32,6 +32,7 @@ export function  ConvertDateFormat(originalDate: string) {
   
     return formattedDate;
   }
+
   
 export function SeparateEmailsByCommas(string: string) {
     return string.split(',').filter(function (substring) {
@@ -47,3 +48,16 @@ export  const HighlighWord = (text: string, word: string) => {
       '<span class="bg-yellow-100  opacity-80 font-bold text-black rounded-md">' + word + '</span>'
     )
   }
+
+export  function SearchWithFuse(words :string[], searchTerm: string) {
+    const fuse = new Fuse(words, { threshold: 0.2 });
+    const results = fuse.search(searchTerm);
+
+    if (results.length > 0) {
+        return results
+            .filter((result) => result.item.startsWith(searchTerm.slice(0, 2)))
+            .map((result) => result.item);
+    } else {
+        return [];
+    }
+}
