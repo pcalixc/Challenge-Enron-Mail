@@ -9,5 +9,4 @@ zinc
 terraform
 .docker
 .env
-main.terraform
 deploy-app.yml
