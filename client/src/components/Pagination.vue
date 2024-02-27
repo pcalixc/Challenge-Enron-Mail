@@ -71,19 +71,19 @@ const props = defineProps<Props>()
       </button>
 
       <button
-        @click="props.getData(props.totalPages - 1, currentSearchTerm)"
+        @click="props.getData(props.totalPages, currentSearchTerm)"
         :class="[
           'px-2 py-1 text-sm rounded-xl ',
-          props.currentPage === props.totalPages - 1
+          props.currentPage === props.totalPages 
             ? 'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900  '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
         ]"
       >
-        {{ props.totalPages - 1 }}
+        {{ props.totalPages }}
       </button>
     </div>
 
-    <div v-if="props.currentPage > 2 && props.currentPage != props.totalPages - 1">
+    <div v-if="props.currentPage > 2 && props.currentPage != props.totalPages ">
       <section v-if="props.totalPages <= 5" class="items-center hidden md:flex gap-x-3">
         <button
           v-for="pageNumber in props.totalPages"
@@ -175,19 +175,19 @@ const props = defineProps<Props>()
         </button>
         <span v-if="props.currentPage + 2 < props.totalPages" class="dark:text-slate-100">...</span>
         <button
-          @click="props.getData(props.totalPages - 1, currentSearchTerm)"
+          @click="props.getData(props.totalPages , currentSearchTerm)"
           class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
           :class="{
             'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
               props.currentPage === props.totalPages
           }"
         >
-          {{ props.totalPages - 1 }}
+          {{ props.totalPages  }}
         </button>
       </section>
     </div>
 
-    <div v-if="props.currentPage == totalPages - 1" class="items-center hidden md:flex gap-x-3">
+    <div v-if="props.currentPage == totalPages" class="items-center hidden md:flex gap-x-3">
       <button
         v-for="pageNumber in Math.min(3, props.totalPages)"
         :key="pageNumber"
@@ -210,15 +210,15 @@ const props = defineProps<Props>()
         ...
       </button>
       <button
-        @click="props.getData(Math.round(totalPages / 2) - 1, currentSearchTerm)"
+        @click="props.getData(Math.round(totalPages / 2) , currentSearchTerm)"
         :class="[
           'px-2 py-1 text-sm rounded-xl ',
-          props.currentPage === Math.round(totalPages / 2) - 1
+          props.currentPage === Math.round(totalPages / 2) 
             ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
         ]"
       >
-        {{ Math.round(totalPages / 2) - 1 }}
+        {{ Math.round(totalPages / 2)  }}
       </button>
       <button
         @click="props.getData(Math.round(totalPages / 2), currentSearchTerm)"
@@ -249,26 +249,37 @@ const props = defineProps<Props>()
       >
         ...
       </button>
-
       <button
-        @click="props.getData(totalPages - 1, currentSearchTerm)"
+  
         :class="[
           'px-2 py-1 text-sm rounded-xl ',
-          props.currentPage === totalPages - 1
+          props.currentPage === totalPages -1
             ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
         ]"
       >
-        {{ totalPages - 1 }}
+        {{ totalPages-1 }}
+      </button>
+
+      <button
+        @click="props.getData(totalPages , currentSearchTerm)"
+        :class="[
+          'px-2 py-1 text-sm rounded-xl ',
+          props.currentPage === totalPages 
+            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
+            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
+        ]"
+      >
+        {{ totalPages }}
       </button>
     </div>
 
     <button
       @click="props.getData(props.currentPage + 1, props.currentSearchTerm)"
-      :disabled="props.currentPage == props.totalPages - 1"
+      :disabled="props.currentPage == props.totalPages "
       :class="[
         'flex items-center px-8 py-2 text-sm capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
-        props.currentPage == props.totalPages - 1
+        props.currentPage == props.totalPages 
           ? ' text-gray-400  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900'
           : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200 dark:hover:bg-gray-900'
       ]"
