@@ -39,6 +39,7 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
   let strPageNumber = pageNumber.toString()
   currentSearchTerm.value = searchTerm
   isLoading.value = true
+  console.log("testing334d")
 
   try {
     const response = await fetch(

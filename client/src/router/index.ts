@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       name: 'Home',
-      path: '/mail-searcher',
+      path: '/',
       component: HomeView,
     },
     {

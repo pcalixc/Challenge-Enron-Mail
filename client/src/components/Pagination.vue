@@ -16,7 +16,7 @@ const props = defineProps<Props>()
   <div
     id="pagination"
     v-if="props.totalResults > 0"
-    class="flex items-center justify-center gap-2 mt-3 mx-24"
+    class="flex items-center justify-center gap-2 mt-0 mx-24"
   >
     <button
       @click="getData(props.currentPage - 1, props.currentSearchTerm)"

@@ -27,7 +27,7 @@ const props = defineProps<Props>()
 <template>
   <div class="flex items-center justify-center font-sans overflow-hidden">
     <div class="w-full lg:w-5/6">
-      <div class="flex flex-col h-[70vh] overflow-hidden mt-2 mb-2">
+      <div class="flex flex-col h-[70vh] overflow-hidden mt-2 mb-0">
         <div class="overflow-x-auto px-9 md:overflow-auto sm:-mx-6 lg:-mx-8">
           <div class="min-w-[90%] py-0 align-middle md:px-6 lg:px-8">
             <div
@@ -35,7 +35,7 @@ const props = defineProps<Props>()
             >
               <table
                 v-if="props.totalResults > 0 && !props.isLoading"
-                class="w-[90%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-8 dark:divide-gray-700 min-w-max border-collapse block md:table"
+                class="w-[90%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
               >
                 <thead class="block md:table-header-group">
                   <tr

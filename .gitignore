@@ -1,4 +1,3 @@
-data
 .vscode
 indexer/enron
 indexer/.env
@@ -7,6 +6,10 @@ zinc
 indexer/zinc
 zinc
 terraform
+.terraform
 .docker
 .env
-deploy-app.yml
+main.tf
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup

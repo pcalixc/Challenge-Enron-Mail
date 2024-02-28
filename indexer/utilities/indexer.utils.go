@@ -51,7 +51,7 @@ func IsDirectory(path string) bool {
 // SendDataToIndex sends data to the index using HTTP.
 func SendDataToIndex(data *[]models.EnronMail) error {
 	bulkData := models.BulkDocument{
-		Index:   "mail",
+		Index:   "emails",
 		Records: *data,
 	}
 
