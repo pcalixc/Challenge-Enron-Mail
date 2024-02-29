@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/Home.vue'
-import NotFounded from '@/views/NotFounded.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,7 +13,7 @@ const router = createRouter({
     {
       name: 'notFound',
       path: '/:pathMatch(.*)*',
-      component: NotFounded,
+      component: NotFound,
     },
   ]
 })

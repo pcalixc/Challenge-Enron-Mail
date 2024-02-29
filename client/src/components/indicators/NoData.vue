@@ -7,21 +7,14 @@ interface Props {
   suggestions: string[]
   getData: Function
 }
-// const emit = defineEmits(['changeSearchValue'])
-
 
 const props = defineProps<Props>()
 
-// const  Change =()=>{
-//       emit('changeSearchValue');
-//     }
-
 </script>
-
 <template>
   <div class="flex flex-col align-middle justify-center m-auto">
     <div
-      class="flex bg-yellow-100 rounded-lg p-4 mb-4 mt-9 w-auto text-sm text-yellow-700"
+      class="flex bg-yellow-100 rounded-lg dark:bg-deep_blue dark:text-white p-4 mb-4 mt-9 w-auto text-sm text-yellow-700"
       role="alert"
     >
       <svg
@@ -39,14 +32,13 @@ const props = defineProps<Props>()
       <div>
         <span class="font-medium">No emails matched the term "{{ currentSearchTerm }}" </span>
 
-        <span v-if="props.suggestions.length>0">
+        <span v-if="props.suggestions.length>0 && props.suggestions[0] != currentSearchTerm">
           Did you mean
           <span
             @click="props.getData(1, props.suggestions[0])"
             class="underline font-semibold cursor-pointer"
             >{{ props.suggestions[0]}}</span>
           ?</span>
-          
       </div>
     </div>
     <div class="h-full flex justify-center align-middle mt-12">

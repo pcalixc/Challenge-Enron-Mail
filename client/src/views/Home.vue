@@ -67,8 +67,6 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
   currentPage.value = pageNumber
 }
 
-
-
 const asigneSelectedContent = (index: number) => {
   selectedEmail.value = emails.value[index]._source
   selectedEmailIndex.value = index
@@ -85,8 +83,6 @@ onBeforeMount(() => {
   <Header 
   :getData="getData"
  />
-
-
 
   <EmailsTable
     :getData="getData" 

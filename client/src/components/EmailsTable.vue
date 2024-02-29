@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { defineProps } from 'vue'
 import ConnectionError from '@/components/indicators/ConnectionError.vue'
@@ -7,6 +6,23 @@ import Loading from '@/components/indicators/Loading.vue'
 import Pagination from './Pagination.vue'
 import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
 import type { Hit } from '@/types'
+
+
+// This function checks if a current SearchTerm is present 'only' in the content of the email. 
+const isWordInContent = (
+  subject: string,
+  from: string,
+  to: string,
+  content: string,
+  term: string
+) => {
+  const regex = new RegExp(term, 'gi')
+  let a = regex.test(subject) || regex.test(from) || regex.test(to)
+  if (a) {
+    return !a
+  }
+  return regex.test(content)
+}
 
 interface Props {
   getData: Function
@@ -35,7 +51,7 @@ const props = defineProps<Props>()
             >
               <table
                 v-if="props.totalResults > 0 && !props.isLoading"
-                class="w-[90%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
+                class="w-[95%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
               >
                 <thead class="block md:table-header-group">
                   <tr
@@ -154,7 +170,7 @@ const props = defineProps<Props>()
                       </span>
                       <span
                         :title="data._source.subject"
-                        class="font-xs font-semibold md:block truncate text-ellipsis w-[12rem]"
+                        class="font-xs ml-3 font-semibold md:block truncate text-ellipsis w-[15rem]"
                         v-html="HighlighWord(data._source.subject, props.currentSearchTerm)"
                       ></span>
                     </td>
@@ -179,6 +195,7 @@ const props = defineProps<Props>()
                         </div>
                       </span>
                       <span
+                        class="ml-4"
                         :title="data._source.from"
                         v-html="HighlighWord(data._source.from, currentSearchTerm)"
                       ></span>
@@ -204,7 +221,7 @@ const props = defineProps<Props>()
                       </span>
                       <span
                         :title="data._source.to"
-                        class="font-xs font-normal md:block truncate text-ellipsis w-[15rem] overflow-x-auto"
+                        class="font-xs ml-4 font-normal md:block truncate text-ellipsis w-[15rem] overflow-x-auto"
                         v-html="HighlighWord(data._source.to, currentSearchTerm)"
                       ></span>
                     </td>
@@ -230,7 +247,7 @@ const props = defineProps<Props>()
                         </div>
                       </span>
                       <span
-                        class="inline-flex items-center gap-1 dark:bg-transparent_blue rounded-xl bg-gray-50 px-2 py-1 text-xs font-semibold"
+                        class="inline-flex ml-4 items-center gap-1 dark:bg-transparent_blue rounded-xl bg-gray-50 px-2 py-1 text-xs font-semibold"
                       >
                         {{ ConvertDateFormat(data._source.date) }}
                       </span>
@@ -238,8 +255,19 @@ const props = defineProps<Props>()
                     <td class="p-2 text-left block md:table-cell">
                       <span class="inline-block w-1/3 md:hidden font-bold"></span>
                       <button
+                        :class="[
+                          'bg-gray-200  p-1.5 rounded-lg mx-3',
+                          isWordInContent(
+                            data._source.subject,
+                            data._source.from,
+                            data._source.to,
+                            data._source.content,
+                            currentSearchTerm
+                          )
+                            ? 'px-2 py-1 dark:bg-royal_purple dark:text-slate-950 border font-semibold dark:border-yellow-700 dark:bg-transparent_blue border-yellow-500 text-yellow-600 bg-yellow-50  rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
+                            : 'px-2 py-1 font-semibold dark:bg-slate-900 dark:text-slate-300 border dark:border-slate-700 dark:bg-transparent_blue border-purple-500 text-violet-600 bg-violet-50 rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
+                        ]"
                         @click="asigneSelectedContent(index)"
-                        class="px-2 py-1 font-normal dark:bg-slate-900 dark:text-slate-300 border dark:border-slate-700 dark:bg-transparent_blue border-purple-500 text-violet-600 bg-violet-50 rounded-lg transition duration-300 hover:scale-105 focus:outline-none"
                       >
                         Open Email
                       </button>
