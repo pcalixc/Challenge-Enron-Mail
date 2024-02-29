@@ -16,6 +16,6 @@ func (s *Server) setupRoutes() {
 	})
 	s.ChiRouter.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("Not found"))
+		http.ServeFile(w, r, "../../client/index.html")
 	})
 }
