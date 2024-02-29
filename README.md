@@ -17,7 +17,7 @@ The Enron Mail Indexer and Data Visualizer project is a combination of an Indexe
 ### 1. Clone the Git Repository
 
 ```bash
-git clone https://github.com/pcalixc/Challenge-Enron-Mail.git
+git clone https://github.com/pcalixc/challenge.git
 
 ```
 ### 2. Download and Extract the Enron Email Dataset
