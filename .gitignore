@@ -15,4 +15,3 @@ terraform.tfstate
 .terraform.tfstate.lock.info
 terraform.tfstate.backup
 indexerv2/utils/logs.go
-pc
