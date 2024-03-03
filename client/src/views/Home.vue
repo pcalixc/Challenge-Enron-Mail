@@ -39,7 +39,7 @@ const getData = async (pageNumber: number, searchTerm?: string) => {
   let strPageNumber = pageNumber.toString()
   currentSearchTerm.value = searchTerm
   isLoading.value = true
-  console.log("testing334d")
+  console.log("api url",import.meta.env.VITE_API_URL)
 
   try {
     const response = await fetch(
