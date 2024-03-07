@@ -65,8 +65,8 @@ func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
 	)
 	params = utils.EvaluateQueryParams(r.URL.Query().Get("max"), r.URL.Query().Get("page"), r.URL.Query().Get("term"))
 
-	if params.Term != "" {
-		result, err = controllers.SearchMails(params.Term, params.PageNumber, params.MaxResults)
+	if params.SearchTerm != "" {
+		result, err = controllers.SearchEmails(params.SearchTerm, params.PageNumber, params.MaxResults)
 	} else {
 		result, err = controllers.GetAllEmails(params.PageNumber, params.MaxResults)
 	}

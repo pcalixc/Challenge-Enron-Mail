@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import ConnectionError from '@/components/indicators/ConnectionError.vue'
 import NoData from '@/components/indicators/NoData.vue'
 import Loading from '@/components/indicators/Loading.vue'
 import Pagination from './Pagination.vue'
+import { useEmailsStore } from '@/stores/emails';
+const emailsStore = useEmailsStore()
 import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
-import type { Hit } from '@/types'
-
 
 // This function checks if a current SearchTerm is present 'only' in the content of the email. 
 const isWordInContent = (
@@ -24,20 +23,6 @@ const isWordInContent = (
   return regex.test(content)
 }
 
-interface Props {
-  getData: Function
-  emails: Hit[]
-  asigneSelectedContent: Function
-  currentSearchTerm: string
-  isLoading: boolean
-  totalResults: number
-  conectionError: boolean
-  totalPages: number
-  currentPage: number
-  suggestions: string[]
-}
-
-const props = defineProps<Props>()
 </script>
 
 <template>
@@ -50,7 +35,7 @@ const props = defineProps<Props>()
               class="dark:border-gray-700 md:rounded-tl-lg rounded flex align-middle justify-center"
             >
               <table
-                v-if="props.totalResults > 0 && !props.isLoading"
+                v-if="emailsStore.totalResults > 0 && !emailsStore.isLoading"
                 class="w-[95%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
               >
                 <thead class="block md:table-header-group">
@@ -139,7 +124,7 @@ const props = defineProps<Props>()
                 </thead>
                 <tbody class="block md:table-row-group font-light text-sm text-gray-600">
                   <tr
-                    v-for="(data, index) in props.emails"
+                    v-for="(data, index) in emailsStore.emails"
                     :key="index"
                     :class="{
                       ' bg-white dark:bg-ligth_blue dark:hover:bg-slate-900  ': index % 2 === 0,
@@ -171,7 +156,7 @@ const props = defineProps<Props>()
                       <span
                         :title="data._source.subject"
                         class="font-xs ml-3 font-semibold md:block truncate text-ellipsis w-[15rem]"
-                        v-html="HighlighWord(data._source.subject, props.currentSearchTerm)"
+                        v-html="HighlighWord(data._source.subject, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
                     <td class="p-2 text-left block md:table-cell">
@@ -197,7 +182,7 @@ const props = defineProps<Props>()
                       <span
                         class="ml-4"
                         :title="data._source.from"
-                        v-html="HighlighWord(data._source.from, currentSearchTerm)"
+                        v-html="HighlighWord(data._source.from, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
                     <td class="p-2 text-left block md:table-cell">
@@ -222,7 +207,7 @@ const props = defineProps<Props>()
                       <span
                         :title="data._source.to"
                         class="font-xs ml-4 font-normal md:block truncate text-ellipsis w-[15rem] overflow-x-auto"
-                        v-html="HighlighWord(data._source.to, currentSearchTerm)"
+                        v-html="HighlighWord(data._source.to, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
                     <td class="p-2 text-left block md:table-cell">
@@ -262,12 +247,12 @@ const props = defineProps<Props>()
                             data._source.from,
                             data._source.to,
                             data._source.content,
-                            currentSearchTerm
+                            emailsStore.currentSearchTerm
                           )
                             ? 'px-2 py-1 dark:bg-royal_purple dark:text-slate-950 border font-semibold dark:border-yellow-700 dark:bg-transparent_blue border-yellow-500 text-yellow-600 bg-yellow-50  rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
                             : 'px-2 py-1 font-semibold dark:bg-slate-900 dark:text-slate-300 border dark:border-slate-700 dark:bg-transparent_blue border-purple-500 text-violet-600 bg-violet-50 rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
                         ]"
-                        @click="asigneSelectedContent(index)"
+                        @click="emailsStore.asigneSelectedContent(index)"
                       >
                         Open Email
                       </button>
@@ -281,28 +266,16 @@ const props = defineProps<Props>()
 
         <!-- indicators -->
 
-        <NoData
-          v-if="
-            props.totalResults == 0 && props.isLoading == false && props.conectionError == false
-          "
-          :currentSearchTerm="currentSearchTerm"
-          :suggestions="suggestions"
-          :getData="getData"
-        />
+        <NoData v-if="emailsStore.totalResults == 0 && emailsStore.isLoading == false && emailsStore.conectionError == false" />
 
-        <ConnectionError v-if="props.conectionError" />
+        <ConnectionError v-if="emailsStore.conectionError" />
 
-        <Loading v-if="props.isLoading" />
+        <Loading v-if="emailsStore.isLoading" />
+
       </div>
 
-      <Pagination
-        v-if="!conectionError"
-        :currentPage="props.currentPage"
-        :totalResults="props.totalResults"
-        :currentSearchTerm="currentSearchTerm"
-        :totalPages="totalPages"
-        :getData="getData"
-      />
+      <Pagination v-if="!emailsStore.conectionError" />
+
     </div>
   </div>
 </template>

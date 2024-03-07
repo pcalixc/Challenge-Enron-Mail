@@ -11,7 +11,7 @@ import (
 // The search term is assigned directly.
 func EvaluateQueryParams(max, page, term string) models.QueryParameters {
 	// Create an instance of QueryParameter with default values.
-	var params = models.QueryParameters{MaxResults: 10, PageNumber: 1, Term: term}
+	var params = models.QueryParameters{MaxResults: 10, PageNumber: 1, SearchTerm: term}
 
 	// If the max parameter is not empty, it is converted to an integer and assigned to MaxResults.
 	if max != "" {
@@ -22,7 +22,7 @@ func EvaluateQueryParams(max, page, term string) models.QueryParameters {
 		params.PageNumber, _ = strconv.Atoi(page)
 	}
 	// Assign the provided search term.
-	params.Term = term
+	params.SearchTerm = term
 
 	// Return the updated QueryParameter structure.
 	return params

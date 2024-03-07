@@ -1,14 +1,8 @@
 <script setup lang="ts">
 import { LottieAnimation } from 'lottie-web-vue'
-import animationNotData from '@/assets/se2.json'
-import { defineProps } from 'vue'
-interface Props {
-  currentSearchTerm: string
-  suggestions: string[]
-  getData: Function
-}
-
-const props = defineProps<Props>()
+import animationNotData from '@/assets/NoData.json'
+import { useEmailsStore } from '@/stores/emails';
+const emailsStore = useEmailsStore()
 
 </script>
 <template>
@@ -30,14 +24,14 @@ const props = defineProps<Props>()
         ></path>
       </svg>
       <div>
-        <span class="font-medium">No emails matched the term "{{ currentSearchTerm }}" </span>
+        <span class="font-medium">No emails matched the term "{{ emailsStore.currentSearchTerm }}" </span>
 
-        <span v-if="props.suggestions.length>0 && props.suggestions[0] != currentSearchTerm">
+        <span v-if="emailsStore.suggestion.length>0 && emailsStore.suggestion[0] != emailsStore.currentSearchTerm">
           Did you mean
           <span
-            @click="props.getData(1, props.suggestions[0])"
+            @click="emailsStore.getData(1, emailsStore.suggestion[0])"
             class="underline font-semibold cursor-pointer"
-            >{{ props.suggestions[0]}}</span>
+            >{{ emailsStore.suggestion[0]}}</span>
           ?</span>
       </div>
     </div>

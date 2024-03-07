@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Email } from '@/types'
-import { defineProps } from 'vue'
+import { useEmailsStore } from '@/stores/emails';
+const emailsStore = useEmailsStore()
 import { HighlighWord, SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/emails.utilities'
 
 function close() {
@@ -13,14 +13,6 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-interface Props {
-  asigneSelectedContent: Function
-  selectedEmail: Email | undefined
-  currentSearchTerm: string
-  selectedEmailIndex: number
-}
-
-const props = defineProps<Props>()
 </script>
 
 <template>
@@ -40,10 +32,10 @@ const props = defineProps<Props>()
             <div class="px-2 flex items-end mr-auto space-x-4">
               <div class="flex items-center space-x-2">
                 <button
-                  @click="props.asigneSelectedContent(props.selectedEmailIndex - 1)"
+                  @click="emailsStore.asigneSelectedContent(emailsStore.selectedEmailIndex - 1)"
                   :class="[
                     'bg-gray-200  p-1.5 rounded-lg',
-                    props.selectedEmailIndex != 0
+                    emailsStore.selectedEmailIndex != 0
                       ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
                       : 'text-gray-400 dark:bg-gray-600  disabled pointer-events-none'
                   ]"
@@ -63,10 +55,10 @@ const props = defineProps<Props>()
                   </svg>
                 </button>
                 <button
-                  @click="props.asigneSelectedContent(props.selectedEmailIndex + 1)"
+                  @click="emailsStore.asigneSelectedContent(emailsStore.selectedEmailIndex + 1)"
                   :class="[
                     'bg-gray-200  p-1.5 rounded-lg',
-                    props.selectedEmailIndex != 6
+                    emailsStore.selectedEmailIndex != 6
                       ? 'text-gray-700 dark:text-slate-100 dark:bg-slate-700 hover:scale-105'
                       : 'text-gray-400 dark:bg-gray-700  disabled pointer-events-none'
                   ]"
@@ -131,16 +123,16 @@ const props = defineProps<Props>()
                     <circle cx="12" cy="6" r="6" />
                   </svg>
                   <span
-                    v-if="props.selectedEmail"
-                    v-html="HighlighWord(props.selectedEmail.from, props.currentSearchTerm)"
+                    v-if="emailsStore.selectedEmail"
+                    v-html="HighlighWord(emailsStore.selectedEmail.from, emailsStore.currentSearchTerm)"
                   ></span>
                 </div>
               </div>
               <div class="inline-flex ml-4 font-semibold dark:text-slate-200">
                 To:
-                <div v-if="props.selectedEmail" class="ml-6 grid grid-cols-2 gap-y-1 gap-x-2">
+                <div v-if="emailsStore.selectedEmail" class="ml-6 grid grid-cols-2 gap-y-1 gap-x-2">
                   <span
-                    v-for="(email, index) in SeparateEmailsByCommas(props.selectedEmail.to)"
+                    v-for="(email, index) in SeparateEmailsByCommas(emailsStore.selectedEmail.to)"
                     :key="index"
                     class="inline-flex rounded-full bg-violet-50 dark:bg-vivid_blue px-2 py-1 text-xs font-semibold text-gray-600 dark:text-slate-200"
                   >
@@ -174,20 +166,20 @@ const props = defineProps<Props>()
 
           <main class="mt-4 px-10 overflow-x-hidden overflow-y-auto custom-scrollbar">
             <h2
-              v-if="props.selectedEmail"
+              v-if="emailsStore.selectedEmail"
               class="mt-1 mb-4 mr-8 text-right rounded-full text-md font-bold uppercase text-slate-800 dark:text-slate-200"
             >
-              {{ ConvertDateFormat(props.selectedEmail.date) }}
+              {{ ConvertDateFormat(emailsStore.selectedEmail.date) }}
             </h2>
             <h2
-              v-if="props.selectedEmail"
+              v-if="emailsStore.selectedEmail"
               class="font-bold text-2xl dark:text-slate-300"
-              v-html="HighlighWord(props.selectedEmail.subject, props.currentSearchTerm)"
+              v-html="HighlighWord(emailsStore.selectedEmail.subject, emailsStore.currentSearchTerm)"
             ></h2>
             <p
-              v-if="props.selectedEmail"
+              v-if="emailsStore.selectedEmail"
               class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14"
-              v-html="HighlighWord(props.selectedEmail.content, props.currentSearchTerm)"
+              v-html="HighlighWord(emailsStore.selectedEmail.content, emailsStore.currentSearchTerm)"
             ></p>
           </main>
           <hr class="border-t border-slate-300 mt-4 dark:border-slate-700 shadow-md" />

@@ -2,6 +2,7 @@
 indexer/enron
 indexer/.env
 api/.env
+client/.env
 zinc
 indexer/zinc
 zinc

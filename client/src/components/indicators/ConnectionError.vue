@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { LottieAnimation } from 'lottie-web-vue'
 
-import animationConnError from '@/assets/oops3.json'
+import animationConnError from '@/assets/ConnectionError.json'
 </script>
 
 <template>

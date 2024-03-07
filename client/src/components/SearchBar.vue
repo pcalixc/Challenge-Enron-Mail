@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { ref, watch } from 'vue'
 const searchTerm = ref('')
 const errorMessage = ref('')
-const props = defineProps(['getData'])
+import { useEmailsStore } from '@/stores/emails';
+const emailsStore = useEmailsStore()
+
+watch(() => emailsStore.currentSearchTerm, (newValue) => {
+  searchTerm.value = newValue
+})
 
 const handleSubmit = () => {
   const regex = /[?/><>,!@#$%^&*()_=+{}|[\]\\:;"'`~]/
@@ -10,7 +15,7 @@ const handleSubmit = () => {
     errorMessage.value = 'Input must not contain special characters.'
     return
   }
-  props.getData(1, searchTerm.value)
+  emailsStore.getData(1, searchTerm.value)
   errorMessage.value = ''
 }
 </script>

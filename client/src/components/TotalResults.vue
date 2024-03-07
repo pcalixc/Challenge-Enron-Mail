@@ -1,24 +1,19 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
-interface Props {
-  totalResults: number
-  isLoading: boolean
-  currentSearchTerm: string
-  currentPage: number
-}
+import { useEmailsStore } from '@/stores/emails';
+import { computed } from 'vue'
+
+const emailsStore = useEmailsStore()
 
 const emailsByPage=8
-const ini = computed(() => (props.currentPage  * emailsByPage) - emailsByPage)
+const ini = computed(() => (emailsStore.currentPage  * emailsByPage) - emailsByPage)
 const fin = computed(() => {
   let endValue = ini.value + emailsByPage
-  if (endValue > props.totalResults) {
-    endValue = props.totalResults
+  if (endValue > emailsStore.totalResults) {
+    endValue = emailsStore.totalResults
   }
   return endValue
 })
 
-
-const props = defineProps<Props>()
 </script>
 
 <template>
@@ -27,7 +22,7 @@ const props = defineProps<Props>()
       Showing 
       <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ ini +1 }}</span>  to 
       <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ fin }}</span>  of 
-      <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ props.totalResults }}</span> emails
+      <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ emailsStore.totalResults }}</span> emails
   </p>
   </div>
 </template>

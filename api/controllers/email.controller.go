@@ -30,23 +30,24 @@ func doRequest(query string) (*http.Response, error) {
 	return resp, nil
 }
 
-func SearchMails(term string, page, max int) (models.HitsResponse, error) {
+func SearchEmails(term string, page, max int) (models.HitsResponse, error) {
 	from := (page-1)*max + 1
 
 	//ini= (pag-1) * num + 1
 	//fin= pag*num
 
 	var query = fmt.Sprintf(`{
-        "search_type": "match",
+        "search_type": "matchphrase",
         "query":
         {
+			"sort_fields": ["@date"],
             "term": "%s",
             "start_time": "2021-06-02T14:28:31.894Z",
             "end_time": "2028-01-31T15:28:31.894Z"
         },
         "from": %d,
         "max_results": %d,
-        "_source": []
+        "_source": ["subject","from","to","date", "content" ]
     }`, term, from, max)
 
 	resp, err := doRequest(query)
@@ -73,10 +74,10 @@ func GetAllEmails(page, max int) (models.HitsResponse, error) {
 
 	var query = fmt.Sprintf(`{
 		"search_type": "matchall",
-		"sort_fields": ["-Date"],
+		"sort_fields": ["@date"],
 		"from": %d,
 		"max_results": %d,
-		"_source": []
+		"_source": ["subject","from","to","date", "content" ]
 	}`, from, max)
 
 	resp, err := doRequest(query)
