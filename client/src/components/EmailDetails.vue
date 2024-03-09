@@ -16,7 +16,7 @@ const emit = defineEmits<Emits>()
 </script>
 
 <template>
-  <div tra class="fixed inset-0 z-50 overflow-hidden">
+  <div class="fixed inset-0 z-50 overflow-hidden">
     <div
       class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
       @click="close()"
@@ -25,7 +25,7 @@ const emit = defineEmits<Emits>()
     <section class="absolute inset-y-0 right-0 pl-10 flex">
       <div class="rounded-l-2xl">
         <div
-          class="h-full flex flex-col w-[33rem] py-6 bg-white border dark:border-slate-800 dark:shadow-xl dark:bg-slate-900 shadow-xl rounded-2xl"
+          class="h-full flex flex-col w-[33rem] modal py-6 bg-white border dark:border-slate-800 dark:shadow-xl dark:bg-slate-900 shadow-xl rounded-2xl"
         >
           <!-- Sidebar Header -->
           <div class="flex items-center justify-between px-4">
@@ -188,3 +188,13 @@ const emit = defineEmits<Emits>()
     </section>
   </div>
 </template>
+
+
+<style>
+@media (max-width: 768px) {
+  .modal {
+    width: 90vw;
+
+  }
+}
+</style>

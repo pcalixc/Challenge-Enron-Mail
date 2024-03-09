@@ -87,6 +87,7 @@ func GetAllEmails(page, max int) (models.HitsResponse, error) {
 	defer resp.Body.Close()
 
 	log.Println(resp.StatusCode)
+	fmt.Println(resp)
 
 	var hitsResponse models.HitsResponse
 	err = json.NewDecoder(resp.Body).Decode(&hitsResponse)

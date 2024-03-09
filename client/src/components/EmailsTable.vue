@@ -28,7 +28,7 @@ const isWordInContent = (
 <template>
   <div class="flex items-center justify-center font-sans overflow-hidden">
     <div class="w-full lg:w-5/6">
-      <div class="flex flex-col h-[70vh] overflow-hidden mt-2 mb-0">
+      <div class="flex flex-col h-[70vh] overflow-hidden mt-2 mb-5">
         <div class="overflow-x-auto px-9 md:overflow-auto sm:-mx-6 lg:-mx-8">
           <div class="min-w-[90%] py-0 align-middle md:px-6 lg:px-8">
             <div
@@ -134,7 +134,7 @@ const isWordInContent = (
                   >
                     <td class="p-2 text-left block md:table-cell">
                       <span class="inline-block w-1/3 md:hidden font-bold">
-                        <div class="gap-1 flex">
+                        <div class="gap-1 ml-5 flex">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="mt-1 dark:fill-white fill-[#414141]"
@@ -155,13 +155,13 @@ const isWordInContent = (
                       </span>
                       <span
                         :title="data._source.subject"
-                        class="font-xs ml-3 font-semibold md:block truncate text-ellipsis w-[15rem]"
+                        class="font-xs ml-5 font-semibold md:block truncate text-ellipsis w-[15rem]"
                         v-html="HighlighWord(data._source.subject, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
                     <td class="p-2 text-left block md:table-cell">
                       <span class="inline-block w-1/3 md:hidden font-bold">
-                        <div class="gap-1 flex">
+                        <div class="gap-1 ml-5 flex">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             id="Layer_1"
@@ -180,14 +180,14 @@ const isWordInContent = (
                         </div>
                       </span>
                       <span
-                        class="ml-4"
+                        class="ml-5"
                         :title="data._source.from"
                         v-html="HighlighWord(data._source.from, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
                     <td class="p-2 text-left block md:table-cell">
                       <span class="inline-block w-1/3 md:hidden font-bold">
-                        <div class="gap-1 flex">
+                        <div class="gap-1 ml-5 flex">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             id="Layer_1"
@@ -206,12 +206,12 @@ const isWordInContent = (
                       </span>
                       <span
                         :title="data._source.to"
-                        class="font-xs ml-4 font-normal md:block truncate text-ellipsis w-[15rem] overflow-x-auto"
+                        class="font-xs ml-5 font-normal md:block truncate text-ellipsis w-[15rem] overflow-x-auto"
                         v-html="HighlighWord(data._source.to, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
-                    <td class="p-2 text-left block md:table-cell">
-                      <span class="inline-block w-1/3 md:hidden font-bold">
+                    <td class="p-2 grid grid-cols-3 gap-4  text-left  md:table-cell">
+                      <span class="inline-block pl-5  w-32 md:hidden font-bold">
                         <div class="gap-1 flex">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -232,12 +232,29 @@ const isWordInContent = (
                         </div>
                       </span>
                       <span
-                        class="inline-flex ml-4 items-center gap-1 dark:bg-transparent_blue rounded-xl bg-gray-50 px-2 py-1 text-xs font-semibold"
+                        class="inline-flex ml-3 w-32 items-center gap-1 dark:bg-transparent_blue rounded-xl bg-gray-50 px-2 py-1 text-xs font-semibold"
                       >
                         {{ ConvertDateFormat(data._source.date) }}
                       </span>
+                      <button
+                        :class="[
+                          'bg-gray-200  p-1.5 rounded-lg mx-3 w-24 hid',
+                          isWordInContent(
+                            data._source.subject,
+                            data._source.from,
+                            data._source.to,
+                            data._source.content,
+                            emailsStore.currentSearchTerm
+                          )
+                            ? 'px-2 py-1 dark:bg-royal_purple dark:text-slate-950 border font-semibold dark:border-yellow-700 dark:bg-transparent_blue border-yellow-500 text-yellow-600 bg-yellow-50  rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
+                            : 'px-2 py-1 font-semibold dark:bg-slate-900 dark:text-slate-300 border dark:border-slate-700 dark:bg-transparent_blue border-purple-500 text-violet-600 bg-violet-50 rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
+                        ]"
+                        @click="emailsStore.asigneSelectedContent(index)"
+                      >
+                        Open Email
+                      </button>
                     </td>
-                    <td class="p-2 text-left block md:table-cell">
+                    <td class="p-2 text-left block md:table-cell hid1">
                       <span class="inline-block w-1/3 md:hidden font-bold"></span>
                       <button
                         :class="[
@@ -255,6 +272,7 @@ const isWordInContent = (
                         @click="emailsStore.asigneSelectedContent(index)"
                       >
                         Open Email
+
                       </button>
                     </td>
                   </tr>
@@ -266,16 +284,31 @@ const isWordInContent = (
 
         <!-- indicators -->
 
-        <NoData v-if="emailsStore.totalResults == 0 && emailsStore.isLoading == false && emailsStore.conectionError == false" />
+        <NoData />
 
-        <ConnectionError v-if="emailsStore.conectionError" />
+        <ConnectionError/>
 
         <Loading v-if="emailsStore.isLoading" />
 
       </div>
 
-      <Pagination v-if="!emailsStore.conectionError" />
+      <Pagination />
 
     </div>
   </div>
 </template>
+
+
+<style scoped>
+@media (min-width: 768px) {
+  .hid {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hid1 {
+    display: none;
+  }
+}
+</style>

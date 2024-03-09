@@ -1,32 +1,31 @@
 <template>
-  <div class="cursor-pointer md:hidden block">
-    <div class="flex items-center justify-center">
+  <div class=" flex justify-center md:items-center lg:w-auto w-auto">
+    <div class="flex items-center w-12 h-13 justify-center">
       <img
         src="../../public/envelope.png"
-        class="w-12 h-13 transform hover:scale-125 transition duration-700"
-        alt=""
       />
     </div>
-  </div>
-  <div class="flex justify-center md:flex md:items-center md:w-auto w-full">
-    <div class="flex items-center justify-center">
-      <img
-        src="../../public/envelope.png"
-        class="w-12 h-13 transform hover:scale-125 transition duration-700"
-        alt=""
-      />
-    </div>
-    <div class="flex flex-col ml-3">
+    <div class="flex flex-col ml-3 hidden_ ">
       <div class="mb-0 flex flex-col">
         <a
-          href="#"
+          href="/"
           class="text-lg dark:text-slate-100 font-semibold tracking-wider uppercase text-black focus:outline-none focus:shadow-outline"
           >Mail Searcher</a
         >
-        <span class="text-slate-600 dark:text-slate-300 text-[0.70rem] font-xs"
-          >Find Emails Effortlessly!</span
+        <a 
+        href="/"
+        class="text-slate-600 dark:text-slate-300 text-[0.70rem] font-xs"
+          >Find Emails Effortlessly!</a
         >
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@media (max-width: 1024px) {
+  .hidden_ {
+    display: none;
+  }
+}
+</style>

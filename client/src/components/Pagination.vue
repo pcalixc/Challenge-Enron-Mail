@@ -1,14 +1,20 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { useEmailsStore } from '@/stores/emails';
+import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
+
+const ascendingPageNumbers = [1, 2, 3, 4, 5, 6]
+const ascendingPageNumbersReverse = [6, 5, 4, 3, 2, 1]
+const descendingPageNumbers = [3, 2, 1]
+const descendingPageNumbersReverse = [1, 2, 3]
+
 
 </script>
 
 <template>
   <div
     id="pagination"
-    v-if="emailsStore.totalResults > 0"
+    v-if="emailsStore.totalResults > 0 && !emailsStore.ServerErrorResponse.errorStatus"
     class="flex items-center justify-center gap-2 mt-0 mx-24"
   >
     <button
@@ -37,16 +43,75 @@ const emailsStore = useEmailsStore()
       </svg>
       <span> Previous </span>
     </button>
-    <div
-      v-if="emailsStore.currentPage > 0 && emailsStore.currentPage < 3"
-      class="items-center hidden md:flex gap-x-3"
+
+    <div v-if="emailsStore.totalPages < 10 && emailsStore.currentPage > 0 ">
+      <button
+        v-for="pageNumber in emailsStore.totalPages"
+        :key="pageNumber"
+        @click="emailsStore.getData(pageNumber, emailsStore.currentSearchTerm)"
+        :class="[
+          'px-2 py-1 text-sm rounded-xl mx-1',
+          emailsStore.currentPage === pageNumber
+            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
+            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
+        ]"
+      >
+        {{ pageNumber }}
+      </button>
+
+    </div>
+
+    <div v-if="emailsStore.totalPages >= 10 && emailsStore.currentPage > 0 && emailsStore.currentPage < 6">
+      <button
+        v-for="pageNumber in ascendingPageNumbers"
+        :key="pageNumber"
+        @click="emailsStore.getData(pageNumber, emailsStore.currentSearchTerm)"
+        :class="[
+          'px-2 py-1 text-sm rounded-xl mx-1',
+          emailsStore.currentPage === pageNumber
+            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
+            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
+        ]"
+      >
+        {{ pageNumber }}
+      </button>
+
+      <button
+        v-if="emailsStore.totalPages > 5"
+        class="px-2 py-1 text-sm mx-1 text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
+        disabled
+      >
+        ...
+      </button>
+
+      <button
+        v-for="pageNumber in descendingPageNumbers"
+        :key="pageNumber"
+        @click="
+          emailsStore.getData(
+            emailsStore.totalPages - pageNumber + 1,
+            emailsStore.currentSearchTerm
+          )
+        "
+        :class="[
+          'px-2 py-1 text-sm rounded-xl mx-1',
+          emailsStore.currentPage === emailsStore.totalPages - pageNumber + 1
+            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
+            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
+        ]"
+      >
+        {{ emailsStore.totalPages - pageNumber + 1 }}
+      </button>
+    </div>
+
+    <div  v-if="emailsStore.currentPage >= 6 && emailsStore.currentPage <= emailsStore.totalPages - 5"
     >
       <button
-        v-for="pageNumber in Math.min(4, emailsStore.totalPages)"
+        v-for="pageNumber in descendingPageNumbersReverse"
         :key="pageNumber"
         @click="emailsStore.getData(pageNumber, emailsStore.currentSearchTerm)"
         :class="[
-          'px-2 py-1 text-sm rounded-xl ',
+          'px-2 py-1 text-sm rounded-xl mx-1',
           emailsStore.currentPage === pageNumber
             ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
@@ -57,136 +122,103 @@ const emailsStore = useEmailsStore()
 
       <button
         v-if="emailsStore.totalPages > 5"
-        class="px-2 py-1 text-sm text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
+        class="px-2 py-1 text-sm mx-1 text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
         disabled
       >
         ...
       </button>
 
       <button
-        @click="emailsStore.getData(emailsStore.totalPages, emailsStore.currentSearchTerm)"
+        @click="emailsStore.getData(emailsStore.currentPage - 2, emailsStore.currentSearchTerm)"
+        class="px-2 py-1 mx-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
+        :class="{
+          'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+            emailsStore.currentPage === emailsStore.currentPage - 2
+        }"
+      >
+        {{ emailsStore.currentPage - 2 }}
+      </button>
+      <button
+        @click="emailsStore.getData(emailsStore.currentPage - 1, emailsStore.currentSearchTerm)"
+        class="px-2 py-1 text-sm mx-1 rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
+        :class="{
+          'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+            emailsStore.currentPage === emailsStore.currentPage - 1
+        }"
+      >
+        {{ emailsStore.currentPage - 1 }}
+      </button>
+      <button
+        @click="emailsStore.getData(emailsStore.currentPage, emailsStore.currentSearchTerm)"
+        class="px-2 py-1 text-sm mx-1 rounded-xl text-royal_purple font-bold bg-blue-100/60 hover:bg-gray-300 bg-slate-200 shadow-xs dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
+        :class="{
+          'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+            emailsStore.currentPage === emailsStore.currentPage
+        }"
+      >
+        {{ emailsStore.currentPage }}
+      </button>
+      <button
+        @click="emailsStore.getData(emailsStore.currentPage + 1, emailsStore.currentSearchTerm)"
+        class="px-2 py-1 text-sm mx-1 rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
+        :class="{
+          'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+            emailsStore.currentPage === emailsStore.currentPage + 1
+        }"
+      >
+        {{ emailsStore.currentPage + 1 }}
+      </button>
+      <button
+        @click="emailsStore.getData(emailsStore.currentPage + 2, emailsStore.currentSearchTerm)"
+        class="px-2 py-1 text-sm mx-1 rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
+        :class="{
+          'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
+            emailsStore.currentPage === emailsStore.currentPage + 2
+        }"
+      >
+        {{ emailsStore.currentPage + 2 }}
+      </button>
+      <button
+        v-if="emailsStore.totalPages > 5"
+        class="px-2 py-1 text-sm mx-1 text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
+        disabled
+      >
+        ...
+      </button>
+
+      <button
+        v-for="pageNumber in descendingPageNumbers"
+        :key="pageNumber"
+        @click="
+          emailsStore.getData(
+            emailsStore.totalPages - pageNumber + 1,
+            emailsStore.currentSearchTerm
+          )
+        "
         :class="[
-          'px-2 py-1 text-sm rounded-xl ',
-          emailsStore.currentPage === emailsStore.totalPages 
-            ? 'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900  '
+          'px-2 py-1 text-sm rounded-xl mx-1',
+          emailsStore.currentPage === emailsStore.totalPages - pageNumber + 1
+            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
         ]"
       >
-        {{ emailsStore.totalPages }}
+        {{ emailsStore.totalPages - pageNumber + 1 }}
       </button>
     </div>
 
-    <div v-if="emailsStore.currentPage > 2 && emailsStore.currentPage != emailsStore.totalPages ">
-      <section v-if="emailsStore.totalPages <= 5" class="items-center hidden md:flex gap-x-3">
-        <button
-          v-for="pageNumber in emailsStore.totalPages"
-          :key="pageNumber"
-          @click="emailsStore.getData(pageNumber, emailsStore.currentSearchTerm)"
-          class="px-2 py-1 text-sm rounded-xl text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900"
-          :class="{
-            'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-              emailsStore.currentPage === pageNumber
-          }"
-        >
-          {{ pageNumber }}
-        </button>
-      </section>
-
-      <section v-else class="items-center hidden md:flex gap-x-3">
-        <button
-          @click="emailsStore.getData(1, emailsStore.currentSearchTerm)"
-          class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-          :class="{
-            'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-              emailsStore.currentPage === 1
-          }"
-        >
-          1
-        </button>
-        <span v-if="emailsStore.currentPage > 3" class="dark:text-slate-100">...</span>
-
-        <template v-if="emailsStore.currentPage === 1">
-          <button
-            @click="emailsStore.getData(2, emailsStore.currentSearchTerm)"
-            class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-          >
-            2
-          </button>
-        </template>
-
-        <template v-else>
-          <button
-            @click="emailsStore.getData(emailsStore.currentPage - 2, emailsStore.currentSearchTerm)"
-            class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-            :class="{
-              'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-                emailsStore.currentPage === emailsStore.currentPage - 2
-            }"
-          >
-            {{ emailsStore.currentPage - 2 }}
-          </button>
-          <button
-            @click="emailsStore.getData(emailsStore.currentPage - 1, emailsStore.currentSearchTerm)"
-            class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-            :class="{
-              'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-                emailsStore.currentPage === emailsStore.currentPage - 1
-            }"
-          >
-            {{ emailsStore.currentPage - 1 }}
-          </button>
-        </template>
-        <button
-          @click="emailsStore.getData(emailsStore.currentPage, emailsStore.currentSearchTerm)"
-          class="px-2 py-1 text-sm rounded-xl text-royal_purple font-bold bg-blue-100/60 hover:bg-gray-300 bg-slate-200 shadow-xs dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-          :class="{
-            'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-              emailsStore.currentPage === emailsStore.currentPage
-          }"
-        >
-          {{ emailsStore.currentPage }}
-        </button>
-        <button
-          @click="emailsStore.getData(emailsStore.currentPage + 1, emailsStore.currentSearchTerm)"
-          class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-          :class="{
-            'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-              emailsStore.currentPage === emailsStore.currentPage + 1
-          }"
-        >
-          {{ emailsStore.currentPage + 1 }}
-        </button>
-        <button
-          @click="emailsStore.getData(emailsStore.currentPage + 2, emailsStore.currentSearchTerm)"
-          class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-          :class="{
-            'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-              emailsStore.currentPage === emailsStore.currentPage + 2
-          }"
-        >
-          {{ emailsStore.currentPage + 2 }}
-        </button>
-        <span v-if="emailsStore.currentPage + 2 < emailsStore.totalPages" class="dark:text-slate-100">...</span>
-        <button
-          @click="emailsStore.getData(emailsStore.totalPages , emailsStore.currentSearchTerm)"
-          class="px-2 py-1 text-sm rounded-xl hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue dark:text-slate-200 dark:hover:bg-gray-900"
-          :class="{
-            'text-royal_purple font-bold bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 ':
-              emailsStore.currentPage === emailsStore.totalPages
-          }"
-        >
-          {{ emailsStore.totalPages  }}
-        </button>
-      </section>
-    </div>
-
-    <div v-if="emailsStore.currentPage == emailsStore.totalPages" class="items-center hidden md:flex gap-x-3">
+    <div 
+      v-if="
+        emailsStore.totalPages >= 10 && 
+        emailsStore.currentPage > emailsStore.totalPages - 5 &&
+        emailsStore.currentPage <= emailsStore.totalPages
+      "
+    >
       <button
-        v-for="pageNumber in Math.min(3, emailsStore.totalPages)"
+        v-for="pageNumber in descendingPageNumbersReverse"
         :key="pageNumber"
         @click="emailsStore.getData(pageNumber, emailsStore.currentSearchTerm)"
         :class="[
-          'px-2 py-1 text-sm rounded-xl ',
+          'px-2 py-1 text-sm rounded-xl mx-1 ',
           emailsStore.currentPage === pageNumber
             ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
@@ -197,82 +229,38 @@ const emailsStore = useEmailsStore()
 
       <button
         v-if="emailsStore.totalPages > 5"
-        class="px-2 py-1 text-sm text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
+        class="px-2 py-1 text-sm mx-1 text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
         disabled
       >
         ...
-      </button>
-      <button
-        @click="emailsStore.getData(Math.round(emailsStore.totalPages / 2) , emailsStore.currentSearchTerm)"
-        :class="[
-          'px-2 py-1 text-sm rounded-xl ',
-          emailsStore.currentPage === Math.round(emailsStore.totalPages / 2) 
-            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
-            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
-        ]"
-      >
-        {{ Math.round(emailsStore.totalPages / 2)  }}
-      </button>
-      <button
-        @click="emailsStore.getData(Math.round(emailsStore.totalPages / 2), emailsStore.currentSearchTerm)"
-        :class="[
-          'px-2 py-1 text-sm rounded-xl ',
-          emailsStore.currentPage === Math.round(emailsStore.totalPages / 2)
-            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
-            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
-        ]"
-      >
-        {{ Math.round(emailsStore.totalPages / 2) }}
-      </button>
-      <button
-        @click="emailsStore.getData(Math.round(emailsStore.totalPages / 2) + 1, emailsStore.currentSearchTerm)"
-        :class="[
-          'px-2 py-1 text-sm rounded-xl ',
-          emailsStore.currentPage === Math.round(emailsStore.totalPages / 2 + 1)
-            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
-            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
-        ]"
-      >
-        {{ Math.round(emailsStore.totalPages / 2) + 1 }}
-      </button>
-      <button
-        v-if="emailsStore.totalPages > 5"
-        class="px-2 py-1 text-sm text-gray-500 rounded-xl hover:bg-gray-100 dark:text-slate-100"
-        disabled
-      >
-        ...
-      </button>
-      <button
-  
-        :class="[
-          'px-2 py-1 text-sm rounded-xl ',
-          emailsStore.currentPage === emailsStore.totalPages -1
-            ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
-            : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
-        ]"
-      >
-        {{ emailsStore.totalPages-1 }}
       </button>
 
       <button
-        @click="emailsStore.getData(emailsStore.totalPages , emailsStore.currentSearchTerm)"
+        v-for="pageNumber in ascendingPageNumbersReverse"
+        :key="pageNumber"
+        @click="
+          emailsStore.getData(
+            emailsStore.totalPages - pageNumber + 1,
+            emailsStore.currentSearchTerm
+          )
+        "
         :class="[
-          'px-2 py-1 text-sm rounded-xl ',
-          emailsStore.currentPage === emailsStore.totalPages 
+          'px-2 py-1 text-sm rounded-xl mx-1',
+          emailsStore.currentPage === emailsStore.totalPages - pageNumber + 1
             ? 'text-royal_purple font-bold  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900 '
             : ' hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200  dark:hover:bg-gray-900'
         ]"
       >
-        {{ emailsStore.totalPages }}
+        {{ emailsStore.totalPages - pageNumber + 1 }}
       </button>
     </div>
 
     <button
       @click="emailsStore.getData(emailsStore.currentPage + 1, emailsStore.currentSearchTerm)"
-      :disabled="emailsStore.currentPage == emailsStore.totalPages "
+      :disabled="emailsStore.currentPage == emailsStore.totalPages"
       :class="[
-        'flex items-center px-8 py-2 text-sm capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
-        emailsStore.currentPage == emailsStore.totalPages 
+        'flex items-center px-8 py-2 text-sm  capitalize transition-colors duration-200  rounded-xl gap-x-2 ',
+        emailsStore.currentPage == emailsStore.totalPages
           ? ' text-gray-400  bg-blue-100/60 dark:bg-slate-200 dark:text-slate-900'
           : 'hover:bg-gray-300 bg-slate-200 shadow-xs text-gray-800 dark:bg-ligth_blue   dark:text-slate-200 dark:hover:bg-gray-900'
       ]"
