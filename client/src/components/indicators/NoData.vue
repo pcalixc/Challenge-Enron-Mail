@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { LottieAnimation } from 'lottie-web-vue'
-import animationNotData from '@/assets/NoData.json'
-import { useEmailsStore } from '@/stores/emails';
+import NotData from '@/assets/NoData.json'
+import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
-
 </script>
 <template>
-  <div v-if="emailsStore.totalResults == 0 && !emailsStore.isLoading && !emailsStore.ServerErrorResponse.errorStatus" class="flex flex-col align-middle justify-center m-auto">
+  <div
+    v-if="
+      emailsStore.totalResults == 0 &&
+      !emailsStore.isLoading &&
+      !emailsStore.ServerErrorResponse.errorStatus
+    "
+    class="flex flex-col align-middle justify-center m-auto"
+  >
     <div
       class="flex bg-yellow-100 rounded-lg dark:bg-deep_blue dark:text-white p-4 mb-4 mt-9 w-auto text-sm text-yellow-700"
       role="alert"
@@ -24,19 +30,28 @@ const emailsStore = useEmailsStore()
         ></path>
       </svg>
       <div>
-        <span class="font-medium">No emails matched the term "{{ emailsStore.currentSearchTerm }}" </span>
+        <span class="font-medium"
+          >No emails matched the term "{{ emailsStore.currentSearchTerm }}"
+        </span>
 
-        <span v-if="emailsStore.searchSuggestion.length>0 && emailsStore.searchSuggestion[0] != emailsStore.currentSearchTerm">
+        <span
+          v-if="
+            emailsStore.searchSuggestion.length > 0 &&
+            emailsStore.searchSuggestion[0] != emailsStore.currentSearchTerm
+          "
+        >
           Did you mean
           <span
             @click="emailsStore.getData(1, emailsStore.searchSuggestion[0])"
             class="underline font-semibold cursor-pointer"
-            >{{ emailsStore.searchSuggestion[0]}}</span>
-          ?</span>
+            >{{ emailsStore.searchSuggestion[0] }}</span
+          >
+          ?</span
+        >
       </div>
     </div>
     <div class="h-full flex justify-center align-middle mt-12">
-      <lottie-animation :animation-data="animationNotData" :loop="true" class="w-72 h-72" />
+      <lottie-animation :animation-data="NotData" :loop="true" class="w-72 h-72" />
     </div>
   </div>
 </template>

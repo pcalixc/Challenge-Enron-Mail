@@ -1,25 +1,22 @@
 <script setup lang="ts">
-import { useEmailsStore } from '@/stores/emails';
+import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
 import { HighlighWord, SeparateEmailsByCommas, ConvertDateFormat } from '@/utils/emails.utilities'
 
-function close() {
-  emit('close', false)
+function closeModal() {
+  emailsStore.modalOpen=false
 }
-
-interface Emits {
-  (event: 'close', value: boolean): void
-}
-
-const emit = defineEmits<Emits>()
 
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 overflow-hidden">
+  
+  <div
+  v-if="emailsStore.modalOpen"
+   class="fixed inset-0 z-50 overflow-hidden">
     <div
       class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
-      @click="close()"
+      @click="closeModal()"
     ></div>
     <!-- Sidebar Content -->
     <section class="absolute inset-y-0 right-0 pl-10 flex">
@@ -79,8 +76,8 @@ const emit = defineEmits<Emits>()
                 </button>
               </div>
             </div>
-            <button @click="close()" class="text-gray-600 scale-105 hover:text-gray-700">
-              <span class="sr-only">Close</span>
+            <button @click="closeModal()" class="text-gray-600 scale-105 hover:text-gray-700">
+              <span class="sr-only">CloseModal</span>
               <svg
                 class="h-6 w-6"
                 x-description="Heroicon name: x"
@@ -124,7 +121,9 @@ const emit = defineEmits<Emits>()
                   </svg>
                   <span
                     v-if="emailsStore.selectedEmail"
-                    v-html="HighlighWord(emailsStore.selectedEmail.from, emailsStore.currentSearchTerm)"
+                    v-html="
+                      HighlighWord(emailsStore.selectedEmail.from, emailsStore.currentSearchTerm)
+                    "
                   ></span>
                 </div>
               </div>
@@ -174,12 +173,16 @@ const emit = defineEmits<Emits>()
             <h2
               v-if="emailsStore.selectedEmail"
               class="font-bold text-2xl dark:text-slate-300"
-              v-html="HighlighWord(emailsStore.selectedEmail.subject, emailsStore.currentSearchTerm)"
+              v-html="
+                HighlighWord(emailsStore.selectedEmail.subject, emailsStore.currentSearchTerm)
+              "
             ></h2>
             <p
               v-if="emailsStore.selectedEmail"
               class="mt-2 text-gray-900 scroll-smooth dark:text-slate-200 my-14"
-              v-html="HighlighWord(emailsStore.selectedEmail.content, emailsStore.currentSearchTerm)"
+              v-html="
+                HighlighWord(emailsStore.selectedEmail.content, emailsStore.currentSearchTerm)
+              "
             ></p>
           </main>
           <hr class="border-t border-slate-300 mt-4 dark:border-slate-700 shadow-md" />
@@ -189,12 +192,10 @@ const emit = defineEmits<Emits>()
   </div>
 </template>
 
-
 <style>
 @media (max-width: 768px) {
   .modal {
     width: 90vw;
-
   }
 }
 </style>

@@ -17,7 +17,7 @@ const fin = computed(() => {
 </script>
 
 <template>
-  <div v-if="!emailsStore.ServerErrorResponse.errorStatus" class="flex flex-row align-middle justify-center">
+  <div v-if="!emailsStore.ServerErrorResponse.errorStatus && emailsStore.totalResults !=0" class="flex flex-row align-middle justify-center">
     <p class="text-slate-800 text-xs dark:text-slate-200  mt-4">
       Showing 
       <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ ini +1 }}</span>  to 

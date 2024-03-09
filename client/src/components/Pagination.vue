@@ -44,6 +44,9 @@ const descendingPageNumbersReverse = [1, 2, 3]
       <span> Previous </span>
     </button>
 
+    <section class="hideInSmallScreens">
+
+  
     <div v-if="emailsStore.totalPages < 10 && emailsStore.currentPage > 0 ">
       <button
         v-for="pageNumber in emailsStore.totalPages"
@@ -255,6 +258,8 @@ const descendingPageNumbersReverse = [1, 2, 3]
       </button>
     </div>
 
+    </section>
+
     <button
       @click="emailsStore.getData(emailsStore.currentPage + 1, emailsStore.currentSearchTerm)"
       :disabled="emailsStore.currentPage == emailsStore.totalPages"
@@ -283,3 +288,11 @@ const descendingPageNumbersReverse = [1, 2, 3]
     </button>
   </div>
 </template>
+
+<style scoped>
+@media (max-width: 1024px) {
+  .hideInSmallScreens  {
+    display: none;
+  }
+}
+</style>

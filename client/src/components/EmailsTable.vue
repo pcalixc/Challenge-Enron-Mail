@@ -12,15 +12,13 @@ const isWordInContent = (
   subject: string,
   from: string,
   to: string,
-  content: string,
   term: string
 ) => {
   const regex = new RegExp(term, 'gi')
-  let a = regex.test(subject) || regex.test(from) || regex.test(to)
-  if (a) {
-    return !a
+  if (regex.test(subject) || regex.test(from) || regex.test(to)) {
+    return false
   }
-  return regex.test(content)
+  return true
 }
 
 </script>
@@ -243,7 +241,6 @@ const isWordInContent = (
                             data._source.subject,
                             data._source.from,
                             data._source.to,
-                            data._source.content,
                             emailsStore.currentSearchTerm
                           )
                             ? 'px-2 py-1 dark:bg-royal_purple dark:text-slate-950 border font-semibold dark:border-yellow-700 dark:bg-transparent_blue border-yellow-500 text-yellow-600 bg-yellow-50  rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
@@ -254,7 +251,7 @@ const isWordInContent = (
                         Open Email
                       </button>
                     </td>
-                    <td class="p-2 text-left block md:table-cell hid1">
+                    <td class="p-2 text-left block md:table-cell hiddenButton">
                       <span class="inline-block w-1/3 md:hidden font-bold"></span>
                       <button
                         :class="[
@@ -263,7 +260,6 @@ const isWordInContent = (
                             data._source.subject,
                             data._source.from,
                             data._source.to,
-                            data._source.content,
                             emailsStore.currentSearchTerm
                           )
                             ? 'px-2 py-1 dark:bg-royal_purple dark:text-slate-950 border font-semibold dark:border-yellow-700 dark:bg-transparent_blue border-yellow-500 text-yellow-600 bg-yellow-50  rounded-lg transition duration-300 hover:scale-105 focus:outline-none'
@@ -292,7 +288,7 @@ const isWordInContent = (
 
       </div>
 
-      <Pagination />
+      <Pagination  />
 
     </div>
   </div>
@@ -307,7 +303,7 @@ const isWordInContent = (
 }
 
 @media (max-width: 768px) {
-  .hid1 {
+  .hiddenButton {
     display: none;
   }
 }

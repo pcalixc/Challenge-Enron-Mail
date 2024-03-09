@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 
-export function  ConvertDateFormat(originalDate: string) {
+export const ConvertDateFormat=(originalDate: string)=> {
     // Create a Date object with the original date string
     const date = new Date(originalDate);
   
@@ -33,15 +33,13 @@ export function  ConvertDateFormat(originalDate: string) {
     return formattedDate;
   }
 
-  
-export function SeparateEmailsByCommas(string: string) {
+export const SeparateEmailsByCommas=(string: string) =>{
     return string.split(',').filter(function (substring) {
       return substring.trim() !== ''; // Exclude empty strings after trimming whitespace
     });
   }
   
-
-export  const HighlighWord = (text: string, term: string) => {
+export const HighlighWord = (text: string, term: string) => {
     const regex = new RegExp(term, 'gi')
     return text.replace(
       regex,
@@ -49,7 +47,7 @@ export  const HighlighWord = (text: string, term: string) => {
     )
   }
 
-export  function SearchWithFuse(words :string[], searchTerm: string) {
+export const SearchWithFuse=(words :string[], searchTerm: string) =>{
     const fuse = new Fuse(words, { threshold: 0.2 });
     const results = fuse.search(searchTerm);
 

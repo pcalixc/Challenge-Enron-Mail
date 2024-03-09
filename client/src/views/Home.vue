@@ -18,36 +18,11 @@ onBeforeMount(() => {
 
   <Header/>
 
-  <EmailsTable
-    :getData="emailsStore.getData" 
-    :emails ="emailsStore.emails"
-    :asigneSelectedContent = "emailsStore.asigneSelectedContent"
-    :currentSearchTerm="emailsStore.currentSearchTerm"
-    :isLoading="emailsStore.isLoading"
-    :totalResults="emailsStore.totalResults"
-    :conectionError="emailsStore.conectionError"
-    :totalPages="emailsStore.totalPages"
-    :currentPage="emailsStore.currentPage"
-    :suggestions="emailsStore.suggestion"
-    />
+  <EmailsTable/>
 
-    <TotalResults v-if="!emailsStore.conectionError && emailsStore.totalResults !=0"
-    :totalResults="emailsStore.totalResults"
-    :isLoading="emailsStore.isLoading"
-    :currentSearchTerm="emailsStore.currentSearchTerm"
-    :currentPage="emailsStore.currentPage"
-    :sugerencias="emailsStore.suggestion"
-    :getData="emailsStore.getData"
-    />
+  <TotalResults/>
 
-
-  <EmailDetails v-if="emailsStore.modalOpen"
-    :selectedEmail="emailsStore.selectedEmail"
-    :asigneSelectedContent="emailsStore.asigneSelectedContent"
-    :currentSearchTerm="emailsStore.currentSearchTerm"
-    :selectedEmailIndex="emailsStore.selectedEmailIndex"
-    @close="emailsStore.modalOpen=false"
-    />
+  <EmailDetails/>
 
 </template>
 

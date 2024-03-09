@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { IEmail, Hit } from '@/types/index'
+import type { IEmail, IHit } from '@/types/index'
 import dictionary from '@/assets/Dictionary.json'
 import { SearchWithFuse } from '@/utils/emails.utilities'
 import { fetchEmails } from '@/utils/api'
-import type { IServerErrorResponse } from '@/types/ServerErrorResponse'
+import type { IServerErrorResponse } from '@/types/index'
 
 export const useEmailsStore = defineStore('emails', () => {
   const modalOpen = ref<boolean>(false)
   const selectedEmail = ref<IEmail | undefined>()
-  const emails = ref<Hit[]>([])
+  const emails = ref<IHit[]>([])
   const selectedEmailIndex = ref<number>(0)
   const currentSearchTerm = ref<string>('')
   const totalResults = ref<number>(0)
