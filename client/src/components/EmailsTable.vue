@@ -1,19 +1,15 @@
 <script setup lang="ts">
+import { watch } from 'vue'
 import ConnectionError from '@/components/indicators/ConnectionError.vue'
 import NoData from '@/components/indicators/NoData.vue'
 import Loading from '@/components/indicators/Loading.vue'
 import Pagination from './Pagination.vue'
-import { useEmailsStore } from '@/stores/emails';
+import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
 import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
 
-// This function checks if a current SearchTerm is present 'only' in the content of the email. 
-const isWordInContent = (
-  subject: string,
-  from: string,
-  to: string,
-  term: string
-) => {
+// This function checks if a current SearchTerm is present 'only' in the content of the email.
+const isWordInContent = (subject: string, from: string, to: string, term: string) => {
   const regex = new RegExp(term, 'gi')
   if (regex.test(subject) || regex.test(from) || regex.test(to)) {
     return false
@@ -24,19 +20,19 @@ const isWordInContent = (
 </script>
 
 <template>
-  <div class="flex items-center justify-center font-sans overflow-hidden">
+  <div class="flex items-center  justify-center font-sans overflow-hidden">
     <div class="w-full lg:w-5/6">
-      <div class="flex flex-col h-[70vh] overflow-hidden mt-2 mb-5">
+      <div class="flex  flex-col h-[70vh] overflow-hidden mt-2 mb-5">
         <div class="overflow-x-auto px-9 md:overflow-auto sm:-mx-6 lg:-mx-8">
-          <div class="min-w-[90%] py-0 align-middle md:px-6 lg:px-8">
+          <div class="min-w-[90%]  py-0 align-middle md:px-6 lg:px-8">
             <div
               class="dark:border-gray-700 md:rounded-tl-lg rounded flex align-middle justify-center"
             >
               <table
                 v-if="emailsStore.totalResults > 0 && !emailsStore.isLoading"
-                class="w-[95%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
+                class="w-[95%] rounded-t-xl fade-in bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
               >
-                <thead class="block md:table-header-group">
+                <thead class="block  md:table-header-group">
                   <tr
                     class="bg-slate-300 dark:bg-black dark:text-slate-100 text-gray-600 uppercase text-sm block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative"
                   >
@@ -208,8 +204,8 @@ const isWordInContent = (
                         v-html="HighlighWord(data._source.to, emailsStore.currentSearchTerm)"
                       ></span>
                     </td>
-                    <td class="p-2 grid grid-cols-3 gap-4  text-left  md:table-cell">
-                      <span class="inline-block pl-5  w-32 md:hidden font-bold">
+                    <td class="p-2 grid grid-cols-3 gap-4 text-left md:table-cell">
+                      <span class="inline-block pl-5 w-32 md:hidden font-bold">
                         <div class="gap-1 flex">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -268,7 +264,6 @@ const isWordInContent = (
                         @click="emailsStore.asigneSelectedContent(index)"
                       >
                         Open Email
-
                       </button>
                     </td>
                   </tr>
@@ -282,18 +277,15 @@ const isWordInContent = (
 
         <NoData />
 
-        <ConnectionError/>
+        <ConnectionError />
 
         <Loading v-if="emailsStore.isLoading" />
-
       </div>
 
-      <Pagination  />
-
+      <Pagination />
     </div>
   </div>
 </template>
-
 
 <style scoped>
 @media (min-width: 768px) {
@@ -307,4 +299,5 @@ const isWordInContent = (
     display: none;
   }
 }
+
 </style>

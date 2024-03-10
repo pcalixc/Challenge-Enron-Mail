@@ -10,10 +10,11 @@ function closeModal() {
 </script>
 
 <template>
-  
+  <Transition  
+  >
   <div
   v-if="emailsStore.modalOpen"
-   class="fixed inset-0 z-50 overflow-hidden">
+   class="fixed fade-in  inset-0 z-50 overflow-hidden">
     <div
       class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
       @click="closeModal()"
@@ -190,12 +191,22 @@ function closeModal() {
       </div>
     </section>
   </div>
+
+
+  </Transition>
+  
+
 </template>
 
 <style>
-@media (max-width: 768px) {
-  .modal {
-    width: 90vw;
-  }
+/* .fade-in {
+  animation: fadeIn 0.4s;
 }
+
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+} */
+
 </style>

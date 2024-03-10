@@ -9,6 +9,7 @@ export const fetchEmails = async (
 
   try {
     emailsStore.restoreServerErrorResponse()
+    console.log(  `http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`)
 
     const response = await fetch(
       `http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`
