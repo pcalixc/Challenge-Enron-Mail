@@ -26,7 +26,7 @@
 - **Uso de Memoria**: 34.01MB
 
 ### Análisis: 
--   La segunda versión muestra un aumento significativo en el uso de memoria en comparación con la primera versión.
+-   La segunda versión muestra un aumento significativo en el uso de memoria.
 -   En ambas versiones, las operaciones de manipulación y serialización de datos, así como las operaciones de manipulación de cadenas, son responsables de una parte significativa del uso de memoria.
 
 ## Mejoras

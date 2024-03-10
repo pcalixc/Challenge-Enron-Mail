@@ -280,6 +280,7 @@ const isWordInContent = (subject: string, from: string, to: string, term: string
         <ConnectionError />
 
         <Loading v-if="emailsStore.isLoading" />
+
       </div>
 
       <Pagination />

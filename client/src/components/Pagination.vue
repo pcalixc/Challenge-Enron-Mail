@@ -14,7 +14,7 @@ const descendingPageNumbersReverse = [1, 2, 3]
 <template>
   <div
     id="pagination"
-    v-if="emailsStore.totalResults > 0 && !emailsStore.ServerErrorResponse.errorStatus"
+    v-if="emailsStore.totalResults > 0 && !emailsStore.isLoading && !emailsStore.ServerErrorResponse.errorStatus"
     class="flex items-center justify-center gap-2 mt-0 mx-24"
   >
     <button

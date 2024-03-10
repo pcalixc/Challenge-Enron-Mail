@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { LottieAnimation } from 'lottie-web-vue'
 
-import animationConnError from '@/assets/ConnError.json'
+import animationConnError from '@/assets/ConnError.lottie'
 import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
 </script>
@@ -12,7 +12,7 @@ const emailsStore = useEmailsStore()
     class="lg:px-24 md:px-44 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-5"
   >
     <div class="xl:pt-0 w-44 xl:w-1/3 relative pb-12 lg:pb-0">
-      <h1 class="font-mono text-gray-800 font-bold text-2xl dark:text-slate-100">
+      <h1 class="font-mono ml-1 text-gray-800 font-bold text-2xl dark:text-slate-100">
         Whoops, something went wrong.
       </h1>
 

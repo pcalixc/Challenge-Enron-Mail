@@ -1,6 +1,6 @@
 package models
 
-type EnronMail struct {
+type Email struct {
 	MessageID               string `json:"message_id"`
 	Date                    string `json:"date"`
 	From                    string `json:"from"`
@@ -21,7 +21,7 @@ type EnronMail struct {
 	Content                 string `json:"content"`
 }
 
-type OriginalMail struct {
+type OriginalEmail struct {
 	From    string `json:"from"`
 	Sent    string `json:"sent"`
 	To      string `json:"to"`
