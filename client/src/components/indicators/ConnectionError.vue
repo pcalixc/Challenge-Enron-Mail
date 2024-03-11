@@ -4,6 +4,15 @@ import animationConnError from '@/assets/ConnError.json'
 import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
 
+let animationData: any = null 
+
+import('@/assets/ConnError.json').then(module => {
+  animationData = module.default 
+    console.log(animationData)
+  }).catch(error => {
+    console.error('Failed to load animationData:', error)
+  })
+
 </script>
 
 <template>

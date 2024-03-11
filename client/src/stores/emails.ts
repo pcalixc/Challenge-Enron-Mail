@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { IEmail, IHit } from '@/types/index'
-import dictionary from '@/assets/Dictionary.json'
+//import dictionary from '@/assets/Dictionary.json'
 import { SearchWithFuse } from '@/utils/emails.utilities'
 import { fetchEmails } from '@/utils/api'
 import type { IServerErrorResponse } from '@/types/index'
@@ -15,13 +15,20 @@ export const useEmailsStore = defineStore('emails', () => {
   const totalResults = ref<number>(0)
   const currentPage = ref<number>(1)
   const isLoading = ref<boolean>(false)
-  const wordsInDictionary: string[] = dictionary
+  //const wordsInDictionary: string[] = dictionary
+  let wordsInDictionary: string[] = []
   const searchSuggestion = ref()
   const amountEmailsByPage = 8
   const totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage))
   const response = ref<any | undefined>()
 
-  console.log(wordsInDictionary)
+  //console.log(wordsInDictionary)
+  import('@/assets/Dictionary.json').then(module => {
+    wordsInDictionary = module.default // Assuming Dictionary.json exports an array
+    console.log(wordsInDictionary)
+  }).catch(error => {
+    console.error('Failed to load dictionary:', error)
+  })
 
   const ServerErrorResponse = ref<IServerErrorResponse>({
     errorStatus: false,
@@ -30,7 +37,6 @@ export const useEmailsStore = defineStore('emails', () => {
   })
 
   const getData = async (pageNumber: number, searchTerm = '') => {
-    console.log("pp", currentPage.value)
     currentSearchTerm.value = searchTerm
     isLoading.value = true
 
