@@ -48,15 +48,19 @@ func New() Server {
 func (s *Server) Run() error {
 	port := config.GetEnvVar("API_PORT")
 
-	fmt.Println("running on:" + port)
+	fmt.Println("running on port:" + port)
 	return http.ListenAndServe(":"+port, s.ChiRouter)
 }
 
 func (s *Server) Welcome(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(`{"message":"Welcome to Enron-Email Index ZincSearch API 💫"}`))
+	text := "Welcome to Enron-Email Index ZincSearch API! 📧💫\n\n" +
+		"Explore Enron's email archive using the /emails endpoint.\n\n" +
+		"Customize your search by specifying page, max, and term parameters to find what you need. 🔍  \n\n" +
+		"Happy searching!"
+	w.Write([]byte(text))
 }
 
-func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleEmailSearch(w http.ResponseWriter, r *http.Request) {
 	var (
 		result   models.HitsResponse
 		jsonData []byte
@@ -68,7 +72,7 @@ func (s *Server) handleEmails(w http.ResponseWriter, r *http.Request) {
 	if params.SearchTerm != "" {
 		result, err = controllers.SearchEmails(params.SearchTerm, params.PageNumber, params.MaxResults)
 	} else {
-		result, err = controllers.GetAllEmails(params.PageNumber, params.MaxResults)
+		result, err = controllers.RetrieveAllEmails(params.PageNumber, params.MaxResults)
 	}
 	if err != nil {
 		http.Error(w, fmt.Sprintf("error processing request: %v", err), http.StatusInternalServerError)

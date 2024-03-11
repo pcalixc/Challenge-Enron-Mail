@@ -12,8 +12,9 @@ func (s *Server) setupRoutes() {
 		r.Get("/", s.Welcome)
 
 		//Route in charge of handling emails
-		r.Get("/emails", s.handleEmails)
+		r.Get("/emails", s.handleEmailSearch)
 	})
+
 	s.ChiRouter.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, "../../client/index.html")
