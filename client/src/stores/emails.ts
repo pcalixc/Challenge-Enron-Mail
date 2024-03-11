@@ -15,11 +15,13 @@ export const useEmailsStore = defineStore('emails', () => {
   const totalResults = ref<number>(0)
   const currentPage = ref<number>(1)
   const isLoading = ref<boolean>(false)
-  const wordsInDictionary: string[] = Object.keys(dictionary)
+  const wordsInDictionary: string[] = dictionary
   const searchSuggestion = ref()
   const amountEmailsByPage = 8
   const totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage))
   const response = ref<any | undefined>()
+
+  console.log(wordsInDictionary)
 
   const ServerErrorResponse = ref<IServerErrorResponse>({
     errorStatus: false,

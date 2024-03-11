@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { watch } from 'vue'
 import ConnectionError from '@/components/indicators/ConnectionError.vue'
 import NoData from '@/components/indicators/NoData.vue'
 import Loading from '@/components/indicators/Loading.vue'

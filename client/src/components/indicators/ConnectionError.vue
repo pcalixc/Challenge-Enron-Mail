@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { LottieAnimation } from 'lottie-web-vue'
-
-import animationConnError from '@/assets/ConnError.lottie'
+import animationConnError from '@/assets/ConnError.json'
 import { useEmailsStore } from '@/stores/emails'
 const emailsStore = useEmailsStore()
+
 </script>
 
 <template>
