@@ -11,19 +11,9 @@ func RetrieveAllEmails(page, max int) (models.HitsResponse, error) {
 
 	from := (page-1)*max + 1
 
-	// var query = fmt.Sprintf(`{
-	// 	"search_type": "matchall",
-	// 	"sort_fields": ["@date"],
-	// 	"from": %d,
-	// 	"max_results": %d,
-	// 	"_source": ["subject","from","to","date", "content" ]
-	// }`, from, max)
-
-	query := models.SearchQuery{
-		SearchType: "matchall",
-		Query: models.Query{
-			SortFields: []string{"@date"},
-		},
+	query := models.AllEmailsQuery{
+		SearchType:   "matchall",
+		SortFields:   []string{"@date"},
 		From:         from,
 		MaxResults:   max,
 		SourceFields: []string{"subject", "from", "to", "date", "content"},

@@ -67,6 +67,7 @@ func (s *Server) handleEmailSearch(w http.ResponseWriter, r *http.Request) {
 		err      error
 		params   models.QueryParameters
 	)
+
 	params = utils.EvaluateQueryParams(r.URL.Query().Get("max"), r.URL.Query().Get("page"), r.URL.Query().Get("term"))
 
 	if params.SearchTerm != "" {
@@ -74,6 +75,7 @@ func (s *Server) handleEmailSearch(w http.ResponseWriter, r *http.Request) {
 	} else {
 		result, err = controllers.RetrieveAllEmails(params.PageNumber, params.MaxResults)
 	}
+
 	if err != nil {
 		http.Error(w, fmt.Sprintf("error processing request: %v", err), http.StatusInternalServerError)
 		return

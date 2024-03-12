@@ -9,9 +9,9 @@ import (
 func SearchEmails(term string, page, max int) (models.HitsResponse, error) {
 	from := (page-1)*max + 1
 
-	query := models.SearchQuery{
+	query := models.EmailSearchQuery{
 		SearchType: "matchphrase",
-		Query: models.Query{
+		Query: models.EmailQuery{
 			SortFields: []string{"@date"},
 			Term:       term,
 			StartTime:  "2021-06-02T14:28:31.894Z",
