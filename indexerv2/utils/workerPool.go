@@ -15,6 +15,12 @@ type WorkerPool struct {
 	mu            sync.Mutex
 }
 
+type Result struct {
+	filePath string
+	email    models.EnronMail
+	err      error
+}
+
 // NewWorkerPool creates a new pool of workers with the specified number of workers and buffer capacity.
 func NewWorkerPool(numWorkers, bufferCapacity int) *WorkerPool {
 	return &WorkerPool{

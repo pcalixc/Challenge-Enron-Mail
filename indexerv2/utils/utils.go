@@ -2,19 +2,12 @@ package utils
 
 import (
 	"fmt"
-	"indexer/models"
 	"os"
 	"path/filepath"
 	"runtime"
 )
 
-type Result struct {
-	filePath string
-	email    models.EnronMail
-	err      error
-}
-
-const batchSize = 5000
+const batchSize = 1000
 
 // Main entrance to the indexing process. Start by creating a new pool of workers with the number of available CPUs and a buffer size of 1000.
 // Then, start the pool of workers by calling its Start() method. After that, it invokes the readFilesInDir() function to process the files in the specified directory.

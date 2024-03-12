@@ -66,13 +66,13 @@ func TestSendDataToIndex_Success(t *testing.T) {
 func TestSendDataToIndex_ServerError(t *testing.T) {
 	// Create a mock HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Simulate a server error response
+		// Simulate error response
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, "Internal Server Error")
 	}))
 	defer server.Close()
 
-	// Set the mock server URL as the ZS_BASE_URL environment variable
+	// Set the mock server URL
 	os.Setenv("ZS_BASE_URL", server.URL)
 
 	// Test case: server error
