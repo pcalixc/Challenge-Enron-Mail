@@ -15,17 +15,14 @@ export const useEmailsStore = defineStore('emails', () => {
   const totalResults = ref<number>(0)
   const currentPage = ref<number>(1)
   const isLoading = ref<boolean>(false)
-  //const wordsInDictionary: string[] = dictionary
   let wordsInDictionary: string[] = []
   const searchSuggestion = ref()
   const amountEmailsByPage = 8
   const totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage))
   const response = ref<any | undefined>()
 
-  //console.log(wordsInDictionary)
   import('@/assets/Dictionary.json').then(module => {
-    wordsInDictionary = module.default // Assuming Dictionary.json exports an array
-    console.log(wordsInDictionary)
+    wordsInDictionary = module.default 
   }).catch(error => {
     console.error('Failed to load dictionary:', error)
   })

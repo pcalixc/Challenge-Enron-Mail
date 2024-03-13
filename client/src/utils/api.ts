@@ -9,11 +9,19 @@ export const fetchEmails = async (
 
   try {
     emailsStore.restoreServerErrorResponse()
-    console.log(  `http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`)
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const timeoutId = setTimeout(() => {
+      controller.abort(); // Aborta la solicitud después de un tiempo de espera
+    }, 10000); 
 
     const response = await fetch(
       `http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`
+      , { signal } 
     );
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       emailsStore.ServerErrorResponse = {
@@ -28,11 +36,21 @@ export const fetchEmails = async (
     return { data };
 
   } catch (error) {
-    emailsStore.ServerErrorResponse = {
-      errorStatus: true,
-      errorCode: 0,
-      errorMessage: 'CONNECTION_ERROR'
+    console.log(error)
+    if (error === 'AbortError') {
+      emailsStore.ServerErrorResponse = {
+        errorStatus: true,
+        errorCode: 0,
+        errorMessage: 'TIMEOUT_ERROR'
+      };
+    } else {
+      emailsStore.ServerErrorResponse = {
+        errorStatus: true,
+        errorCode: 0,
+        errorMessage: 'CONNECTIONN_ERROR'
+      };
     }
-    }
+    return error;
+  }
   }
 

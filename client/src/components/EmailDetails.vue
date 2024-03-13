@@ -198,15 +198,3 @@ function closeModal() {
 
 </template>
 
-<style>
-/* .fade-in {
-  animation: fadeIn 0.4s;
-}
-
-
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-} */
-
-</style>
