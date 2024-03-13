@@ -10,10 +10,5 @@ terraform
 .terraform
 .docker
 .env
-main.tf
-.terraform.lock.hcl
-terraform.tfstate
-.terraform.tfstate.lock.info
-terraform.tfstate.backup
 indexerv2/utils/logs.go
 pkey
