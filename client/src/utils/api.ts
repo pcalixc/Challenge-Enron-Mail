@@ -14,7 +14,7 @@ export const fetchEmails = async (
 
     const timeoutId = setTimeout(() => {
       controller.abort(); // Aborta la solicitud después de un tiempo de espera
-    }, 10000); 
+    }, 9000); 
 
     const response = await fetch(
       `http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`
@@ -36,8 +36,7 @@ export const fetchEmails = async (
     return { data };
 
   } catch (error) {
-    console.log(error)
-    if (error === 'AbortError') {
+    if (error instanceof DOMException && error.name === 'AbortError') {
       emailsStore.ServerErrorResponse = {
         errorStatus: true,
         errorCode: 0,
