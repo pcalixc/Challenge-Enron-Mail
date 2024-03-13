@@ -15,9 +15,9 @@ COPY . .
 ARG VITE_API_URL 
 
 ENV VITE_API_URL=${VITE_API_URL}
-#COPY ./dist ./dist  
+COPY ./dist ./dist  
 
-RUN npm run build
+#RUN npm run build
 
 CMD [ "http-server", "dist"]
 
