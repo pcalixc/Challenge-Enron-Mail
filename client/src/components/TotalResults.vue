@@ -18,8 +18,8 @@ const fin = computed(() => {
 
 <template>
   <div v-if="!emailsStore.ServerErrorResponse.errorStatus && emailsStore.totalResults !=0 && !emailsStore.isLoading" 
-  class="flex flex-row align-middle justify-center">
-    <p class="text-slate-800 text-xs dark:text-slate-200  mt-4">
+  class="flex flex-row align-middle justify-center mb-8 mt-4">
+    <p class="text-slate-800 text-xs dark:text-slate-200  mb-2">
       Showing 
       <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ ini +1 }}</span>  to 
       <span class="font-semibold text-vivid_blue dark:text-slate-50">{{ fin }}</span>  of 

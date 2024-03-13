@@ -5,7 +5,7 @@ const togleDark = useToggle(isDark)
 </script>
 
 <template>
-  <div class="flex justify-center items-center test">
+  <div class="flex justify-center items-center hidden_">
     <span class="">
       <svg
         class="h-6 w-6 dark:text-gray-500 text-[#9292FF]"
@@ -52,7 +52,7 @@ const togleDark = useToggle(isDark)
 
 <style scoped>
 @media (max-width: 768px) {
-  .test {
+  .hidden_ {
     display: none;
   }
 }

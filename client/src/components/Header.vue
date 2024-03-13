@@ -10,7 +10,7 @@ import SearchBar from './SearchBar.vue'
   <nav
     id="header"
     class="container mx-auto h-20 dark:bg-primary_dark bg-white rounded-lg p-4 mt-0 pt-2 dark:shadow-md dark:shadow-ligth_blue shadow-violet-100 shadow-md">
-    <div class="w-full test2 flex justify-between px-6 py-2">
+    <div class="w-full responsive-container flex justify-between px-6 py-2">
       <LogoSection/>
 
       <SearchBar/>
@@ -24,7 +24,7 @@ import SearchBar from './SearchBar.vue'
 
 <style scoped>
 @media (max-width: 768px) {
-  .test2 {
+  .responsive-container {
     display: flex;
     justify-content: center; 
     align-items: center;

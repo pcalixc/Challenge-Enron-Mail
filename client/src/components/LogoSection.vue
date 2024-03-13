@@ -6,18 +6,14 @@
       />
     </div>
     <div class="flex flex-col ml-3 hidden_ ">
-      <div class="mb-0 flex flex-col">
-        <a
-          href="/"
+      <a href="/" class="mb-0 flex flex-col">
+        <h2
           class="text-lg dark:text-slate-100 font-semibold tracking-wider uppercase text-black focus:outline-none focus:shadow-outline"
-          >Mail Searcher</a
-        >
-        <a 
-        href="/"
+          >Mail Searcher</h2>
+        <h4
         class="text-slate-600 dark:text-slate-300 text-[0.70rem] font-xs"
-          >Find Emails Effortlessly!</a
-        >
-      </div>
+          >Find Emails Effortlessly!</h4>
+      </a>
     </div>
   </div>
 </template>

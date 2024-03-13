@@ -13,6 +13,7 @@ export default  {
         "vivid_blue": "#1a1a40",
         "transparent_blue": "#28287552",
         "royal_purple": "#9292FF",
+        "royal_blue": "#3A3AFF"
       },
   },
   plugins: [],

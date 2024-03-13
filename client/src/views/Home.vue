@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
 import Header from '@/components/Header.vue'
-import EmailDetails from '@/components/EmailDetails.vue'
+import EmailDetailsModal from '@/components/EmailDetailsModal.vue'
 import TotalResults from '@/components/TotalResults.vue'
-import EmailsTable from '@/components/EmailsTable.vue'
+import EmailsList from '@/components/EmailsList.vue'
 import { useEmailsStore } from '@/stores/emails';
 const emailsStore = useEmailsStore()
 
@@ -18,11 +18,11 @@ onBeforeMount(() => {
 
   <Header/>
 
-  <EmailsTable/>
+  <EmailsList/>
 
   <TotalResults/>
 
-  <EmailDetails/>
+  <EmailDetailsModal/>
 
 </template>
 
