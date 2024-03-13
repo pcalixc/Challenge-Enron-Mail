@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { IEmail, IHit } from '@/types/index'
-//import dictionary from '@/assets/Dictionary.json'
 import { SearchWithFuse } from '@/utils/emails.utilities'
 import { fetchEmails } from '@/utils/api'
 import type { IServerErrorResponse } from '@/types/index'
