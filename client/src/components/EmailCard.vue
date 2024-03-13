@@ -61,7 +61,7 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
               <h3
                 :title="data._source.from"
                 v-html="HighlighWord(data._source.from, emailsStore.currentSearchTerm)"
-                class="text-sm font-semibold leading-6 text-gray-700 dark:text-gray-300"
+                class="text-sm font-semibold leading-6 text-gray-700 dark:text-gray-300 truncate text-ellipsis w-[15rem]"
               ></h3>
             </div>
           </div>
