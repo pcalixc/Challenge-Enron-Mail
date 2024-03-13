@@ -7,7 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 .env
-dist
+
+main.tf
 
 node_modules
 .DS_Store

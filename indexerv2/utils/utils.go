@@ -7,13 +7,11 @@ import (
 	"runtime"
 )
 
-const batchSize = 1000
-
 // Main entrance to the indexing process. Start by creating a new pool of workers with the number of available CPUs and a buffer size of 1000.
 // Then, start the pool of workers by calling its Start() method. After that, it invokes the readFilesInDir() function to process the files in the specified directory.
 // Finally, it closes the worker pool and returns an error if there is one.
 func ProcessEmailDirectory(pathName string) error {
-	workerPool := NewWorkerPool(runtime.NumCPU(), 1000)
+	workerPool := NewWorkerPool(runtime.NumCPU(), bufferCapacity)
 	workerPool.Start()
 
 	if err := readFilesInDir(pathName, workerPool); err != nil {
