@@ -29,7 +29,7 @@ const isWordInContent = (subject: string, from: string, to: string, term: string
             >
               <table
                 v-if="emailsStore.totalResults > 0 && !emailsStore.isLoading"
-                class="w-[95%] rounded-t-xl fade-in bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
+                class="w-[95%] rounded-t-xl bg-white shadow-md dark:bg-slate-600 mt-10 dark:divide-gray-700 min-w-max border-collapse block md:table"
               >
                 <thead class="block  md:table-header-group">
                   <tr
