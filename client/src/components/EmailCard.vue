@@ -8,7 +8,7 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
   <div
     v-for="(data, index) in emailsStore.emails"
     :key="index"
-    class="relative h-[14rem] group overflow-hidden p-4 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:border-white/15 before:rounded-[7px] before:absolute dark:before:border-white/20 before:bg-gradient-to-b dark:before:from-white/10 dark:before:to-transparent before:shadow dark:before:shadow-gray-950"
+    class="relative h-[14rem]  group overflow-hidden p-4 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:border-white/15 before:rounded-[7px] before:absolute dark:before:border-white/20 before:bg-gradient-to-b dark:before:from-white/10 dark:before:to-transparent before:shadow dark:before:shadow-gray-950"
   >
     <div
       aria-hidden="true"

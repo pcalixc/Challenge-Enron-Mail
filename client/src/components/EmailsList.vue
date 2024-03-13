@@ -22,7 +22,7 @@ const emailsStore = useEmailsStore()
   <section v-if="emailsStore.totalResults > 0 && !emailsStore.isLoading">
     <div class="py-5 lg:px-16 sm:px-8 h-[75vh]">
       <div class="mx-auto px-3 max-w-8xl text-gray-500">
-        <div class="mt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="mt-0 grid  sm:grid-cols-1 mx-8 md:grid-cols-2 lg:grid-cols-4 gap-2 lg:mx-0">
           <EmailCard />
         </div>
       </div>

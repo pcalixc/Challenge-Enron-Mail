@@ -1,5 +1,5 @@
 <template>
-  <div class=" flex justify-center md:items-center lg:w-auto w-auto">
+  <div class=" flex justify-center md:items-center lg:w-auto w-auto ">
     <div class="flex items-center w-12 h-13 justify-center">
       <img
         src="../../public/envelope.png"
@@ -24,4 +24,6 @@
     display: none;
   }
 }
+
 </style>
+

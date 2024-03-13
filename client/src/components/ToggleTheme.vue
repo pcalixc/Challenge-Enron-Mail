@@ -5,10 +5,10 @@ const togleDark = useToggle(isDark)
 </script>
 
 <template>
-  <div class="flex justify-center items-center hidden_">
+  <div class="flex justify-center items-center ">
     <span class="">
       <svg
-        class="h-6 w-6 dark:text-gray-500 text-[#9292FF]"
+        class="h-6 w-6 dark:text-gray-500 text-[#9292FF] hidden_"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -32,9 +32,9 @@ const togleDark = useToggle(isDark)
       ></div>
     </button>
 
-    <span class="">
+    <span >
       <svg
-        class="h-6 w-6 sm: text-gray-400 dark:text-[#2525ff52]"
+        class="h-6 w-6 sm: text-gray-400 dark:text-[#2525ff52] hidden_"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

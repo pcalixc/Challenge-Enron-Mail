@@ -21,7 +21,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="flex items-center m-0   flex-col justify-center max-w-md">
+  <div class="flex items-center m-0 flex-col justify-center max-w-md">
     <form
       @submit.prevent="handleSubmit()"
       class="relative text-slate-800 dark:text-slate-50"
@@ -30,7 +30,7 @@ const handleSubmit = () => {
         type="search"
         placeholder="Enter a keyword..."
         v-model="searchTerm"
-        class="peer lg:w-[28vw] cursor-pointer relative shadow-inner z-10 h-12 rounded-xl border-2 border-[#2525ff52] dark:bg-[#28287549] bg-transparent pl-16 pr-4 outline-none focus:cursor-text focus:border-[#4a4aff5c] focus:border-3"
+        class="peer lg:w-[28vw] w-[38vw] cursor-pointer relative shadow-inner z-10 h-12 rounded-xl border-2 border-[#2525ff52] dark:bg-[#28287549] bg-transparent pl-16 pr-4 outline-none focus:cursor-text focus:border-[#4a4aff5c] focus:border-3"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"
