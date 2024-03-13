@@ -16,6 +16,8 @@ export const fetchEmails = async (
       controller.abort(); // Aborta la solicitud después de un tiempo de espera
     }, 9000); 
 
+    console.log(`http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`)
+
     const response = await fetch(
       `http://${import.meta.env.VITE_API_URL}/emails?page=${pageNumber}&max=${amountEmailsByPage}&term=${searchTerm}`
       , { signal } 
