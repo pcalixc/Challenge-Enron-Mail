@@ -63,8 +63,8 @@ func (wp *WorkerPool) SubmitFile(filePath string) {
 	wp.filePathQueue <- filePath
 }
 
-// Close (workerPool method) closes the worker pool and sends any pending batches of emails by calling the sendBulk() method.
-func (wp *WorkerPool) Close() {
+// Stop (workerPool method) closes the worker pool and sends any pending batches of emails by calling the sendBulk() method.
+func (wp *WorkerPool) Stop() {
 	if len(wp.emails) > 0 {
 		wp.sendBulk()
 	}

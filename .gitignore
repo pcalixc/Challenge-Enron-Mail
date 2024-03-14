@@ -1,6 +1,7 @@
 .vscode
 indexer/enron
 indexer/.env
+indexerv2/.env
 api/.env
 client/.env
 zinc
@@ -10,5 +11,3 @@ terraform
 .terraform
 .docker
 .env
-indexerv2/utils/logs.go
-pkey

@@ -43,7 +43,7 @@ export const HighlighWord = (text: string, term: string) => {
     const regex = new RegExp(term, 'gi')
     return text.replace(
       regex,
-      '<span class="bg-yellow-100 dark:bg-transparent_blue dark:text-slate-50  opacity-80 font-bold text-black rounded-md">' + term + '</span>'
+      '<span class="bg-yellow-100 dark:text-slate-900  opacity-80 font-bold text-black rounded-md">' + term + '</span>'
     )
   }
 
