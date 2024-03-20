@@ -1,30 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { IEmail, IHit } from '@/types/index'
+import type { IEmail, IHit, IServerErrorResponse } from '@/types/index'
 import { SearchWithFuse } from '@/utils/emails.utilities'
 import { fetchEmails } from '@/utils/api'
-import type { IServerErrorResponse } from '@/types/index'
+import Dictionary from '@/assets/Dictionary.json'
 
 export const useEmailsStore = defineStore('emails', () => {
   const modalOpen = ref<boolean>(false)
   const selectedEmail = ref<IEmail | undefined>()
-  const emails = ref<IHit[]>([])
+  const hits = ref<IHit[]>([])
   const selectedEmailIndex = ref<number>(0)
   const currentSearchTerm = ref<string>('')
   const totalResults = ref<number>(0)
   const currentPage = ref<number>(1)
   const isLoading = ref<boolean>(false)
-  let wordsInDictionary: string[] = []
-  const searchSuggestion = ref()
+  const wordsInDictionary: string[] = Dictionary
+  const searchSuggestion = ref<string[]>([])
   const amountEmailsByPage = 8
   const totalPages = computed(() => Math.ceil(totalResults.value / amountEmailsByPage))
   const response = ref<any | undefined>()
-
-  import('@/assets/Dictionary.json').then(module => {
-    wordsInDictionary = module.default 
-  }).catch(error => {
-    console.error('Failed to load dictionary:', error)
-  })
 
   const ServerErrorResponse = ref<IServerErrorResponse>({
     errorStatus: false,
@@ -38,7 +32,7 @@ export const useEmailsStore = defineStore('emails', () => {
 
     response.value = await fetchEmails(pageNumber, amountEmailsByPage, searchTerm)
 
-    emails.value = response.value.data.hits.hits
+    hits.value = response.value.data.hits.hits
     totalResults.value = response.value.data.hits.Total.value
 
     if (totalResults.value === 0) {
@@ -50,7 +44,7 @@ export const useEmailsStore = defineStore('emails', () => {
   }
 
   const asigneSelectedContent = (index: number) => {
-    selectedEmail.value = emails.value[index]._source
+    selectedEmail.value = hits.value[index]._source
     selectedEmailIndex.value = index
     modalOpen.value = true
   }
@@ -64,7 +58,7 @@ export const useEmailsStore = defineStore('emails', () => {
   }
 
   return {
-    emails,
+    hits,
     modalOpen,
     selectedEmail,
     searchSuggestion,

@@ -6,7 +6,7 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
 
 <template>
   <div
-    v-for="(data, index) in emailsStore.emails"
+    v-for="(email, index) in emailsStore.hits"
     :key="index"
     class="relative h-[14rem]  group overflow-hidden p-4 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:border-white/15 before:rounded-[7px] before:absolute dark:before:border-white/20 before:bg-gradient-to-b dark:before:from-white/10 dark:before:to-transparent before:shadow dark:before:shadow-gray-950"
   >
@@ -16,7 +16,7 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
     ></div>
     <div class="relative">
       <div class="text-xs text-right ml-auto dark:text-gray-50">
-        {{ ConvertDateFormat(data._source.date) }}
+        {{ ConvertDateFormat(email._source.date) }}
       </div>
       <div class="flex items-center justify-between">
         <div class="flex items-center">
@@ -38,8 +38,8 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
                 />
               </svg>
               <h3
-                :title="data._source.subject"
-                v-html="HighlighWord(data._source.subject, emailsStore.currentSearchTerm)"
+                :title="email._source.subject"
+                v-html="HighlighWord(email._source.subject, emailsStore.currentSearchTerm)"
                 class="text-base font-semibold leading-7 tracking-tight h-[2rem] dark:text-white text-gray-900 truncate text-ellipsis w-[15rem]"
               ></h3>
             </div>
@@ -59,8 +59,8 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
                 <circle cx="12" cy="6" r="6" />
               </svg>
               <h3
-                :title="data._source.from"
-                v-html="HighlighWord(data._source.from, emailsStore.currentSearchTerm)"
+                :title="email._source.from"
+                v-html="HighlighWord(email._source.from, emailsStore.currentSearchTerm)"
                 class="text-sm font-semibold leading-6 line-clamp-1 text-gray-700 dark:text-gray-300  text-ellipsis w-[14rem]"
               ></h3>
             </div>
@@ -71,8 +71,8 @@ import { ConvertDateFormat, HighlighWord } from '../utils/emails.utilities'
       <div class="mt-3 pb-2 mx-1 h-[4.5rem] rounded-b-[--card-border-radius]">
         <p
           class="text-gray-700 font-xs text-sm dark:text-gray-300 line-clamp-3"
-          :title="data._source.content"
-          v-html="HighlighWord(data._source.content, emailsStore.currentSearchTerm)"
+          :title="email._source.content"
+          v-html="HighlighWord(email._source.content, emailsStore.currentSearchTerm)"
         ></p>
       </div>
 

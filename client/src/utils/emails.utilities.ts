@@ -1,37 +1,19 @@
 import Fuse from 'fuse.js';
 
-export const ConvertDateFormat=(originalDate: string)=> {
-    // Create a Date object with the original date string
-    const date = new Date(originalDate);
-  
-    // Array with the full names of the months
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-  
-    // Get the full name of the month
-    const monthName = months[date.getMonth()];
-  
-    // Get the day and year
-    const day = date.getDate();
-    const year = date.getFullYear();
-  
-    // Format the date in the "October 9, 2020" format
-    const formattedDate = monthName + ' ' + day + ', ' + year;
-  
-    return formattedDate;
-  }
+export const ConvertDateFormat =(originalDate: string): string => {
+  const year = parseInt(originalDate.substring(0, 4));
+  const month = parseInt(originalDate.substring(5, 7));
+  const day = parseInt(originalDate.substring(8, 10));
+  const hour = parseInt(originalDate.substring(11, 13));
+  const minute = parseInt(originalDate.substring(14, 16));
+  const second = parseInt(originalDate.substring(17, 19));
+
+  const fecha = new Date(year, month - 1, day, hour, minute, second);
+
+  const formatOptions: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+  const formatedDate = fecha.toLocaleDateString('en-US', formatOptions);
+  return formatedDate;
+}
 
 export const SeparateEmailsByCommas=(string: string) =>{
     return string.split(',').filter(function (substring) {
