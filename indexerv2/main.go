@@ -4,6 +4,7 @@ import (
 	"indexer/config"
 	"indexer/profiling"
 	"indexerv2/utils"
+
 	"log"
 	_ "net/http/pprof"
 	"os"

@@ -4,7 +4,6 @@ import (
 	"challenge/api/models"
 	"encoding/json"
 	"fmt"
-	"log"
 )
 
 func RetrieveAllEmails(page, max int) (models.HitsResponse, error) {
@@ -13,7 +12,7 @@ func RetrieveAllEmails(page, max int) (models.HitsResponse, error) {
 
 	query := models.AllEmailsQuery{
 		SearchType:   "matchall",
-		SortFields:   []string{"@date"},
+		SortFields:   []string{"-date"},
 		From:         from,
 		MaxResults:   max,
 		SourceFields: []string{"subject", "from", "to", "date", "content"},
@@ -30,12 +29,13 @@ func RetrieveAllEmails(page, max int) (models.HitsResponse, error) {
 	}
 	defer resp.Body.Close()
 
-	log.Println(resp.StatusCode)
-
 	var hitsResponse models.HitsResponse
+
 	err = json.NewDecoder(resp.Body).Decode(&hitsResponse)
+
 	if err != nil {
 		return models.HitsResponse{}, fmt.Errorf("failed to decode response body: %w", err)
 	}
+
 	return hitsResponse, nil
 }

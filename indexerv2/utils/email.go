@@ -60,12 +60,16 @@ func ConvertEmailFileToStruct(filePath string) (*models.EnronMail, error) {
 }
 
 // MapEmailHeaders maps the email headers to the email data structure.
-func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) {
+func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) error {
 	switch key {
 	case "Message-ID":
 		emailStruct.MessageID = value
 	case "Date":
-		emailStruct.Date = value
+		formatedDate, err := ConvertDateFormat(value)
+		if err != nil {
+			return err
+		}
+		emailStruct.Date = formatedDate
 	case "From":
 		emailStruct.From = value
 	case "To":
@@ -93,12 +97,13 @@ func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) {
 	case "X-FileName":
 		emailStruct.XFileName = value
 	}
+	return nil
 }
 
 // SendDataToIndex sends data to the index via HTTP.
 func SendDataToIndex(data *[]models.EnronMail) error {
 	bulkData := models.BulkDocument{
-		Index:   "emails",
+		Index:   "test3",
 		Records: *data,
 	}
 

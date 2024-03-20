@@ -1,33 +1,24 @@
 package utils
 
 import (
-	"fmt"
 	"indexer/models"
 	"log"
-	"sync"
 )
 
 type WorkerPool struct {
-	filePathQueue chan string
-	resultChan    chan Result
-	numWorkers    int
-	emails        []models.EnronMail
-	mu            sync.Mutex
-}
-
-type Result struct {
-	filePath string
-	email    models.EnronMail
-	err      error
+	filePathQueue   chan string
+	processedEmails chan *models.EnronMail
+	numWorkers      int
+	emails          []models.EnronMail
 }
 
 // NewWorkerPool creates a new pool of workers with the specified number of workers and buffer capacity.
 func NewWorkerPool(numWorkers, bufferCapacity int) *WorkerPool {
 	return &WorkerPool{
-		filePathQueue: make(chan string, bufferCapacity),
-		resultChan:    make(chan Result, bufferCapacity),
-		numWorkers:    numWorkers,
-		emails:        make([]models.EnronMail, 0),
+		filePathQueue:   make(chan string, bufferCapacity),
+		processedEmails: make(chan *models.EnronMail, bufferCapacity),
+		numWorkers:      numWorkers,
+		emails:          make([]models.EnronMail, 0),
 	}
 }
 
@@ -38,40 +29,32 @@ func (wp *WorkerPool) Start() {
 	for i := 0; i < wp.numWorkers; i++ {
 		worker := Worker{
 			filePathsToProcess: wp.filePathQueue,
-			resultChannel:      wp.resultChan}
+			processedEmails:    wp.processedEmails}
 		worker.Start()
 	}
 
 	go func() {
-		for result := range wp.resultChan {
-			if result.err != nil {
-				fmt.Printf(" Path: %s, Error: %v\n", result.filePath, result.err)
-			} else {
-				wp.mu.Lock()
-				wp.emails = append(wp.emails, result.email)
-				if len(wp.emails) == batchSize {
-					wp.sendBulk()
-				}
-				wp.mu.Unlock()
+		for email := range wp.processedEmails {
+			wp.emails = append(wp.emails, *email)
+			if len(wp.emails) == batchSize {
+				wp.SendAndResetBatch()
 			}
 		}
 	}()
 }
 
-// SubmitFile (workerPool method) sends a file to the worker pool file queue channel for processing.
-func (wp *WorkerPool) SubmitFile(filePath string) {
-	wp.filePathQueue <- filePath
-}
-
 // Stop (workerPool method) closes the worker pool and sends any pending batches of emails by calling the sendBulk() method.
 func (wp *WorkerPool) Stop() {
 	if len(wp.emails) > 0 {
-		wp.sendBulk()
+		if err := SendDataToIndex(&wp.emails); err != nil {
+			log.Printf("Error sending data: %v", err)
+		}
+		wp.emails = make([]models.EnronMail, 0)
 	}
 }
 
-// sendBulk (workerPool method) method sends a batch of emails to the indexing system by calling SendDataToIndex() and then restarts the email slice.
-func (wp *WorkerPool) sendBulk() {
+// SendAndResetBatch (workerPool method) method sends a batch of emails to the indexing system by calling SendDataToIndex() and then restarts the email slice.
+func (wp *WorkerPool) SendAndResetBatch() {
 	if err := SendDataToIndex(&wp.emails); err != nil {
 		log.Printf("Error sending data: %v", err)
 	}

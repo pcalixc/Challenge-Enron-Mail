@@ -12,11 +12,11 @@ func SearchEmails(term string, page, max int) (models.HitsResponse, error) {
 	query := models.EmailSearchQuery{
 		SearchType: "matchphrase",
 		Query: models.EmailQuery{
-			SortFields: []string{"@date"},
-			Term:       term,
-			StartTime:  "2021-06-02T14:28:31.894Z",
-			EndTime:    "2028-01-31T15:28:31.894Z",
+			Term:      term,
+			StartTime: "2021-06-02T14:28:31.894Z",
+			EndTime:   "2028-01-31T15:28:31.894Z",
 		},
+		SortFields:   []string{"-date"},
 		From:         from,
 		MaxResults:   max,
 		SourceFields: []string{"subject", "from", "to", "date", "content"},

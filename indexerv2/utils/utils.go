@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"time"
 )
 
 // Main entrance to the indexing process. Start by creating a new pool of workers with the number of available CPUs and a buffer size of 1000.
@@ -39,8 +40,14 @@ func readFilesInDir(dir string, workerPool *WorkerPool) error {
 			}
 		} else {
 			// If it's a file, send it to the worker pool for processing
-			workerPool.SubmitFile(filePath)
+			workerPool.filePathQueue <- filePath
 		}
 	}
 	return nil
+}
+
+func ConvertDateFormat(date string) (time.Time, error) {
+	time, err := time.Parse("Mon, _2 Jan 2006 15:04:05 -0700 (MST)", date)
+
+	return time, err
 }

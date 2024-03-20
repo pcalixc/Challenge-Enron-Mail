@@ -6,15 +6,26 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
+func ConvertDateFormat(date string) (time.Time, error) {
+	time, err := time.Parse("Mon, _2 Jan 2006 15:04:05 -0700 (MST)", date)
+
+	return time, err
+}
+
 // MapEmailHeaders structures mail data based on headers.
-func MapEmailHeaders(key string, value string, emailStruct models.EnronMail) models.EnronMail {
+func MapEmailHeaders(key string, value string, emailStruct models.EnronMail) (models.EnronMail, error) {
 	switch key {
 	case "Message-ID":
 		emailStruct.MessageID = value
 	case "Date":
-		emailStruct.Date = value
+		formatedDate, err := ConvertDateFormat(value)
+		if err != nil {
+			return emailStruct, err
+		}
+		emailStruct.Date = formatedDate
 	case "From":
 		emailStruct.From = value
 	case "To":
@@ -43,7 +54,7 @@ func MapEmailHeaders(key string, value string, emailStruct models.EnronMail) mod
 		emailStruct.XFileName = value
 	}
 
-	return emailStruct
+	return emailStruct, nil
 }
 
 // ConvertEmailFileToJSON converts an email file to JSON format.
@@ -83,7 +94,7 @@ func ConvertEmailFileToJSON(filePath string) models.EnronMail {
 				key := parts[0]
 				value := parts[1]
 				// Create an Email object
-				emailStructure = MapEmailHeaders(key, value, emailStructure)
+				emailStructure, _ = MapEmailHeaders(key, value, emailStructure)
 			}
 		}
 	}
