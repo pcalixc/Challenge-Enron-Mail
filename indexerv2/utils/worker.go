@@ -2,12 +2,12 @@ package utils
 
 import (
 	"fmt"
-	"indexer/models"
+	"indexerv2/models"
 )
 
 type Worker struct {
 	filePathsToProcess <-chan string
-	processedEmails    chan<- *models.EnronMail
+	processedEmails    chan<- *models.Email
 }
 
 // Start (Worker method) initiates a worker to process files. Each worker receives files from the file queue channel, processes them,
@@ -17,7 +17,7 @@ func (w *Worker) Start() {
 		for filePath := range w.filePathsToProcess {
 			email, err := ConvertEmailFileToStruct(filePath)
 			if err != nil {
-				fmt.Printf("Error al procesar el archivo %s: %v", filePath, err)
+				fmt.Printf("Error procesing file %s: %v", filePath, err)
 			}
 			w.processedEmails <- email
 		}

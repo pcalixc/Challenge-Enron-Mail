@@ -18,6 +18,7 @@ func ProcessEmailDirectory(pathName string) error {
 	if err := readFilesInDir(pathName, workerPool); err != nil {
 		return fmt.Errorf("error reading file: %v", err)
 	}
+
 	workerPool.Stop()
 	return nil
 }

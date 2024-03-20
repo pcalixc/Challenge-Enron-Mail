@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"indexer/models"
+	"indexerv2/models"
 	"log"
 	"net/http"
 	"os"
@@ -13,17 +13,17 @@ import (
 )
 
 // Convert an email file to a Models data structure
-func ConvertEmailFileToStruct(filePath string) (*models.EnronMail, error) {
+func ConvertEmailFileToStruct(filePath string) (*models.Email, error) {
 	var (
 		bodyLines      strings.Builder
-		emailStructure = &models.EnronMail{}
+		emailStructure = &models.Email{}
 		bodyStarted    bool
 	)
 
 	// We read the email file
 	file, err := os.Open(filePath)
 	if err != nil {
-		return &models.EnronMail{}, fmt.Errorf("error opening path: %v", err)
+		return &models.Email{}, fmt.Errorf("error opening path: %v", err)
 	}
 	defer file.Close()
 
@@ -60,7 +60,7 @@ func ConvertEmailFileToStruct(filePath string) (*models.EnronMail, error) {
 }
 
 // MapEmailHeaders maps the email headers to the email data structure.
-func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) error {
+func MapEmailHeaders(key string, value string, emailStruct *models.Email) error {
 	switch key {
 	case "Message-ID":
 		emailStruct.MessageID = value
@@ -101,9 +101,9 @@ func MapEmailHeaders(key string, value string, emailStruct *models.EnronMail) er
 }
 
 // SendDataToIndex sends data to the index via HTTP.
-func SendDataToIndex(data *[]models.EnronMail) error {
+func SendDataToIndex(data *[]models.Email) error {
 	bulkData := models.BulkDocument{
-		Index:   "test3",
+		Index:   "test5",
 		Records: *data,
 	}
 

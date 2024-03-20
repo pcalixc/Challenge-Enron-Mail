@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"indexer/models"
+	"indexerv2/models"
 	"indexerv2/utils"
 	"net/http"
 	"net/http/httptest"
@@ -26,7 +26,7 @@ func TestConvertEmailFileToStruct(t *testing.T) {
 	assert.Equal(t, "Here is our forecast\n", email.Content)
 }
 func TestMapEmailHeaders(t *testing.T) {
-	email := &models.EnronMail{}
+	email := &models.Email{}
 
 	utils.MapEmailHeaders("Subject", "Test Subject", email)
 	assert.Equal(t, "Test Subject", email.Subject)
@@ -56,7 +56,7 @@ func TestSendDataToIndex_Success(t *testing.T) {
 	os.Setenv("ZS_BASE_URL", server.URL)
 
 	// Test case: successful indexing
-	data := []models.EnronMail{ /* mock data */ }
+	data := []models.Email{ /* mock data */ }
 	err := utils.SendDataToIndex(&data)
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
@@ -76,7 +76,7 @@ func TestSendDataToIndex_ServerError(t *testing.T) {
 	os.Setenv("ZS_BASE_URL", server.URL)
 
 	// Test case: server error
-	data := []models.EnronMail{ /* mock data */ }
+	data := []models.Email{ /* mock data */ }
 	err := utils.SendDataToIndex(&data)
 	if err == nil {
 		t.Error("Expected error, got nil")
